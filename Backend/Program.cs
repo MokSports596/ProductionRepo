@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using MokSportsApp.Data;
-using MokSportsApp.Data.Repositories.Interfaces; // Ensure this namespace is correct
+using MokSportsApp.Data.Repositories.Interfaces;
 using MokSportsApp.Data.Repositories.Implementations;
-using MokSportsApp.Services.Interfaces; // Ensure this namespace is correct
+using MokSportsApp.Services.Interfaces;
 using MokSportsApp.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<UserInterface, UserImplementation>(); // Corrected interfaces
-builder.Services.AddScoped<IUserService, UserService>(); // Corrected interfaces
+builder.Services.AddScoped<IUserRepository, UserImplementation>();
+builder.Services.AddScoped<IFranchiseRepository, FranchiseRepository>();
+builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<IFranchiseTeamRepository, FranchiseTeamRepository>();
+builder.Services.AddScoped<IStatRepository, StatRepository>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IFranchiseService, FranchiseService>();
+builder.Services.AddScoped<ITeamService, TeamService>();
+builder.Services.AddScoped<IFranchiseTeamService, FranchiseTeamService>();
+builder.Services.AddScoped<IStatService, StatService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

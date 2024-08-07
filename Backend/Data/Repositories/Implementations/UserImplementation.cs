@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MokSportsApp.Data.Repositories.Implementations
 {
-    public class UserImplementation : UserInterface
+    public class UserImplementation : IUserRepository
     {
         private readonly AppDbContext _context;
 
@@ -17,12 +17,18 @@ namespace MokSportsApp.Data.Repositories.Implementations
 
         public async Task<IEnumerable<User>> GetAllUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Include(u => u.Franchises)
+                                        .ThenInclude(f => f.FranchiseTeams)
+                                        .ThenInclude(ft => ft.Team)
+                                        .ToListAsync();
         }
 
         public async Task<User> GetUserById(int userId)
         {
-            return await _context.Users.FindAsync(userId);
+            return await _context.Users.Include(u => u.Franchises)
+                                        .ThenInclude(f => f.FranchiseTeams)
+                                        .ThenInclude(ft => ft.Team)
+                                        .FirstOrDefaultAsync(u => u.UserId == userId);
         }
 
         public async Task AddUser(User user)

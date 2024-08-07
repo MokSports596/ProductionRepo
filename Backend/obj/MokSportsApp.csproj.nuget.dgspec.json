@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/dylanconnolly/Downloads/ProductionRepo-main/Backend/MokSportsApp.csproj": {}
+    "/Users/meghashyam/Desktop/ModProduction/Backend/MokSportsApp.csproj": {}
   },
   "projects": {
-    "/Users/dylanconnolly/Downloads/ProductionRepo-main/Backend/MokSportsApp.csproj": {
+    "/Users/meghashyam/Desktop/ModProduction/Backend/MokSportsApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/dylanconnolly/Downloads/ProductionRepo-main/Backend/MokSportsApp.csproj",
+        "projectUniqueName": "/Users/meghashyam/Desktop/ModProduction/Backend/MokSportsApp.csproj",
         "projectName": "MokSportsApp",
-        "projectPath": "/Users/dylanconnolly/Downloads/ProductionRepo-main/Backend/MokSportsApp.csproj",
-        "packagesPath": "/Users/dylanconnolly/.nuget/packages/",
-        "outputPath": "/Users/dylanconnolly/Downloads/ProductionRepo-main/Backend/obj/",
+        "projectPath": "/Users/meghashyam/Desktop/ModProduction/Backend/MokSportsApp.csproj",
+        "packagesPath": "/Users/meghashyam/.nuget/packages/",
+        "outputPath": "/Users/meghashyam/Desktop/ModProduction/Backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/dylanconnolly/.nuget/NuGet/NuGet.Config"
+          "/Users/meghashyam/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
