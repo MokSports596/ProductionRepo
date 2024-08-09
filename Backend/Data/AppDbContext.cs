@@ -13,7 +13,7 @@ namespace MokSportsApp.Data
         public DbSet<Franchise> Franchises { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<FranchiseTeam> FranchiseTeams { get; set; }
-        public DbSet<Stat> Stats { get; set; }
+        public DbSet<UserStats> UserStats { get; set; }  // New UserStats DbSet
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,7 +35,24 @@ namespace MokSportsApp.Data
             modelBuilder.Entity<Franchise>().ToTable("Franchises");
             modelBuilder.Entity<Team>().ToTable("Teams");
             modelBuilder.Entity<FranchiseTeam>().ToTable("FranchiseTeams");
-            modelBuilder.Entity<Stat>().ToTable("Stats");
+
+            // Removed Stat configuration and added UserStats configuration
+            modelBuilder.Entity<UserStats>(entity =>
+            {
+                entity.ToTable("user_stats");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.UserId).HasColumnName("user_id");
+                entity.Property(e => e.SeasonPoints).HasColumnName("season_points");
+                entity.Property(e => e.WeekPoints).HasColumnName("week_points");
+                entity.Property(e => e.LoksUsed).HasColumnName("loks_used");
+                entity.Property(e => e.Skins).HasColumnName("skins");
+
+                // Define the relationship between UserStats and User
+                entity.HasOne(us => us.User)
+                      .WithMany(u => u.UserStats)
+                      .HasForeignKey(us => us.UserId);
+            });
 
             modelBuilder.Entity<FranchiseTeam>()
                 .HasKey(ft => new { ft.FranchiseId, ft.TeamId });

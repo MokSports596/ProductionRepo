@@ -19,7 +19,7 @@ namespace MokSportsApp.Models
 
         // Navigation properties
         public ICollection<Franchise> Franchises { get; set; } = new List<Franchise>();
-        public ICollection<Stat> Stats { get; set; } = new List<Stat>();
+        public ICollection<UserStats> UserStats { get; set; } = new List<UserStats>();
 
         public bool VerifyPassword(string password)
         {
