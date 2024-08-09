@@ -13,8 +13,8 @@ import {
   import { useState } from "react";
   import DropDownPicker from 'react-native-dropdown-picker';
   import Dropdown from 'react-native-input-select';
-  import TopBar from "./TopBar.js"
-
+  import TopBar from "./page_components/TopBar.js"
+import StickyBar from "./page_components/StickyBar.js";
 
 
 export default function Stable(props) {
@@ -143,7 +143,7 @@ export default function Stable(props) {
 
       
 
-          
+{/*           
       <View style = {styles.stickyBar}>
       <TouchableOpacity onPress = {() => (props.navigation.navigate("Home"))}>
       <Image style = {{height: 0.055*windowHeight, width: 0.1*windowWidth}} resizeMode={'cover'} source = {require('../assets/home.png')}/>
@@ -155,7 +155,9 @@ export default function Stable(props) {
       <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../assets/standings_labelled.png')}/>
       </TouchableOpacity>
       <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../assets/trades.png')}/>
-      </View>
+      </View> */}
+
+      <StickyBar properties = {props}></StickyBar>
         </View>
 
     )

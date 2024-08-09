@@ -10,13 +10,15 @@ import {
   Image, FlatList, ScrollView
 } from "react-native";
 import { StyleSheet } from "react-native";
-import Player from "./Player.js"
-import TeamLogo from "./TeamLogo.js"
+import Player from "./page_components/Player.js"
+import TeamLogo from "./page_components/TeamLogo.js"
+import StickyBar from "./page_components/StickyBar.js";
+import axiosInstance from "./axiosInstance.js";
 
 export default function HomePage(props) {
 
     const windowWidth = Dimensions.get("window").width;
-  const windowHeight = props.height;
+  const windowHeight = Dimensions.get("window").height;
 
   const styles = StyleSheet.create({
     container: {
@@ -100,9 +102,36 @@ export default function HomePage(props) {
       borderBottomLeftRadius: "20"
     },
   });
-  function goToStable() {
-    props.properties.navigation.navigate("Stable");
-  }
+
+  const addStat = async (userId, points, seasonWins, seasonLosses, seasonTies) => {
+    try {
+      response = axiosInstance.post('/stat', {
+        UserId: 1,
+        Points: 10,
+        SeasonWins: 2,
+        SeasonLosses: 5,
+        SeasonTies: 5
+    });
+    
+      console.log('Stat added successfully:', response.data);
+    } catch (error) {
+      if (error.response) {
+        // The request was made, and the server responded with a status code that falls out of the range of 2xx
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      } else if (error.request) {
+        // The request was made, but no response was received
+        console.error('Error request:', error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error message:', error.message);
+      }
+    }
+  };
+  //Testing function call here:
+  addStat(4, 10, 2, 5, 5)
+  
 
   
   return (
@@ -156,7 +185,7 @@ width:0.8*windowWidth
 
       </ScrollView>
 
-      <View style = {styles.stickyBar}>
+      {/* <View style = {styles.stickyBar}>
 
       <Image style = {{height: 0.055*windowHeight, width: 0.1*windowWidth}} resizeMode={'cover'} source = {require('../assets/home.png')}/>
       <TouchableOpacity onPress = {goToStable}>
@@ -169,7 +198,9 @@ width:0.8*windowWidth
       
 
 
-      </View>
+      </View> */}
+
+<StickyBar properties = {props}></StickyBar>
           
     </View>
   );

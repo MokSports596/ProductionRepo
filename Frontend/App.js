@@ -81,7 +81,7 @@ export default function App() {
         Main
         } ></Stack.Screen>
 
-        <Stack.Screen component={ReactConversion} name = "Home"></Stack.Screen>
+        <Stack.Screen component={HomePage} name = "Home"></Stack.Screen>
         <Stack.Screen component = {Stable} name = "Stable"/>
         <Stack.Screen component={Standings} name = "Standings"/>
         </Stack.Navigator> 

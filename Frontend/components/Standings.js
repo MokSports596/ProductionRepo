@@ -11,9 +11,9 @@ import {
     Image, FlatList, ScrollView, StatusBar
   } from "react-native";
   import { useState } from "react";
-import TopBar from "./TopBar.js"
-import Player from "./Player.js";
-
+import TopBar from "./page_components/TopBar.js"
+import Player from "./page_components/Player.js";
+import StickyBar from "./page_components/StickyBar.js";
 export default function Standings(props) {
 
     const windowWidth = Dimensions.get("window").width;
@@ -130,7 +130,7 @@ export default function Standings(props) {
       paddingBottom: "1000"}}></View>
         </ScrollView>
 
-        <View style = {styles.stickyBar}>
+        {/* <View style = {styles.stickyBar}>
       <TouchableOpacity onPress = {() => (props.navigation.navigate("Home"))}>
       <Image style = {{height: 0.055*windowHeight, width: 0.1*windowWidth}} resizeMode={'cover'} source = {require('../assets/home.png')}/>
       </TouchableOpacity>
@@ -139,6 +139,7 @@ export default function Standings(props) {
       </TouchableOpacity>
       <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../assets/standings_labelled.png')}/>
       <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../assets/trades.png')}/>
-      </View>
+      </View> */}
+      <StickyBar properties = {props}></StickyBar>
       </View>)
 }
