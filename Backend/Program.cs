@@ -11,17 +11,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Register your repositories
 builder.Services.AddScoped<IUserRepository, UserImplementation>();
 builder.Services.AddScoped<IFranchiseRepository, FranchiseRepository>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<IFranchiseTeamRepository, FranchiseTeamRepository>();
 builder.Services.AddScoped<IUserStatsRepository, UserStatsRepository>();
+builder.Services.AddScoped<ILeagueRepository, LeagueRepository>();
+builder.Services.AddScoped<IUserLeagueRepository, UserLeagueRepository>();
 
+// Register your services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFranchiseService, FranchiseService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IFranchiseTeamService, FranchiseTeamService>();
 builder.Services.AddScoped<IUserStatsService, UserStatsService>();
+builder.Services.AddScoped<ILeagueService, LeagueService>();
+builder.Services.AddScoped<IUserLeagueService, UserLeagueService>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -43,3 +50,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

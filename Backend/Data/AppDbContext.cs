@@ -14,6 +14,8 @@ namespace MokSportsApp.Data
         public DbSet<Team> Teams { get; set; }
         public DbSet<FranchiseTeam> FranchiseTeams { get; set; }
         public DbSet<UserStats> UserStats { get; set; }  // New UserStats DbSet
+        public DbSet<UserLeague> UserLeagues { get; set; }
+        public DbSet<League> Leagues { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,7 +41,7 @@ namespace MokSportsApp.Data
             // Removed Stat configuration and added UserStats configuration
             modelBuilder.Entity<UserStats>(entity =>
             {
-                entity.ToTable("user_stats");
+                entity.ToTable("UserStats");
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).HasColumnName("id");
                 entity.Property(e => e.UserId).HasColumnName("user_id");

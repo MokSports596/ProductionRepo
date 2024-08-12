@@ -130,7 +130,7 @@ export default function HomePage(props) {
     }
   };
   //Testing function call here:
-  addStat(1, 10, 2, 5, 5)
+  addStat(4, 10, 2, 5, 5)
   
 
   

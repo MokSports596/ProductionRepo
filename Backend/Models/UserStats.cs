@@ -13,6 +13,6 @@ namespace MokSportsApp.Models
         public int Skins { get; set; }
 
         // Navigation properties
-        public User User { get; set; } = null!;
+        public User? User { get; set; } = null!;
     }
 }

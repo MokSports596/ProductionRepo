@@ -20,7 +20,8 @@ namespace MokSportsApp.Models
         // Navigation properties
         public ICollection<Franchise> Franchises { get; set; } = new List<Franchise>();
         public ICollection<UserStats> UserStats { get; set; } = new List<UserStats>();
-
+        public ICollection<UserLeague> UserLeagues { get; set; } = new List<UserLeague>();
+        
         public bool VerifyPassword(string password)
         {
             using (var hmac = new HMACSHA512(Convert.FromBase64String(PasswordSalt)))
