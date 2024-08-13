@@ -13,7 +13,7 @@ namespace MokSportsApp.Data
         public DbSet<Franchise> Franchises { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<FranchiseTeam> FranchiseTeams { get; set; }
-        public DbSet<UserStats> UserStats { get; set; }  // New UserStats DbSet
+        public DbSet<UserStats> UserStats { get; set; }
         public DbSet<UserLeague> UserLeagues { get; set; }
         public DbSet<League> Leagues { get; set; }
 
@@ -38,7 +38,6 @@ namespace MokSportsApp.Data
             modelBuilder.Entity<Team>().ToTable("Teams");
             modelBuilder.Entity<FranchiseTeam>().ToTable("FranchiseTeams");
 
-            // Removed Stat configuration and added UserStats configuration
             modelBuilder.Entity<UserStats>(entity =>
             {
                 entity.ToTable("UserStats");
@@ -66,6 +65,25 @@ namespace MokSportsApp.Data
                 .HasOne(ft => ft.Team)
                 .WithMany(t => t.FranchiseTeams)
                 .HasForeignKey(ft => ft.TeamId);
+
+            // Configure UserLeague
+            modelBuilder.Entity<UserLeague>(entity =>
+            {
+                entity.ToTable("UserLeagues");
+
+                entity.HasKey(ul => ul.Id); // Primary key on the Id column
+
+                entity.Property(ul => ul.UserId).HasColumnName("user_id");
+                entity.Property(ul => ul.LeagueId).HasColumnName("league_id");
+
+                entity.HasOne(ul => ul.User)
+                      .WithMany(u => u.UserLeagues)
+                      .HasForeignKey(ul => ul.UserId);
+
+                entity.HasOne(ul => ul.League)
+                      .WithMany(l => l.UserLeagues)
+                      .HasForeignKey(ul => ul.LeagueId);
+            });
         }
     }
 }
