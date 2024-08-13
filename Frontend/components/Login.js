@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Dimensions,
-  StyleSheet
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Dimensions, StyleSheet } from "react-native";
 import axiosInstance from './axiosInstance';
 
 export default function LoginPage(props) {
@@ -18,7 +11,7 @@ export default function LoginPage(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  
+
   const handleLogIn = async () => {
     if (email.trim() === '' || password.trim() === '') {
       alert('Please enter both email and password.');
@@ -28,14 +21,15 @@ export default function LoginPage(props) {
     try {
       const response = await axiosInstance.post('/user/login', { email, password });
       // Handle successful login
-      props.navigation.navigate("Home");
+      const userId = response.data.userId; // Assuming the response contains the userId
+      props.navigation.navigate("League", { userId }); // Redirect to LeaguePage with userId
     } catch (error) {
       // Handle login error
       console.error(error);
       alert('Login failed. Please check your credentials.');
     }
   };
-  
+
   const handleSignUp = async () => {
     if (name.trim() === '' || email.trim() === '' || password.trim() === '') {
       alert('Please fill in all the fields.');
@@ -45,15 +39,15 @@ export default function LoginPage(props) {
     try {
       const response = await axiosInstance.post('/user/signup', { fullName: name, email, password });
       // Handle successful signup
-      setLogin(true); // Switch to login view after successful signup
+      const userId = response.data.userId; // Assuming the response contains the userId
+      props.navigation.navigate("League", { userId }); // Redirect to LeaguePage with userId
     } catch (error) {
       // Handle signup error
       console.error(error);
       alert('Signup failed. Please try again.');
     }
   };
-  
-  
+
   const styles = StyleSheet.create({
     title: {
       width: 0.5 * windowWidth,

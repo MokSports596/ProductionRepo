@@ -26,7 +26,7 @@ namespace MokSportsApp.Tests.Controllers
         public async Task CreateLeague_ReturnsCreatedAtAction_WhenLeagueIsCreated()
         {
             // Arrange
-            var league = new League { LeagueId = 1, LeagueName = "Test League", Pin = "123456" };
+            var league = new League { LeagueId = 1, league_name = "Test League", Pin = "123456" };
             _mockLeagueService.Setup(service => service.CreateLeagueAsync(It.IsAny<League>(), It.IsAny<int>()))
                 .ReturnsAsync(league);
 

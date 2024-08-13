@@ -84,6 +84,18 @@ namespace MokSportsApp.Data
                       .WithMany(l => l.UserLeagues)
                       .HasForeignKey(ul => ul.LeagueId);
             });
+            modelBuilder.Entity<League>(entity =>
+            {
+                entity.ToTable("Leagues");
+
+                entity.HasKey(e => e.LeagueId);
+                entity.Property(e => e.LeagueId).HasColumnName("league_id");
+                entity.Property(e => e.LeagueName).HasColumnName("league_name");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+                entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+                entity.Property(e => e.Pin).HasColumnName("pin");
+
+            });
         }
     }
 }
