@@ -1,9 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using MokSportsApp.Models;
 using MokSportsApp.Data.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MokSportsApp.Data.Repositories.Implementations
 {
@@ -16,14 +15,16 @@ namespace MokSportsApp.Data.Repositories.Implementations
             _context = context;
         }
 
+        public async Task<List<UserStats>> GetUserStatsByLeagueAsync(int userId, int leagueId)
+        {
+            return await _context.UserStats
+                                 .Where(us => us.UserId == userId && us.LeagueId == leagueId)
+                                 .ToListAsync();
+        }
+
         public async Task<UserStats> GetUserStatsByIdAsync(int id)
         {
             return await _context.UserStats.FindAsync(id);
-        }
-
-        public async Task<IEnumerable<UserStats>> GetAllUserStatsAsync()
-        {
-            return await _context.UserStats.ToListAsync();
         }
 
         public async Task AddUserStatsAsync(UserStats userStats)
@@ -34,7 +35,7 @@ namespace MokSportsApp.Data.Repositories.Implementations
 
         public async Task UpdateUserStatsAsync(UserStats userStats)
         {
-            _context.Entry(userStats).State = EntityState.Modified;
+            _context.UserStats.Update(userStats);
             await _context.SaveChangesAsync();
         }
 

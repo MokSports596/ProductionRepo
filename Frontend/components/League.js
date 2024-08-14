@@ -17,7 +17,7 @@ export default function LeaguePage(props) {
 
   const userId = props.route.params.userId; // Assuming userId is passed via navigation props
 
-  const handleCreateLeague = async () => {
+  const handleCreateLeague = async () => { 
     if (leagueName.trim() === '' || pin.trim() === '') {
       alert('Please enter both league name and pin.');
       return;

@@ -28,6 +28,11 @@ namespace MokSportsApp.Services.Implementations
             return await _context.Users.FindAsync(id);
         }
 
+        public async Task<User?> GetUserByUsername(string username)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        }
+
         public async Task<User> AuthenticateUser(string email, string password)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
@@ -55,6 +60,16 @@ namespace MokSportsApp.Services.Implementations
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateUsername(int userId, string username)
+        {
+            var user = await GetUserById(userId);
+            if (user != null)
+            {
+                user.Username = username;
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteUser(int id)

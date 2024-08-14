@@ -33,5 +33,16 @@ namespace MokSportsApp.Data.Repositories.Implementations
                 .Select(ul => ul.User)
                 .ToListAsync();
         }
+
+        public async Task<List<League>> GetLeaguesForUserAsync(int userId)
+        {
+            return await _context.UserLeagues
+                                .Where(ul => ul.UserId == userId)
+                                .Include(ul => ul.League)
+                                .Select(ul => ul.League)
+                                .ToListAsync();
+        }
+
+
     }
 }

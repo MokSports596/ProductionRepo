@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using MokSportsApp.Models;
 using MokSportsApp.Data.Repositories.Interfaces;
 using MokSportsApp.Services.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MokSportsApp.Services.Implementations
 {
@@ -15,14 +15,14 @@ namespace MokSportsApp.Services.Implementations
             _userStatsRepository = userStatsRepository;
         }
 
+        public async Task<List<UserStats>> GetUserStatsByLeagueAsync(int userId, int leagueId)
+        {
+            return await _userStatsRepository.GetUserStatsByLeagueAsync(userId, leagueId);
+        }
+
         public async Task<UserStats> GetUserStatsByIdAsync(int id)
         {
             return await _userStatsRepository.GetUserStatsByIdAsync(id);
-        }
-
-        public async Task<IEnumerable<UserStats>> GetAllUserStatsAsync()
-        {
-            return await _userStatsRepository.GetAllUserStatsAsync();
         }
 
         public async Task AddUserStatsAsync(UserStats userStats)

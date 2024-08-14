@@ -7,5 +7,6 @@ namespace MokSportsApp.Services.Interfaces
     public interface IUserLeagueService
     {
         Task<List<User>> GetUsersInLeagueAsync(int leagueId);
+        Task<List<League>> GetLeaguesForUserAsync(int userId);
     }
 }

@@ -1,58 +1,85 @@
 using Microsoft.AspNetCore.Mvc;
 using MokSportsApp.Models;
-using MokSportsApp.Data;
-using System.Linq;
+using MokSportsApp.Services.Interfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MokSportsApp.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class UserStatsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUserStatsService _userStatsService;
 
-        public UserStatsController(AppDbContext context)
+        public UserStatsController(IUserStatsService userStatsService)
         {
-            _context = context;
+            _userStatsService = userStatsService;
         }
 
-        // POST: api/UserStats
-        [HttpPost]
-        public async Task<ActionResult<UserStats>> PostUserStats(UserStats userStats)
+        // GET: api/userstats/{userId}/league/{leagueId}
+        [HttpGet("{userId}/league/{leagueId}")]
+        public async Task<ActionResult<IEnumerable<UserStats>>> GetUserStatsByLeague(int userId, int leagueId)
         {
-            _context.UserStats.Add(userStats);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetUserStats), new { id = userStats.Id }, userStats);
+            var stats = await _userStatsService.GetUserStatsByLeagueAsync(userId, leagueId);
+            if (stats == null || stats.Count == 0)
+            {
+                return NotFound(new { message = "No stats found for this user in the specified league." });
+            }
+            return Ok(stats);
         }
 
-        // GET: api/UserStats/5
+        // GET: api/userstats/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserStats>> GetUserStats(int id)
+        public async Task<ActionResult<UserStats>> GetUserStatsById(int id)
         {
-            var userStats = await _context.UserStats.FindAsync(id);
-
-            if (userStats == null)
+            var stats = await _userStatsService.GetUserStatsByIdAsync(id);
+            if (stats == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Stats not found." });
             }
-
-            return userStats;
+            return Ok(stats);
         }
 
-        // GET: api/UserStats/User/5
-        [HttpGet("User/{userId}")]
-        public ActionResult<UserStats> GetUserStatsByUserId(int userId)
+        // POST: api/userstats
+        [HttpPost]
+        public async Task<ActionResult> AddUserStats([FromBody] UserStats userStats)
         {
-            var userStats = _context.UserStats.FirstOrDefault(u => u.UserId == userId);
+            await _userStatsService.AddUserStatsAsync(userStats);
+            return CreatedAtAction(nameof(GetUserStatsById), new { id = userStats.Id }, userStats);
+        }
 
-            if (userStats == null)
+        // PUT: api/userstats/{id}
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateUserStats(int id, [FromBody] UserStats userStats)
+        {
+            if (id != userStats.Id)
             {
-                return NotFound();
+                return BadRequest(new { message = "ID mismatch." });
             }
 
-            return Ok(userStats);
+            var existingStats = await _userStatsService.GetUserStatsByIdAsync(id);
+            if (existingStats == null)
+            {
+                return NotFound(new { message = "Stats not found." });
+            }
+
+            await _userStatsService.UpdateUserStatsAsync(userStats);
+            return NoContent();
+        }
+
+        // DELETE: api/userstats/{id}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteUserStats(int id)
+        {
+            var stats = await _userStatsService.GetUserStatsByIdAsync(id);
+            if (stats == null)
+            {
+                return NotFound(new { message = "Stats not found." });
+            }
+
+            await _userStatsService.DeleteUserStatsAsync(id);
+            return NoContent();
         }
     }
 }

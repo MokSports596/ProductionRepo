@@ -16,6 +16,7 @@ namespace MokSportsApp.Models
         public string PasswordSalt { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string Status { get; set; } = string.Empty;
+        public string? Username { get; set; }
 
         // Navigation properties
         public ICollection<Franchise> Franchises { get; set; } = new List<Franchise>();

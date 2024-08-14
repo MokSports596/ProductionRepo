@@ -31,6 +31,12 @@ namespace MokSportsApp.Data.Repositories.Implementations
                                         .FirstOrDefaultAsync(u => u.UserId == userId);
         }
 
+        // New method to get user by username
+        public async Task<User?> GetUserByUsername(string username)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        }
+
         public async Task AddUser(User user)
         {
             await _context.Users.AddAsync(user);

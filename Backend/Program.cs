@@ -4,6 +4,7 @@ using MokSportsApp.Data.Repositories.Interfaces;
 using MokSportsApp.Data.Repositories.Implementations;
 using MokSportsApp.Services.Interfaces;
 using MokSportsApp.Services.Implementations;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,8 +30,13 @@ builder.Services.AddScoped<IUserStatsService, UserStatsService>();
 builder.Services.AddScoped<ILeagueService, LeagueService>();
 builder.Services.AddScoped<IUserLeagueService, UserLeagueService>();
 
+// Configure JSON serialization to handle circular references
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    options.JsonSerializerOptions.MaxDepth = 64; // Adjust if needed
+});
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -50,4 +56,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

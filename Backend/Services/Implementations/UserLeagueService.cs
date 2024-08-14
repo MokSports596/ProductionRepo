@@ -19,5 +19,10 @@ namespace MokSportsApp.Services.Implementations
         {
             return await _userLeagueRepository.GetUsersByLeagueIdAsync(leagueId);
         }
+    
+        public async Task<List<League>> GetLeaguesForUserAsync(int userId)
+        {
+            return await _userLeagueRepository.GetLeaguesForUserAsync(userId);
+        }
     }
 }

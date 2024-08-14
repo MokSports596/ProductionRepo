@@ -72,6 +72,18 @@ namespace MokSportsApp.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
+
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<League>>> GetLeaguesForUser(int userId)
+        {
+            var leagues = await _userLeagueService.GetLeaguesForUserAsync(userId);
+            if (leagues == null || leagues.Count == 0)
+            {
+                return NotFound(new { message = "No leagues found for this user." });
+            }
+            return Ok(leagues);
+        }
+
     }
 
     // DTO for joining a league

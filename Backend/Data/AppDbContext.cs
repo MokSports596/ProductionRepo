@@ -42,8 +42,10 @@ namespace MokSportsApp.Data
             {
                 entity.ToTable("UserStats");
                 entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.Id).HasColumnName("id");
                 entity.Property(e => e.UserId).HasColumnName("user_id");
+                entity.Property(e => e.LeagueId).HasColumnName("LeagueId");  // Mapping for LeagueId
                 entity.Property(e => e.SeasonPoints).HasColumnName("season_points");
                 entity.Property(e => e.WeekPoints).HasColumnName("week_points");
                 entity.Property(e => e.LoksUsed).HasColumnName("loks_used");
@@ -53,6 +55,11 @@ namespace MokSportsApp.Data
                 entity.HasOne(us => us.User)
                       .WithMany(u => u.UserStats)
                       .HasForeignKey(us => us.UserId);
+
+                // Define the relationship between UserStats and League
+                entity.HasOne(us => us.League)
+                      .WithMany(l => l.UserStats)
+                      .HasForeignKey(us => us.LeagueId);
             });
 
             modelBuilder.Entity<FranchiseTeam>()
