@@ -67,11 +67,16 @@ namespace MokSportsApp.Controllers
                 await _leagueService.JoinLeagueAsync(userId, request.Pin, request.LeagueName);
                 return Ok(new { message = "Successfully joined the league." });
             }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
             catch (KeyNotFoundException ex)
             {
                 return NotFound(new { message = ex.Message });
             }
         }
+
 
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<League>>> GetLeaguesForUser(int userId)

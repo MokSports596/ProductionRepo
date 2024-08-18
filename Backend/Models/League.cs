@@ -10,10 +10,7 @@ namespace MokSportsApp.Models
         public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        // Add this navigation property
         public ICollection<UserStats> UserStats { get; set; } = new List<UserStats>();
-
-        // Other properties and navigation properties
         public ICollection<UserLeague> UserLeagues { get; set; } = new List<UserLeague>();
     }
 }

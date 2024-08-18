@@ -8,7 +8,9 @@ import Main from "./components/opening";
 import Standings from "./components/Standings";
 import Stable from "./components/Stable";
 import LoginPage from "./components/Login";
-import LeaguePage from "./components/League";  // <-- Import your LeaguePage component
+import LeaguesPage from "./components/League";  // <-- Import your LeaguesPage component
+import CreateLeague from "./components/CreateLeague";  // <-- Import your CreateLeague component
+import JoinLeague from "./components/JoinLeague";  // <-- Import your JoinLeague component
 
 export default function App() {
   const windowWidth = Dimensions.get("window").width;
@@ -59,16 +61,17 @@ export default function App() {
   StatusBar.setBarStyle("dark-content", true);
 
   return (
-  <NavigationContainer>
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Main" component={Main}></Stack.Screen>
-      <Stack.Screen component={LoginPage} name="Login"></Stack.Screen>
-      <Stack.Screen component={LeaguePage} name="League"></Stack.Screen>
-      <Stack.Screen component={HomePage} name="Home"></Stack.Screen>
-      <Stack.Screen component={Stable} name="Stable" />
-      <Stack.Screen component={Standings} name="Standings" />
-    </Stack.Navigator> 
-  </NavigationContainer>
-
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Main" component={Main}></Stack.Screen>
+        <Stack.Screen name="Login" component={LoginPage}></Stack.Screen>
+        <Stack.Screen name="Leagues" component={LeaguesPage}></Stack.Screen>
+        <Stack.Screen name="CreateLeague" component={CreateLeague}></Stack.Screen>
+        <Stack.Screen name="JoinLeague" component={JoinLeague}></Stack.Screen>  
+        <Stack.Screen name="Home" component={HomePage}></Stack.Screen>
+        <Stack.Screen name="Stable" component={Stable} />
+        <Stack.Screen name="Standings" component={Standings} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }

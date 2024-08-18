@@ -88,6 +88,15 @@ namespace MokSportsApp.Services.Implementations
             return lastUser != null ? lastUser.UserId + 1 : 1;
         }
 
+        public async Task<List<League>> GetUserLeaguesAsync(int userId)
+        {
+            return await _context.UserLeagues
+                                .Where(ul => ul.UserId == userId)
+                                .Select(ul => ul.League)
+                                .ToListAsync();
+        }
+
+
         private string GenerateSalt()
         {
             using (var rng = new RNGCryptoServiceProvider())

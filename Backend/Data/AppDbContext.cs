@@ -44,12 +44,12 @@ namespace MokSportsApp.Data
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Id).HasColumnName("id");
-                entity.Property(e => e.UserId).HasColumnName("user_id");
+                entity.Property(e => e.UserId).HasColumnName("UserId");
                 entity.Property(e => e.LeagueId).HasColumnName("LeagueId");  // Mapping for LeagueId
-                entity.Property(e => e.SeasonPoints).HasColumnName("season_points");
-                entity.Property(e => e.WeekPoints).HasColumnName("week_points");
-                entity.Property(e => e.LoksUsed).HasColumnName("loks_used");
-                entity.Property(e => e.Skins).HasColumnName("skins");
+                entity.Property(e => e.SeasonPoints).HasColumnName("SeasonPoints");
+                entity.Property(e => e.WeekPoints).HasColumnName("WeekPoints");
+                entity.Property(e => e.LoksUsed).HasColumnName("LoksUsed");
+                entity.Property(e => e.Skins).HasColumnName("Skins");
 
                 // Define the relationship between UserStats and User
                 entity.HasOne(us => us.User)
@@ -96,8 +96,8 @@ namespace MokSportsApp.Data
                 entity.ToTable("Leagues");
 
                 entity.HasKey(e => e.LeagueId);
-                entity.Property(e => e.LeagueId).HasColumnName("league_id");
-                entity.Property(e => e.LeagueName).HasColumnName("league_name");
+                entity.Property(e => e.LeagueId).HasColumnName("LeagueId");
+                entity.Property(e => e.LeagueName).HasColumnName("LeagueName");
                 entity.Property(e => e.CreatedAt).HasColumnName("created_at");
                 entity.Property(e => e.CreatedBy).HasColumnName("created_by");
                 entity.Property(e => e.Pin).HasColumnName("pin");

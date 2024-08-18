@@ -3,6 +3,7 @@ using MokSportsApp.Models;
 using MokSportsApp.Services.Interfaces;
 using MokSportsApp.DTOs;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace MokSportsApp.Controllers
@@ -12,10 +13,13 @@ namespace MokSportsApp.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserService userService)
+
+        public UserController(IUserService userService, ILogger<UserController> logger)
         {
             _userService = userService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -74,11 +78,31 @@ namespace MokSportsApp.Controllers
             return NoContent();
         }
 
+        [HttpGet("{userId}/leagues")]
+        public async Task<ActionResult<IEnumerable<League>>> GetUserLeagues(int userId)
+        {
+            _logger.LogInformation("Received request to get leagues for user with ID {UserId}", userId);
+
+            var leagues = await _userService.GetUserLeaguesAsync(userId);
+
+            if (leagues == null || leagues.Count == 0)
+            {
+                _logger.LogWarning("No leagues found for user with ID {UserId}", userId);
+                return NotFound(new { message = "No leagues found for this user." });
+            }
+
+            _logger.LogInformation("Found {LeagueCount} leagues for user with ID {UserId}", leagues.Count, userId);
+
+            return Ok(leagues);
+        }
+
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUser(int id)
         {
             await _userService.DeleteUser(id);
             return NoContent();
         }
+
     }
 }

@@ -10,5 +10,6 @@ namespace MokSportsApp.Data.Repositories.Interfaces
         Task SaveChangesAsync();
         Task<List<User>> GetUsersByLeagueIdAsync(int leagueId);
         Task<List<League>> GetLeaguesForUserAsync(int userId);
+        Task<UserLeague?> GetByUserIdAndLeagueIdAsync(int userId, int leagueId);
     }
 }

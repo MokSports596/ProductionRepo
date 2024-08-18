@@ -1,5 +1,5 @@
-using MokSportsApp.Models;
 using MokSportsApp.Data.Repositories.Interfaces;
+using MokSportsApp.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ namespace MokSportsApp.Data.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<List<UserStats>> GetUserStatsByLeagueAsync(int userId, int leagueId)
+        public async Task<IEnumerable<UserStats>> GetUserStatsByUserAndLeagueAsync(int userId, int leagueId)
         {
             return await _context.UserStats
                                  .Where(us => us.UserId == userId && us.LeagueId == leagueId)
@@ -27,9 +27,27 @@ namespace MokSportsApp.Data.Repositories.Implementations
             return await _context.UserStats.FindAsync(id);
         }
 
-        public async Task AddUserStatsAsync(UserStats userStats)
+        public async Task AddOrUpdateUserStatsAsync(UserStats userStats)
         {
-            await _context.UserStats.AddAsync(userStats);
+            var existingStats = await _context.UserStats
+                .FirstOrDefaultAsync(us => us.UserId == userStats.UserId && us.LeagueId == userStats.LeagueId);
+
+            if (existingStats != null)
+            {
+                // Update the existing record
+                existingStats.SeasonPoints = userStats.SeasonPoints;
+                existingStats.WeekPoints = userStats.WeekPoints;
+                existingStats.LoksUsed = userStats.LoksUsed;
+                existingStats.Skins = userStats.Skins;
+
+                _context.UserStats.Update(existingStats);
+            }
+            else
+            {
+                // Add a new record
+                await _context.UserStats.AddAsync(userStats);
+            }
+
             await _context.SaveChangesAsync();
         }
 

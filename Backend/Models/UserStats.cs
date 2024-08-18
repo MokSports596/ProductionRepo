@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MokSportsApp.Models
 {
-    [Table("user_stats")]
+    [Table("UserStats")]
     public class UserStats
     {
         public int Id { get; set; }

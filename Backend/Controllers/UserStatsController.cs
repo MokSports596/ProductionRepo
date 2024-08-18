@@ -19,12 +19,12 @@ namespace MokSportsApp.Controllers
 
         // GET: api/userstats/{userId}/league/{leagueId}
         [HttpGet("{userId}/league/{leagueId}")]
-        public async Task<ActionResult<IEnumerable<UserStats>>> GetUserStatsByLeague(int userId, int leagueId)
+        public async Task<ActionResult<IEnumerable<UserStats>>> GetUserStatsByUserAndLeague(int userId, int leagueId)
         {
-            var stats = await _userStatsService.GetUserStatsByLeagueAsync(userId, leagueId);
-            if (stats == null || stats.Count == 0)
+            var stats = await _userStatsService.GetUserStatsByUserAndLeagueAsync(userId, leagueId);
+            if (stats == null)
             {
-                return NotFound(new { message = "No stats found for this user in the specified league." });
+                return NotFound();
             }
             return Ok(stats);
         }
@@ -33,35 +33,30 @@ namespace MokSportsApp.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserStats>> GetUserStatsById(int id)
         {
-            var stats = await _userStatsService.GetUserStatsByIdAsync(id);
-            if (stats == null)
+            var userStats = await _userStatsService.GetUserStatsByIdAsync(id);
+            if (userStats == null)
             {
-                return NotFound(new { message = "Stats not found." });
+                return NotFound();
             }
-            return Ok(stats);
+            return Ok(userStats);
         }
 
         // POST: api/userstats
         [HttpPost]
-        public async Task<ActionResult> AddUserStats([FromBody] UserStats userStats)
+        public async Task<ActionResult<UserStats>> AddOrUpdateUserStats(UserStats userStats)
         {
-            await _userStatsService.AddUserStatsAsync(userStats);
-            return CreatedAtAction(nameof(GetUserStatsById), new { id = userStats.Id }, userStats);
+            await _userStatsService.AddOrUpdateUserStatsAsync(userStats);
+            return Ok(userStats);
         }
+
 
         // PUT: api/userstats/{id}
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateUserStats(int id, [FromBody] UserStats userStats)
+        public async Task<IActionResult> UpdateUserStats(int id, UserStats userStats)
         {
             if (id != userStats.Id)
             {
-                return BadRequest(new { message = "ID mismatch." });
-            }
-
-            var existingStats = await _userStatsService.GetUserStatsByIdAsync(id);
-            if (existingStats == null)
-            {
-                return NotFound(new { message = "Stats not found." });
+                return BadRequest();
             }
 
             await _userStatsService.UpdateUserStatsAsync(userStats);
@@ -70,14 +65,8 @@ namespace MokSportsApp.Controllers
 
         // DELETE: api/userstats/{id}
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteUserStats(int id)
+        public async Task<IActionResult> DeleteUserStats(int id)
         {
-            var stats = await _userStatsService.GetUserStatsByIdAsync(id);
-            if (stats == null)
-            {
-                return NotFound(new { message = "Stats not found." });
-            }
-
             await _userStatsService.DeleteUserStatsAsync(id);
             return NoContent();
         }

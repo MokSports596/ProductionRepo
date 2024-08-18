@@ -53,6 +53,7 @@ namespace MokSportsApp.Services.Implementations
 
         public async Task JoinLeagueAsync(int userId, string pin, string leagueName)
         {
+            // Retrieve the league by its pin and name
             var league = await _leagueRepository.GetByPinAndNameAsync(pin, leagueName);
 
             if (league == null)
@@ -60,7 +61,16 @@ namespace MokSportsApp.Services.Implementations
                 throw new KeyNotFoundException("League not found or incorrect pin/name combination.");
             }
 
-            var userLeague = new UserLeague
+            // Check if the user is already in the league
+            var userLeague = await _userLeagueRepository.GetByUserIdAndLeagueIdAsync(userId, league.LeagueId);
+
+            if (userLeague != null)
+            {
+                throw new InvalidOperationException("User is already a member of this league.");
+            }
+
+            // If not, create the UserLeague entry to join the league
+            userLeague = new UserLeague
             {
                 UserId = userId,
                 LeagueId = league.LeagueId
@@ -69,6 +79,7 @@ namespace MokSportsApp.Services.Implementations
             await _userLeagueRepository.AddAsync(userLeague);
             await _userLeagueRepository.SaveChangesAsync();
         }
+
 
         public async Task<League?> GetLeagueByIdAsync(int id)
         {

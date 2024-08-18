@@ -14,21 +14,22 @@ export default function LoginPage(props) {
 
   const handleLogIn = async () => {
     if (email.trim() === '' || password.trim() === '') {
-      alert('Please enter both email and password.');
-      return;
+        alert('Please enter both email and password.');
+        return;
     }
 
     try {
-      const response = await axiosInstance.post('/user/login', { email, password });
-      // Handle successful login
-      const userId = response.data.userId; // Assuming the response contains the userId
-      props.navigation.navigate("League", { userId }); // Redirect to LeaguePage with userId
+        const response = await axiosInstance.post('/user/login', { email, password });
+        const user = response.data;
+        // Navigate to LeaguesPage after successful login
+        props.navigation.navigate("Leagues", { userId: user.userId });
     } catch (error) {
-      // Handle login error
-      console.error(error);
-      alert('Login failed. Please check your credentials.');
+        console.error(error);
+        alert('Login failed. Please check your credentials.');
     }
   };
+
+  
 
   const handleSignUp = async () => {
     if (name.trim() === '' || email.trim() === '' || password.trim() === '') {

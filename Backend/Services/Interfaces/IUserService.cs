@@ -12,5 +12,6 @@ namespace MokSportsApp.Services.Interfaces
         Task AddUser(User user);
         Task UpdateUser(User user);
         Task DeleteUser(int id);
+        Task<List<League>> GetUserLeaguesAsync(int userId);
     }
 }
