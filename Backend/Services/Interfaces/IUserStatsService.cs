@@ -8,6 +8,7 @@ namespace MokSportsApp.Services.Interfaces
     {
         Task<IEnumerable<UserStats>> GetUserStatsByUserAndLeagueAsync(int userId, int leagueId);
         Task<UserStats> GetUserStatsByIdAsync(int id);
+        Task<IEnumerable<UserStats>> GetUserStatsByUserLeagueAndWeekAsync(int userId, int leagueId, int weekId);
         Task AddOrUpdateUserStatsAsync(UserStats userStats);
         Task UpdateUserStatsAsync(UserStats userStats);
         Task DeleteUserStatsAsync(int id);

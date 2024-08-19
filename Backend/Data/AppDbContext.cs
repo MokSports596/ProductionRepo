@@ -43,23 +43,26 @@ namespace MokSportsApp.Data
                 entity.ToTable("UserStats");
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Id).HasColumnName("id");
                 entity.Property(e => e.UserId).HasColumnName("UserId");
-                entity.Property(e => e.LeagueId).HasColumnName("LeagueId");  // Mapping for LeagueId
+                entity.Property(e => e.LeagueId).HasColumnName("LeagueId");
+                entity.Property(e => e.WeekId).HasColumnName("WeekId");  // New column for Week
+
                 entity.Property(e => e.SeasonPoints).HasColumnName("SeasonPoints");
                 entity.Property(e => e.WeekPoints).HasColumnName("WeekPoints");
                 entity.Property(e => e.LoksUsed).HasColumnName("LoksUsed");
                 entity.Property(e => e.Skins).HasColumnName("Skins");
 
-                // Define the relationship between UserStats and User
                 entity.HasOne(us => us.User)
-                      .WithMany(u => u.UserStats)
-                      .HasForeignKey(us => us.UserId);
+                    .WithMany(u => u.UserStats)
+                    .HasForeignKey(us => us.UserId);
 
-                // Define the relationship between UserStats and League
                 entity.HasOne(us => us.League)
-                      .WithMany(l => l.UserStats)
-                      .HasForeignKey(us => us.LeagueId);
+                    .WithMany(l => l.UserStats)
+                    .HasForeignKey(us => us.LeagueId);
+
+                entity.HasOne(us => us.Week)  // Define the relationship between UserStats and Week
+                    .WithMany(w => w.UserStats)
+                    .HasForeignKey(us => us.WeekId);
             });
 
             modelBuilder.Entity<FranchiseTeam>()

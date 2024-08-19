@@ -8,6 +8,7 @@ namespace MokSportsApp.Data.Repositories.Interfaces
     {
         Task<IEnumerable<UserStats>> GetUserStatsByUserAndLeagueAsync(int userId, int leagueId);
         Task<UserStats> GetUserStatsByIdAsync(int id);
+        Task<IEnumerable<UserStats>> GetUserStatsByUserAndLeagueAndWeekAsync(int userId, int leagueId, int weekId);
         Task AddOrUpdateUserStatsAsync(UserStats userStats);
         Task UpdateUserStatsAsync(UserStats userStats);
         Task DeleteUserStatsAsync(int id);

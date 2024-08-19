@@ -25,6 +25,11 @@ namespace MokSportsApp.Services.Implementations
             return await _userStatsRepository.GetUserStatsByIdAsync(id);
         }
 
+        public async Task<IEnumerable<UserStats>> GetUserStatsByUserLeagueAndWeekAsync(int userId, int leagueId, int weekId)
+        {
+            return await _userStatsRepository.GetUserStatsByUserAndLeagueAndWeekAsync(userId, leagueId, weekId);
+        }
+
         public async Task AddOrUpdateUserStatsAsync(UserStats userStats)
         {
             await _userStatsRepository.AddOrUpdateUserStatsAsync(userStats);

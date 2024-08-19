@@ -27,14 +27,20 @@ namespace MokSportsApp.Data.Repositories.Implementations
             return await _context.UserStats.FindAsync(id);
         }
 
+        public async Task<IEnumerable<UserStats>> GetUserStatsByUserAndLeagueAndWeekAsync(int userId, int leagueId, int weekId)
+        {
+            return await _context.UserStats
+                                 .Where(us => us.UserId == userId && us.LeagueId == leagueId && us.WeekId == weekId)
+                                 .ToListAsync();
+        }
+
         public async Task AddOrUpdateUserStatsAsync(UserStats userStats)
         {
             var existingStats = await _context.UserStats
-                .FirstOrDefaultAsync(us => us.UserId == userStats.UserId && us.LeagueId == userStats.LeagueId);
+                .FirstOrDefaultAsync(us => us.UserId == userStats.UserId && us.LeagueId == userStats.LeagueId && us.WeekId == userStats.WeekId);
 
             if (existingStats != null)
             {
-                // Update the existing record
                 existingStats.SeasonPoints = userStats.SeasonPoints;
                 existingStats.WeekPoints = userStats.WeekPoints;
                 existingStats.LoksUsed = userStats.LoksUsed;
@@ -44,7 +50,6 @@ namespace MokSportsApp.Data.Repositories.Implementations
             }
             else
             {
-                // Add a new record
                 await _context.UserStats.AddAsync(userStats);
             }
 

@@ -17,11 +17,11 @@ namespace MokSportsApp.Controllers
             _userStatsService = userStatsService;
         }
 
-        // GET: api/userstats/{userId}/league/{leagueId}
-        [HttpGet("{userId}/league/{leagueId}")]
-        public async Task<ActionResult<IEnumerable<UserStats>>> GetUserStatsByUserAndLeague(int userId, int leagueId)
+        // GET: api/userstats/{userId}/league/{leagueId}/week/{weekId}
+        [HttpGet("{userId}/league/{leagueId}/week/{weekId}")]
+        public async Task<ActionResult<IEnumerable<UserStats>>> GetUserStatsByUserLeagueAndWeek(int userId, int leagueId, int weekId)
         {
-            var stats = await _userStatsService.GetUserStatsByUserAndLeagueAsync(userId, leagueId);
+            var stats = await _userStatsService.GetUserStatsByUserLeagueAndWeekAsync(userId, leagueId, weekId);
             if (stats == null)
             {
                 return NotFound();
@@ -48,7 +48,6 @@ namespace MokSportsApp.Controllers
             await _userStatsService.AddOrUpdateUserStatsAsync(userStats);
             return Ok(userStats);
         }
-
 
         // PUT: api/userstats/{id}
         [HttpPut("{id}")]
