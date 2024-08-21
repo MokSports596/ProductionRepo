@@ -61,5 +61,17 @@ namespace MokSportsApp.Controllers
             }
             return Ok(games);
         }
+
+        // GET: api/game/week/{week}
+        [HttpGet("week/{week}")]
+        public async Task<ActionResult<IEnumerable<Game>>> GetGamesByWeek(int week)
+        {
+            var games = await _gameService.GetGamesByWeekAsync(week);
+            if (games == null || games.Count == 0)
+            {
+                return NotFound(new { message = "No games found for this week." });
+            }
+            return Ok(games);
+        }
     }
 }

@@ -50,5 +50,10 @@ namespace MokSportsApp.Data.Repositories.Implementations
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Game>> GetByWeekAsync(int week)
+        {
+            return await _context.Games.Where(g => g.Week == week).ToListAsync();
+        }
     }
 }

@@ -35,5 +35,10 @@ namespace MokSportsApp.Services.Implementations
         {
             return await _gameRepository.GetGamesByTeamAsync(teamName);
         }
+
+        public async Task<List<Game>> GetGamesByWeekAsync(int week)
+        {
+            return await _gameRepository.GetByWeekAsync(week);
+        }
     }
 }

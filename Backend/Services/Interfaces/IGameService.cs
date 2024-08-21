@@ -11,5 +11,6 @@ namespace MokSportsApp.Services.Interfaces
         Task<IEnumerable<Game>> GetAllGamesAsync();
         Task<IEnumerable<Game>> GetGamesByDateAsync(DateTime date);
         Task<IEnumerable<Game>> GetGamesByTeamAsync(string teamName);
+        Task<List<Game>> GetGamesByWeekAsync(int week); 
     }
 }

@@ -173,6 +173,8 @@ namespace MokSportsApp.Data
                 entity.Property(e => e.ESPNLink)
                       .HasMaxLength(255)
                       .IsRequired(false); // Nullable in the database
+
+                entity.Property(e => e.Week).IsRequired(); 
             });
         }
     }

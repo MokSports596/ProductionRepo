@@ -38,6 +38,9 @@ namespace MokSportsApp.Models
         [MaxLength(50)]
         public string GameStatus { get; set; } = string.Empty;
 
+        [Required]
+        public int Week { get; set; }  // New Week property added
+
         public int? AwayPoints { get; set; }
         public int? HomePoints { get; set; }
         public int? Quarter1 { get; set; }

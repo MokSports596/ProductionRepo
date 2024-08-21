@@ -10,6 +10,7 @@ namespace MokSportsApp.Data.Repositories.Interfaces
         Task<IEnumerable<Game>> GetAllGamesAsync();
         Task<IEnumerable<Game>> GetGamesByDateAsync(DateTime date);
         Task<IEnumerable<Game>> GetGamesByTeamAsync(string teamName);
+        Task<List<Game>> GetByWeekAsync(int week); 
         Task AddGameAsync(Game game);
         Task SaveChangesAsync();
     }
