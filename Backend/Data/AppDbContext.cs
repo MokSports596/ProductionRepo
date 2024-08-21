@@ -16,6 +16,8 @@ namespace MokSportsApp.Data
         public DbSet<UserStats> UserStats { get; set; }
         public DbSet<UserLeague> UserLeagues { get; set; }
         public DbSet<League> Leagues { get; set; }
+        public DbSet<Game> Games { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -105,6 +107,72 @@ namespace MokSportsApp.Data
                 entity.Property(e => e.CreatedBy).HasColumnName("created_by");
                 entity.Property(e => e.Pin).HasColumnName("pin");
 
+            });
+
+
+            modelBuilder.Entity<Game>(entity =>
+            {
+                entity.ToTable("Games"); // Ensure this maps to the correct table in your database
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.GameId)
+                      .IsRequired()
+                      .HasMaxLength(50);
+
+                entity.Property(e => e.Season)
+                      .IsRequired();
+
+                entity.Property(e => e.SeasonType)
+                      .IsRequired()
+                      .HasMaxLength(50);
+
+                entity.Property(e => e.AwayTeam)
+                      .IsRequired()
+                      .HasMaxLength(50);
+
+                entity.Property(e => e.HomeTeam)
+                      .IsRequired()
+                      .HasMaxLength(50);
+
+                entity.Property(e => e.GameDate)
+                      .IsRequired();
+
+                entity.Property(e => e.GameTime)
+                      .IsRequired()
+                      .HasMaxLength(10);
+
+                entity.Property(e => e.GameStatus)
+                      .IsRequired()
+                      .HasMaxLength(50);
+
+                entity.Property(e => e.AwayPoints)
+                      .IsRequired(false); // Nullable in the database
+
+                entity.Property(e => e.HomePoints)
+                      .IsRequired(false); // Nullable in the database
+
+                entity.Property(e => e.Quarter1)
+                      .IsRequired(false); // Nullable in the database
+
+                entity.Property(e => e.Quarter2)
+                      .IsRequired(false); // Nullable in the database
+
+                entity.Property(e => e.Quarter3)
+                      .IsRequired(false); // Nullable in the database
+
+                entity.Property(e => e.Quarter4)
+                      .IsRequired(false); // Nullable in the database
+
+                entity.Property(e => e.TotalPoints)
+                      .IsRequired(false); // Nullable in the database
+
+                entity.Property(e => e.SportsBookOdds)
+                      .HasMaxLength(255)
+                      .IsRequired(false); // Nullable in the database
+
+                entity.Property(e => e.ESPNLink)
+                      .HasMaxLength(255)
+                      .IsRequired(false); // Nullable in the database
             });
         }
     }
