@@ -1,6 +1,6 @@
+using MokSportsApp.Data.Repositories.Interfaces;
 using MokSportsApp.Models;
 using MokSportsApp.Services.Interfaces;
-using MokSportsApp.Data.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,29 +15,63 @@ namespace MokSportsApp.Services.Implementations
             _franchiseRepository = franchiseRepository;
         }
 
-        public async Task<IEnumerable<Franchise>> GetAllFranchises()
+        public async Task<Franchise> GetFranchiseByIdAsync(int id)
         {
-            return await _franchiseRepository.GetAllFranchises();
+            return await _franchiseRepository.GetByIdAsync(id);
         }
 
-        public async Task<Franchise> GetFranchiseById(int franchiseId)
+        public async Task<Franchise> GetFranchiseByUserAndLeagueAsync(int userId, int leagueId)
         {
-            return await _franchiseRepository.GetFranchiseById(franchiseId);
+            return await _franchiseRepository.GetByUserAndLeagueAsync(userId, leagueId);
         }
 
-        public async Task AddFranchise(Franchise franchise)
+        public async Task<List<Franchise>> GetFranchisesByUserAsync(int userId)
         {
-            await _franchiseRepository.AddFranchise(franchise);
+            return await _franchiseRepository.GetByUserAsync(userId);
         }
 
-        public async Task UpdateFranchise(Franchise franchise)
+        public async Task<List<Franchise>> GetFranchisesByLeagueAsync(int leagueId)
         {
-            await _franchiseRepository.UpdateFranchise(franchise);
+            return await _franchiseRepository.GetByLeagueAsync(leagueId);
         }
 
-        public async Task DeleteFranchise(int franchiseId)
+        public async Task<Franchise> CreateFranchiseAsync(Franchise franchise)
         {
-            await _franchiseRepository.DeleteFranchise(franchiseId);
+            await _franchiseRepository.AddAsync(franchise);
+            await _franchiseRepository.SaveChangesAsync();
+            return franchise;
+        }
+
+        public async Task<Franchise> UpdateFranchiseAsync(int id, Franchise updatedFranchise)
+        {
+            var franchise = await _franchiseRepository.GetByIdAsync(id);
+            if (franchise == null)
+            {
+                return null;
+            }
+
+            franchise.FranchiseName = updatedFranchise.FranchiseName;
+            franchise.Team1Id = updatedFranchise.Team1Id;
+            franchise.Team2Id = updatedFranchise.Team2Id;
+            franchise.Team3Id = updatedFranchise.Team3Id;
+            franchise.Team4Id = updatedFranchise.Team4Id;
+            franchise.Team5Id = updatedFranchise.Team5Id;
+
+            await _franchiseRepository.SaveChangesAsync();
+            return franchise;
+        }
+
+        public async Task<bool> DeleteFranchiseAsync(int id)
+        {
+            var franchise = await _franchiseRepository.GetByIdAsync(id);
+            if (franchise == null)
+            {
+                return false;
+            }
+
+            _franchiseRepository.Delete(franchise);
+            await _franchiseRepository.SaveChangesAsync();
+            return true;
         }
     }
 }

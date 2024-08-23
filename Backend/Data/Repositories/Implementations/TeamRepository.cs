@@ -46,5 +46,11 @@ namespace MokSportsApp.Data.Repositories.Implementations
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<IEnumerable<Team>> GetAllTeamsAsync()
+        {
+            return await _context.Teams.ToListAsync();
+        }
+
     }
 }

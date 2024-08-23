@@ -6,10 +6,12 @@ namespace MokSportsApp.Services.Interfaces
 {
     public interface IFranchiseService
     {
-        Task<IEnumerable<Franchise>> GetAllFranchises();
-        Task<Franchise> GetFranchiseById(int franchiseId);
-        Task AddFranchise(Franchise franchise);
-        Task UpdateFranchise(Franchise franchise);
-        Task DeleteFranchise(int franchiseId);
+        Task<Franchise> GetFranchiseByIdAsync(int id);
+        Task<Franchise> GetFranchiseByUserAndLeagueAsync(int userId, int leagueId);
+        Task<List<Franchise>> GetFranchisesByUserAsync(int userId);
+        Task<List<Franchise>> GetFranchisesByLeagueAsync(int leagueId);
+        Task<Franchise> CreateFranchiseAsync(Franchise franchise);
+        Task<Franchise> UpdateFranchiseAsync(int id, Franchise updatedFranchise);
+        Task<bool> DeleteFranchiseAsync(int id);
     }
 }

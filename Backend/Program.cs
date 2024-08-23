@@ -16,21 +16,24 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserImplementation>();
 builder.Services.AddScoped<IFranchiseRepository, FranchiseRepository>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
-builder.Services.AddScoped<IFranchiseTeamRepository, FranchiseTeamRepository>();
 builder.Services.AddScoped<IUserStatsRepository, UserStatsRepository>();
 builder.Services.AddScoped<ILeagueRepository, LeagueRepository>();
 builder.Services.AddScoped<IUserLeagueRepository, UserLeagueRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<IDraftRepository, DraftRepository>();
+builder.Services.AddScoped<IDraftPickRepository, DraftPickRepository>();
+
 
 // Register your services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFranchiseService, FranchiseService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
-builder.Services.AddScoped<IFranchiseTeamService, FranchiseTeamService>();
 builder.Services.AddScoped<IUserStatsService, UserStatsService>();
 builder.Services.AddScoped<ILeagueService, LeagueService>();
 builder.Services.AddScoped<IUserLeagueService, UserLeagueService>();
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IDraftService, DraftService>();
+
 
 // Configure JSON serialization to handle circular references
 builder.Services.AddControllers().AddJsonOptions(options =>

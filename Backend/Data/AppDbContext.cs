@@ -12,11 +12,12 @@ namespace MokSportsApp.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Franchise> Franchises { get; set; }
         public DbSet<Team> Teams { get; set; }
-        public DbSet<FranchiseTeam> FranchiseTeams { get; set; }
         public DbSet<UserStats> UserStats { get; set; }
         public DbSet<UserLeague> UserLeagues { get; set; }
         public DbSet<League> Leagues { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<Draft> Drafts { get; set; }
+        public DbSet<DraftPick> DraftPicks { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,9 +37,52 @@ namespace MokSportsApp.Data
                 entity.Property(e => e.Status).HasColumnName("status");
             });
 
-            modelBuilder.Entity<Franchise>().ToTable("Franchises");
+            modelBuilder.Entity<Franchise>(entity =>
+            {
+            entity.ToTable("Franchises");
+
+            entity.HasKey(e => e.FranchiseId);
+
+            entity.Property(e => e.FranchiseName).HasColumnName("FranchiseName");
+
+            entity.HasOne(f => f.User)
+                  .WithMany(u => u.Franchises)
+                  .HasForeignKey(f => f.UserId);
+
+            entity.HasOne(f => f.League)
+                  .WithMany(l => l.Franchises)
+                  .HasForeignKey(f => f.LeagueId);
+
+            entity.HasOne(f => f.Team1)
+                  .WithMany()
+                  .HasForeignKey(f => f.Team1Id)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(f => f.Team2)
+                  .WithMany()
+                  .HasForeignKey(f => f.Team2Id)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(f => f.Team3)
+                  .WithMany()
+                  .HasForeignKey(f => f.Team3Id)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(f => f.Team4)
+                  .WithMany()
+                  .HasForeignKey(f => f.Team4Id)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(f => f.Team5)
+                  .WithMany()
+                  .HasForeignKey(f => f.Team5Id)
+                  .OnDelete(DeleteBehavior.Restrict);
+            });
+
+
+
+
             modelBuilder.Entity<Team>().ToTable("Teams");
-            modelBuilder.Entity<FranchiseTeam>().ToTable("FranchiseTeams");
 
             modelBuilder.Entity<UserStats>(entity =>
             {
@@ -66,17 +110,6 @@ namespace MokSportsApp.Data
                     .WithMany(w => w.UserStats)
                     .HasForeignKey(us => us.WeekId);
             });
-
-            modelBuilder.Entity<FranchiseTeam>()
-                .HasKey(ft => new { ft.FranchiseId, ft.TeamId });
-            modelBuilder.Entity<FranchiseTeam>()
-                .HasOne(ft => ft.Franchise)
-                .WithMany(f => f.FranchiseTeams)
-                .HasForeignKey(ft => ft.FranchiseId);
-            modelBuilder.Entity<FranchiseTeam>()
-                .HasOne(ft => ft.Team)
-                .WithMany(t => t.FranchiseTeams)
-                .HasForeignKey(ft => ft.TeamId);
 
             // Configure UserLeague
             modelBuilder.Entity<UserLeague>(entity =>
@@ -175,6 +208,35 @@ namespace MokSportsApp.Data
                       .IsRequired(false); // Nullable in the database
 
                 entity.Property(e => e.Week).IsRequired(); 
+            });
+
+            modelBuilder.Entity<Draft>(entity =>
+            {
+                  entity.ToTable("Drafts");
+                  entity.HasKey(d => d.DraftId);
+
+                  entity.HasOne(d => d.League)
+                  .WithMany(l => l.Drafts)
+                  .HasForeignKey(d => d.LeagueId);
+
+            });
+
+            modelBuilder.Entity<DraftPick>(entity =>
+            {
+                  entity.ToTable("DraftPicks");
+                  entity.HasKey(dp => dp.DraftPickId);
+
+                  entity.HasOne(dp => dp.Draft)
+                  .WithMany(d => d.DraftPicks)
+                  .HasForeignKey(dp => dp.DraftId);
+
+                  entity.HasOne(dp => dp.Franchise)
+                  .WithMany(f => f.DraftPicks)
+                  .HasForeignKey(dp => dp.FranchiseId);
+
+                  entity.HasOne(dp => dp.Team)
+                  .WithMany(t => t.DraftPicks)
+                  .HasForeignKey(dp => dp.TeamId);
             });
         }
     }

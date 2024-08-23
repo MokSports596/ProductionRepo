@@ -11,54 +11,124 @@ namespace MokSportsApp.Controllers
     public class FranchiseController : ControllerBase
     {
         private readonly IFranchiseService _franchiseService;
+        private readonly IUserService _userService;
+        private readonly ILeagueService _leagueService;
 
-        public FranchiseController(IFranchiseService franchiseService)
+        public FranchiseController(IFranchiseService franchiseService, IUserService userService, ILeagueService leagueService)
         {
             _franchiseService = franchiseService;
+            _userService = userService;
+            _leagueService = leagueService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Franchise>>> GetAllFranchises()
-        {
-            var franchises = await _franchiseService.GetAllFranchises();
-            return Ok(franchises);
-        }
-
+        // GET: api/franchise/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Franchise>> GetFranchiseById(int id)
         {
-            var franchise = await _franchiseService.GetFranchiseById(id);
+            var franchise = await _franchiseService.GetFranchiseByIdAsync(id);
             if (franchise == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Franchise not found." });
             }
             return Ok(franchise);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> AddFranchise([FromBody] Franchise franchise)
+        // GET: api/franchise/user/{userId}/league/{leagueId}
+        [HttpGet("user/{userId}/league/{leagueId}")]
+        public async Task<ActionResult<Franchise>> GetFranchiseByUserAndLeague(int userId, int leagueId)
         {
-            await _franchiseService.AddFranchise(franchise);
-            return CreatedAtAction(nameof(GetFranchiseById), new { id = franchise.FranchiseId }, franchise);
+            var franchise = await _franchiseService.GetFranchiseByUserAndLeagueAsync(userId, leagueId);
+            if (franchise == null)
+            {
+                return NotFound(new { message = "Franchise not found for this user in the specified league." });
+            }
+            return Ok(franchise);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateFranchise(int id, [FromBody] Franchise franchise)
+        // POST: api/franchise
+        [HttpPost]
+        public async Task<ActionResult<Franchise>> CreateFranchise([FromBody] FranchiseCreateDto franchiseDto)
         {
-            if (id != franchise.FranchiseId)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
-            await _franchiseService.UpdateFranchise(franchise);
-            return NoContent();
+            // Fetch the User and League from the database
+            var user = await _userService.GetUserById(franchiseDto.UserId);
+            var league = await _leagueService.GetLeagueByIdAsync(franchiseDto.LeagueId);
+
+            if (user == null || league == null)
+            {
+                return BadRequest(new { message = "Invalid UserId or LeagueId." });
+            }
+
+            var franchise = new Franchise
+            {
+                UserId = franchiseDto.UserId,
+                LeagueId = franchiseDto.LeagueId,
+                FranchiseName = franchiseDto.FranchiseName,
+                User = user,
+                League = league
+            };
+
+            var createdFranchise = await _franchiseService.CreateFranchiseAsync(franchise);
+            return CreatedAtAction(nameof(GetFranchiseById), new { id = createdFranchise.FranchiseId }, createdFranchise);
         }
 
+
+
+        // PUT: api/franchise/{id}
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Franchise>> UpdateFranchise(int id, [FromBody] Franchise updatedFranchise)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var franchise = await _franchiseService.UpdateFranchiseAsync(id, updatedFranchise);
+            if (franchise == null)
+            {
+                return NotFound(new { message = "Franchise not found." });
+            }
+
+            return Ok(franchise);
+        }
+
+        // DELETE: api/franchise/{id}
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFranchise(int id)
         {
-            await _franchiseService.DeleteFranchise(id);
+            var success = await _franchiseService.DeleteFranchiseAsync(id);
+            if (!success)
+            {
+                return NotFound(new { message = "Franchise not found." });
+            }
+
             return NoContent();
         }
+
+        [HttpPut("{id}/addTeams")]
+        public async Task<ActionResult<Franchise>> AddTeamsToFranchise(int id, [FromBody] Franchise updatedFranchise)
+        {
+            var franchise = await _franchiseService.GetFranchiseByIdAsync(id);
+            if (franchise == null)
+            {
+                return NotFound(new { message = "Franchise not found." });
+            }
+
+            // Update the teams only
+            franchise.Team1 = updatedFranchise.Team1;
+            franchise.Team2 = updatedFranchise.Team2;
+            franchise.Team3 = updatedFranchise.Team3;
+            franchise.Team4 = updatedFranchise.Team4;
+            franchise.Team5 = updatedFranchise.Team5;
+
+            var updated = await _franchiseService.UpdateFranchiseAsync(id, franchise);
+
+            return Ok(updated);
+        }
+
     }
 }

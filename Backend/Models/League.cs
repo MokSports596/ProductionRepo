@@ -12,5 +12,7 @@ namespace MokSportsApp.Models
 
         public ICollection<UserStats> UserStats { get; set; } = new List<UserStats>();
         public ICollection<UserLeague> UserLeagues { get; set; } = new List<UserLeague>();
+        public ICollection<Franchise> Franchises { get; set; } = new List<Franchise>();
+        public ICollection<Draft> Drafts { get; set; } = new List<Draft>();
     }
 }

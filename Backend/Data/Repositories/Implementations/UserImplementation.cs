@@ -17,18 +17,34 @@ namespace MokSportsApp.Data.Repositories.Implementations
 
         public async Task<IEnumerable<User>> GetAllUsers()
         {
-            return await _context.Users.Include(u => u.Franchises)
-                                        .ThenInclude(f => f.FranchiseTeams)
-                                        .ThenInclude(ft => ft.Team)
-                                        .ToListAsync();
+            return await _context.Users
+                                 .Include(u => u.Franchises)
+                                 .ThenInclude(f => f.Team1)
+                                 .Include(u => u.Franchises)
+                                 .ThenInclude(f => f.Team2)
+                                 .Include(u => u.Franchises)
+                                 .ThenInclude(f => f.Team3)
+                                 .Include(u => u.Franchises)
+                                 .ThenInclude(f => f.Team4)
+                                 .Include(u => u.Franchises)
+                                 .ThenInclude(f => f.Team5)
+                                 .ToListAsync();
         }
 
         public async Task<User> GetUserById(int userId)
         {
-            return await _context.Users.Include(u => u.Franchises)
-                                        .ThenInclude(f => f.FranchiseTeams)
-                                        .ThenInclude(ft => ft.Team)
-                                        .FirstOrDefaultAsync(u => u.UserId == userId);
+            return await _context.Users
+                                 .Include(u => u.Franchises)
+                                 .ThenInclude(f => f.Team1)
+                                 .Include(u => u.Franchises)
+                                 .ThenInclude(f => f.Team2)
+                                 .Include(u => u.Franchises)
+                                 .ThenInclude(f => f.Team3)
+                                 .Include(u => u.Franchises)
+                                 .ThenInclude(f => f.Team4)
+                                 .Include(u => u.Franchises)
+                                 .ThenInclude(f => f.Team5)
+                                 .FirstOrDefaultAsync(u => u.UserId == userId);
         }
 
         // New method to get user by username

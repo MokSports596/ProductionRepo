@@ -9,6 +9,6 @@ namespace MokSportsApp.Models
         public int Ties { get; set; }
 
         // Navigation properties
-        public ICollection<FranchiseTeam> FranchiseTeams { get; set; } = new List<FranchiseTeam>();
+        public ICollection<DraftPick> DraftPicks { get; set; } = new List<DraftPick>();
     }
 }
