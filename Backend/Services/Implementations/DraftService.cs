@@ -26,9 +26,12 @@ namespace MokSportsApp.Services.Implementations
         public async Task<Draft?> StartDraftAsync(int leagueId)
         {
             // Check for an existing active draft
+            Console.WriteLine($"Attempting to start draft for LeagueId: {leagueId}");
+
             var activeDraft = await _draftRepository.GetActiveDraftByLeagueIdAsync(leagueId);
             if (activeDraft != null)
             {
+                Console.WriteLine("Draft is already in service.");
                 return null; // A draft is already active for this league
             }
 
@@ -193,6 +196,23 @@ namespace MokSportsApp.Services.Implementations
 
             return availableTeams;
         }
+
+        public async Task<List<int>> GetDraftOrderAsync(int draftId)
+        {
+            var draft = await _draftRepository.GetDraftByIdAsync(draftId);
+            if (draft == null || string.IsNullOrEmpty(draft.DraftOrder))
+            {
+                return new List<int>();
+            }
+
+            var draftOrder = draft.DraftOrder
+                .Split(',')
+                .Select(int.Parse)
+                .ToList();
+
+            return draftOrder;
+        }
+
 
 
     }

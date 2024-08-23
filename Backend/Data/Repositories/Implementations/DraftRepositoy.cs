@@ -38,6 +38,7 @@ namespace MokSportsApp.Data.Repositories.Implementations
             _context.Drafts.Update(draft);
             await _context.SaveChangesAsync();
         }
+
     }
 
 }
