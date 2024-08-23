@@ -164,19 +164,36 @@ namespace MokSportsApp.Services.Implementations
 
         public async Task<IEnumerable<int>> GetAvailableTeamsAsync(int draftId)
         {
+            // Fetch the draft by ID
             var draft = await _draftRepository.GetDraftByIdAsync(draftId);
             if (draft == null)
             {
+                // Return an empty collection if the draft doesn't exist
                 return Enumerable.Empty<int>();
             }
 
             // Fetch teams that have been drafted
             var draftedTeams = await _draftPickRepository.GetDraftedTeamsAsync(draftId);
+            if (draftedTeams == null)
+            {
+                // If no teams have been drafted yet, use an empty collection
+                draftedTeams = Enumerable.Empty<int>();
+            }
+
             // Fetch all teams and find those that haven't been drafted
             var allTeams = await _teamRepository.GetAllTeamsAsync();
+            if (allTeams == null)
+            {
+                // If there are no teams in the database, return an empty collection
+                return Enumerable.Empty<int>();
+            }
+
+            // Find the teams that haven't been drafted yet
             var availableTeams = allTeams.Select(t => t.TeamId).Except(draftedTeams);
 
             return availableTeams;
         }
+
+
     }
 }

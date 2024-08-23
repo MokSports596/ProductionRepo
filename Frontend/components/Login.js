@@ -41,7 +41,7 @@ export default function LoginPage(props) {
       const response = await axiosInstance.post('/user/signup', { fullName: name, email, password });
       // Handle successful signup
       const userId = response.data.userId; // Assuming the response contains the userId
-      props.navigation.navigate("League", { userId }); // Redirect to LeaguePage with userId
+      props.navigation.navigate("Leagues", { userId }); // Redirect to LeaguePage with userId
     } catch (error) {
       // Handle signup error
       console.error(error);
