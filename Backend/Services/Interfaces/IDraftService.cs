@@ -1,5 +1,7 @@
 using MokSportsApp.Models;
 using System.Threading.Tasks;
+using MokSportsApp.DTOs;
+
 
 namespace MokSportsApp.Services.Interfaces
 {
@@ -10,6 +12,7 @@ namespace MokSportsApp.Services.Interfaces
         Task<bool> MakeDraftPickAsync(int draftId, int franchiseId, int teamId);
         Task<IEnumerable<int>> GetAvailableTeamsAsync(int draftId);
         Task<List<int>> GetDraftOrderAsync(int draftId);
+        Task<DraftStateDto> GetDraftStateAsync(int draftId);
     }
 
 }

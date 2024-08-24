@@ -4,6 +4,7 @@ using MokSportsApp.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MokSportsApp.DTOs;
 using System.Threading.Tasks;
 
 namespace MokSportsApp.Services.Implementations
@@ -129,7 +130,7 @@ namespace MokSportsApp.Services.Implementations
                 Console.WriteLine("Error: No available slots in the franchise.");
                 return false; // No available slots in the franchise
             }
-
+ 
             // Create the draft pick
             var draftPick = new DraftPick
             {
@@ -200,18 +201,35 @@ namespace MokSportsApp.Services.Implementations
         public async Task<List<int>> GetDraftOrderAsync(int draftId)
         {
             var draft = await _draftRepository.GetDraftByIdAsync(draftId);
-            if (draft == null || string.IsNullOrEmpty(draft.DraftOrder))
+            if (draft == null)
             {
-                return new List<int>();
+                return null;
             }
 
-            var draftOrder = draft.DraftOrder
-                .Split(',')
-                .Select(int.Parse)
-                .ToList();
-
+            var draftOrder = draft.DraftOrder.Split(',').Select(int.Parse).ToList();
             return draftOrder;
         }
+
+        public async Task<DraftStateDto> GetDraftStateAsync(int draftId)
+        {
+            var draft = await _draftRepository.GetDraftByIdAsync(draftId);
+            if (draft == null)
+            {
+                return null;
+            }
+
+            var draftOrder = draft.DraftOrder.Split(',').Select(int.Parse).ToList();
+            int currentFranchiseId = draftOrder[draft.CurrentPickIndex];
+
+            return new DraftStateDto
+            {
+                CurrentRound = draft.CurrentRound,
+                CurrentPickIndex = draft.CurrentPickIndex,
+                CurrentFranchiseId = currentFranchiseId,
+                IsCompleted = draft.IsCompleted
+            };
+        }
+
 
 
 

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MokSportsApp.Models;
 using MokSportsApp.Services.Interfaces;
 using System.Threading.Tasks;
+using MokSportsApp.DTOs;
 
 namespace MokSportsApp.Controllers
 {
@@ -84,6 +85,28 @@ namespace MokSportsApp.Controllers
             }
 
             return Ok("Draft completed successfully.");
+        }
+
+        [HttpGet("{draftId}/state")]
+        public async Task<ActionResult<DraftStateDto>> GetDraftState(int draftId)
+        {
+            var draftState = await _draftService.GetDraftStateAsync(draftId);
+            if (draftState == null)
+            {
+                return NotFound("Draft not found or draft state could not be determined.");
+            }
+            return Ok(draftState);
+        }
+
+        [HttpGet("{draftId}/order")]
+        public async Task<ActionResult<List<int>>> GetDraftOrder(int draftId)
+        {
+            var draftOrder = await _draftService.GetDraftOrderAsync(draftId);
+            if (draftOrder == null || !draftOrder.Any())
+            {
+                return NotFound("Draft order not found.");
+            }
+            return Ok(draftOrder);
         }
 
 
