@@ -26,7 +26,7 @@ export default function LoginPage(props) {
 
 
 
-  
+
   const handleLogIn = async () => {
     if (email.trim() === '' || password.trim() === '') {
       alert('Please enter both email and password.');
@@ -49,7 +49,7 @@ export default function LoginPage(props) {
     }
 
   };
-  
+
   const handleSignUp = async () => {
     if (isCreatingLeague){
       try {
@@ -84,9 +84,9 @@ export default function LoginPage(props) {
     //   alert('Signup failed. Please try again.');
     // }
   };
-  
-  
-  
+
+
+
   const styles = StyleSheet.create({
     title: {
       width: windowWidth,
@@ -106,7 +106,7 @@ export default function LoginPage(props) {
       fontSize: 30,
       marginTop: 0.04 * windowHeight,
       alignSelf: "center",
-      borderColor: "border: 1px solid rgba(232, 232, 232, 1)",
+      borderColor: "rgba(232, 232, 232, 1)",
       borderWidth: "1px"
     },
     link: {
@@ -168,7 +168,7 @@ export default function LoginPage(props) {
       backgroundColor: "background: rgba(172, 101, 214, 1);",
       borderTopRightRadius: 20,
       borderTopLeftRadius: 20,
-      borderColor: "background: rgba(172, 101, 214, 1);",
+      borderColor: "rgba(172, 101, 214, 1)",
       borderWidth: 1,
       justifyContent: "center"
     },
@@ -177,9 +177,9 @@ export default function LoginPage(props) {
       display: "flex",
       flexDirection: "row",
       gap: "40%",
-      borderColor: "background: rgba(217, 217, 217, 1);",
+      borderColor: "rgba(217, 217, 217, 1)",
       borderWidth: 1,
-      alignContent: "center", 
+      alignContent: "center",
       alignItems: "center",
       justifyContent: "center"
     },
@@ -188,10 +188,10 @@ export default function LoginPage(props) {
       display: "flex",
       flexDirection: "column",
       gap: "40%",
-      borderColor: "background: rgba(217, 217, 217, 1);",
-      borderTopColor: "background: rgba(217, 217, 217, 0);",
+      borderColor: "rgba(217, 217, 217, 1)",
+      borderTopColor: "rgba(217, 217, 217, 0)",
       borderWidth: 1,
-      alignContent: "center", 
+      alignContent: "center",
       alignItems: "center",
       justifyContent: "center",
       borderBottomRightRadius: "20",
@@ -231,7 +231,7 @@ export default function LoginPage(props) {
         console.error(error);
         alert('League not found, please enter a valid league code');
       }
-  
+
     }
     if (onPage == 'username') {
       if (username == '') {
@@ -253,7 +253,7 @@ export default function LoginPage(props) {
     setPage('league')
   }
   return (
-    
+
     <View
       style={{
         opacity: 1,
@@ -265,7 +265,7 @@ export default function LoginPage(props) {
       }}
     >
       <View style = {{backgroundColor: "#FFFFFF"}}>
-        {onPage == 'login' && 
+        {onPage == 'login' &&
       <View style={styles.header}>
 
 <Image style = {{height: 0.07*windowHeight, width: 0.24*windowWidth, alignSelf: "center", top: 0.06*windowHeight}} resizeMode={'cover'} source = {require('../assets/mokLogo.png')}/>
@@ -313,7 +313,7 @@ export default function LoginPage(props) {
       placeholderTextColor={"#BDBDBD"}
     />
       }
-      {(onPage == 'sign up' || onPage == 'login') && 
+      {(onPage == 'sign up' || onPage == 'login') &&
       <><TextInput
         placeholder="Email"
         value={email}
@@ -343,9 +343,9 @@ export default function LoginPage(props) {
         </Text>
         <Image style = {{position: "absolute", height:0.06*windowWidth, width: 0.06*windowWidth, left: -0.03*windowWidth, top: -0.001*windowHeight}} resizeMode={'cover'} source = {require('../assets/Login/unchecked.png')}/>
 
-       
+
         </View>}
-      
+
 
       <TouchableOpacity
         style={styles.button}
@@ -383,7 +383,7 @@ export default function LoginPage(props) {
           </Text>
         </TouchableOpacity>
         </View>}
-     
+
     </View>
     </View>
   );

@@ -28,7 +28,7 @@ export default function Predraft(props){
           fontWeight: "700",
           alignSelf: "center",
           marginBottom: 0.01*windowHeight,
-          color: "background: rgba(102, 102, 102, 1);"
+          color: "rgba(102, 102, 102, 1)"
         },
         input: {
           backgroundColor: "#F6F6F6",
@@ -39,12 +39,12 @@ export default function Predraft(props){
           fontSize: 30,
           marginTop: 0.04 * windowHeight,
           alignSelf: "center",
-          borderColor: "border: 1px solid rgba(232, 232, 232, 1)",
+          borderColor: "rgba(232, 232, 232, 1)",
           borderWidth: "1px"
         },
         link: {
           fontSize: 20,
-          color: "background: rgba(172, 101, 215, 1);",
+          color: "rgba(172, 101, 215, 1)",
           height: 0.03*windowHeight,
           overflow: "visible",
           alignContent: "center",
@@ -97,10 +97,10 @@ export default function Predraft(props){
         },containerHeader: {
           alignItems: "center",
           height: 0.05*windowHeight,
-          backgroundColor: "background: rgba(172, 101, 214, 1);",
+          backgroundColor: "rgba(172, 101, 214, 1)",
           borderTopRightRadius: 20,
           borderTopLeftRadius: 20,
-          borderColor: "background: rgba(172, 101, 214, 1);",
+          borderColor: "rgba(172, 101, 214, 1)",
           borderWidth: 1,
           justifyContent: "center"
         },
@@ -109,9 +109,9 @@ export default function Predraft(props){
           display: "flex",
           flexDirection: "row",
           gap: "40%",
-          borderColor: "background: rgba(217, 217, 217, 1);",
+          borderColor: "rgba(217, 217, 217, 1)",
           borderWidth: 1,
-          alignContent: "center", 
+          alignContent: "center",
           alignItems: "center",
           justifyContent: "center"
         },
@@ -120,10 +120,10 @@ export default function Predraft(props){
           display: "flex",
           flexDirection: "column",
           gap: "40%",
-          borderColor: "background: rgba(217, 217, 217, 1);",
-          borderTopColor: "background: rgba(217, 217, 217, 0);",
+          borderColor: "rgba(217, 217, 217, 1)",
+          borderTopColor: "rgba(217, 217, 217, 0)",
           borderWidth: 1,
-          alignContent: "center", 
+          alignContent: "center",
           alignItems: "center",
           justifyContent: "center",
           borderBottomRightRadius: "20",
@@ -149,7 +149,7 @@ export default function Predraft(props){
           purpleText: {
             alignSelf: "center",
             fontSize: 20,
-            color: "background: rgba(172, 101, 214, 1);",
+            color: "rgba(172, 101, 214, 1)",
             fontWeight: "500",
             marginTop: -0.02*windowHeight
           },
@@ -173,7 +173,7 @@ export default function Predraft(props){
 
 
     return (
-    
+
         <View
       style={{
         opacity: 1,

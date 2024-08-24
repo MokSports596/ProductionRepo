@@ -47,10 +47,10 @@ export default function Stable(props) {
           display: "flex",
           flexDirection: "row",
           height: 0.05*windowHeight,
-          backgroundColor: "background: rgba(172, 101, 214, 1);",
+          backgroundColor: "rgba(172, 101, 214, 1)",
           borderTopRightRadius: 20,
           borderTopLeftRadius: 20,
-          borderColor: "background: rgba(172, 101, 214, 1);",
+          borderColor: "rgba(172, 101, 214, 1)",
           borderWidth: 1,
           justifyContent: "center"
         },
@@ -59,9 +59,9 @@ export default function Stable(props) {
           display: "flex",
           flexDirection: "row",
           gap: "40%",
-          borderColor: "background: rgba(217, 217, 217, 1);",
+          borderColor: "rgba(217, 217, 217, 1)",
           borderWidth: 1,
-          alignContent: "center", 
+          alignContent: "center",
           alignItems: "center",
           justifyContent: "center"
         },
@@ -70,10 +70,10 @@ export default function Stable(props) {
           display: "flex",
           flexDirection: "column",
           // gap: "80%",
-          borderColor: "background: rgba(217, 217, 217, 1);",
-          borderTopColor: "background: rgba(217, 217, 217, 0);",
+          borderColor: "rgba(217, 217, 217, 1)",
+          borderTopColor: "rgba(217, 217, 217, 0)",
           borderWidth: 1,
-          // alignContent: "center", 
+          // alignContent: "center",
           // alignItems: "center",
           // justifyContent: "center",
           borderBottomRightRadius: "20",
@@ -85,7 +85,7 @@ export default function Stable(props) {
           backgroundColor: "background: rgba(172, 101, 214, 1);",
           borderBottomRightRadius: 20,
           borderBottomLeftRadius: 20,
-          borderColor: "background: rgba(172, 101, 214, 1);",
+          borderColor: "rgba(172, 101, 214, 1)",
           borderWidth: 1,
           justifyContent: "center"
         },
@@ -93,11 +93,11 @@ export default function Stable(props) {
           minHeight: 0.1*windowHeight,
           display: "flex",
           flexDirection: "column",
-          borderColor: "background: rgba(217, 217, 217, 1);",
-          borderTopColor: "background: rgba(217, 217, 217, 0);",
+          borderColor: "rgba(217, 217, 217, 1)",
+          borderTopColor: "rgba(217, 217, 217, 0)",
           borderWidth: 1,
         },
-        
+
   })
 
   function Player({rank = '', team = '', weekPoints = '', HSLS = '', MNF = '', MNF2 = '', isHighLighted = false}) {
@@ -186,7 +186,7 @@ export default function Stable(props) {
               <Player rank = "4" team = 'BigAssTruck' weekPoints = '6 Pts' HSLS = 'LS' MNF = '49ers'></Player>
             </View>
           </View>
-          
+
 
           {/* <Text style = {{fontSize: 25, fontWeight: 500,marginTop: 0.01*windowHeight, alignSelf: "center", marginBottom: 0.0*windowHeight, fontFamily: "Poppins",fontSize: "20px",fontWeight: 500,color: "rgba(102, 102, 102, 1)"}}>All Games</Text> */}
           {/* <View style = {styles.infoContainer}>
@@ -198,7 +198,7 @@ export default function Stable(props) {
           </View>
           <View style = {{alignSelf: "center", marginTop: 0.04*windowHeight}}>
           <View style = {styles.infoContainer}>
-        
+
             <View style = {styles.containerHeader}>
                 <Text style = {{fontSize: 20, color: "white", fontWeight: "bold", padding: 2, paddingRight: 5, paddingLeft: 5, overflow: "hidden", borderRadius:"10px"}}>Week {week}</Text>
                 <TouchableOpacity style = {{position: "absolute", height: 0.03*windowHeight, width: 0.05*windowWidth, alignSelf: "center", left: 0.05*windowWidth}} onPress = {decrementWeek}>
@@ -236,9 +236,9 @@ export default function Stable(props) {
       paddingBottom: "1000"}}></View>
           </ScrollView>
 
-      
 
-{/*           
+
+{/*
       <View style = {styles.stickyBar}>
       <TouchableOpacity onPress = {() => (props.navigation.navigate("Home"))}>
       <Image style = {{height: 0.055*windowHeight, width: 0.1*windowWidth}} resizeMode={'cover'} source = {require('../assets/home.png')}/>

@@ -26,7 +26,7 @@ export default function Game({team1 = "", team2 = "", score1 = "", score2 ="", i
       borderRadius: 0.07 * windowWidth,
       backgroundColor: "background: rgba(246, 246, 246, 1)",
       borderColor: "#d1d1d1",
-      borderColor: isLok ? "border: 1px solid rgba(172, 101, 214, 1)": "#d1d1d1",
+      borderColor: isLok ? "rgba(172, 101, 214, 1)": "#d1d1d1",
       borderWidth: isLok? "2": "0",
       marginTop: 10,
 
