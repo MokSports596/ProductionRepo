@@ -1,22 +1,30 @@
-import React from "react";
-import { StyleSheet, Text, View, ActivityIndicator, SafeAreaView, StatusBar, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  SafeAreaView, StatusBar
+} from "react-native";
 import { useState, useEffect } from "react";
+import LoginPage from "./components/Login";
 import { NavigationContainer } from "@react-navigation/native";
+import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Dimensions } from "react-native";
 import HomePage from "./components/HomePage";
 import Main from "./components/opening";
 import Standings from "./components/Standings";
+import { useRoute } from '@react-navigation/native';
+import Draft from "./components/Draft";
 import Stable from "./components/Stable";
-import LoginPage from "./components/Login";
-import LeaguesPage from "./components/League";  // <-- Import your LeaguesPage component
-import CreateLeague from "./components/CreateLeague";  // <-- Import your CreateLeague component
-import JoinLeague from "./components/JoinLeague";  // <-- Import your JoinLeague component
-
+import Payouts from "./components/Payouts";
 export default function App() {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
   const [count, setCount] = useState(0);
   const Stack = createNativeStackNavigator();
+  
+
 
   const styles = StyleSheet.create({
     container: {
@@ -32,9 +40,10 @@ export default function App() {
       width: "100%",
       height: "100%",
       right: 0,
-      top: 0,
-    },
-  });
+      top: 0
+    }
+  }
+);
 
   useEffect(() => {
     setTimeout(() => {
@@ -56,22 +65,29 @@ export default function App() {
   }
 
   function Home() {
-    return <HomePage height={windowHeight}></HomePage>;
+    return (
+      <HomePage height = {windowHeight}></HomePage>
+    )
   }
-  StatusBar.setBarStyle("dark-content", true);
+  
+  StatusBar.setBarStyle('dark-content', true);
+  
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Main" component={Main}></Stack.Screen>
-        <Stack.Screen name="Login" component={LoginPage}></Stack.Screen>
-        <Stack.Screen name="Leagues" component={LeaguesPage}></Stack.Screen>
-        <Stack.Screen name="CreateLeague" component={CreateLeague}></Stack.Screen>
-        <Stack.Screen name="JoinLeague" component={JoinLeague}></Stack.Screen>  
-        <Stack.Screen name="Home" component={HomePage}></Stack.Screen>
-        <Stack.Screen name="Stable" component={Stable} />
-        <Stack.Screen name="Standings" component={Standings} />
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+      <Stack.Navigator  screenOptions={{
+    headerShown: false
+  }}>
+      <Stack.Screen name = "Main" component = {
+        Main
+        } ></Stack.Screen>
+
+        <Stack.Screen component={HomePage} name = "Home"></Stack.Screen>
+        <Stack.Screen component = {Stable} name = "Stable"/>
+        <Stack.Screen component={Standings} name = "Standings"/>
+        <Stack.Screen component={Draft} name = "Draft"></Stack.Screen>
+        <Stack.Screen component={Payouts} name = "Payouts"></Stack.Screen>
+        </Stack.Navigator> 
+      </NavigationContainer>
   );
 }

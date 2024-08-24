@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 
-export default function Player({name = "N/A", ranking = "N/A", season = "/", wk = "/", skins = "/", LOKs = "/", LOKLeader = false, isSelf = false}) {
+export default function Player({name = "N/A", ranking = "N/A", season = "/", wk = "/", skins = "/", LOKs = "/", LOKLeader = false, isSelf = false, arrow = "neutral"}) {
   // const playername = props.name;
   // const playerranking = props.ranking;
   // const playerseason = props.season;
@@ -26,6 +26,7 @@ export default function Player({name = "N/A", ranking = "N/A", season = "/", wk 
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
+  const [modalVisible, setModalVisible] = useState(false)
 
   styles = StyleSheet.create({
     PlayerName: {
@@ -39,7 +40,7 @@ export default function Player({name = "N/A", ranking = "N/A", season = "/", wk 
     },
     InfoContainer: {
       width: 0.9 * windowWidth,
-      minHeight: 100,
+      minHeight: 85,
       borderRadius: 0.07 * windowWidth,
       backgroundColor: isSelf ? "border: 1px solid rgba(229, 229, 229, 1)" : "white", //border: 1px solid rgba(229, 229, 229, 1)
       borderColor: LOKLeader ? "border: 1px solid rgba(172, 101, 214, 1)": "#d1d1d1",
@@ -112,6 +113,7 @@ export default function Player({name = "N/A", ranking = "N/A", season = "/", wk 
   
 
   return (
+    <View>
     <View style={styles.InfoContainer}>
       {LOKLeader && <Text style = {styles.LOKLeader}>LOK Leader</Text>}
       <Text numberOfLines={1} style={styles.PlayerName}>
@@ -185,6 +187,11 @@ export default function Player({name = "N/A", ranking = "N/A", season = "/", wk 
         LOKs
       </Text>
       <Text style={styles.LOKs}>{LOKs}</Text>
+      {arrow == "neutral" && <Image style = {{position: "absolute", height: 0.045*windowHeight, width: 0.1*windowWidth, top: 0.045*windowHeight, left: 0.04*windowWidth}} resizeMode={'cover'} source = {require('../../assets/neutralArrow-removebg-preview.png')}/>}
+      {arrow == "down" && <Image style = {{position: "absolute", height: 0.045*windowHeight, width: 0.1*windowWidth, top: 0.044*windowHeight, left: 0.04*windowWidth}} resizeMode={'cover'} source = {require('../../assets/downArrowRanking-removebg-preview.png')}/>}
+      {arrow == "up" && <Image style = {{position: "absolute", height: 0.04*windowHeight, width: 0.095*windowWidth, top: 0.047*windowHeight, left: 0.04*windowWidth}} resizeMode={'cover'} source = {require('../../assets/upArrowRanking-removebg-preview.png')}/>}
+
+    </View>
     </View>
   );
 }

@@ -57,6 +57,7 @@ export default function StickyBar(props){
             fontSize: "35"
           }
     })
+    page = props.page
     props = props.properties
 
     
@@ -64,21 +65,27 @@ export default function StickyBar(props){
     return (
         <View style = {styles.stickyBar}>
       <TouchableOpacity onPress = {() => (props.navigation.navigate("Home"))}>
-      <Image style = {{height: 0.055*windowHeight, width: 0.1*windowWidth}} resizeMode={'cover'} source = {require('../../assets/home.png')}/>
+      {page != "Home" && <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../../assets/StickyBar/Home.png')}/>}
+      {page == "Home" && <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../../assets/StickyBar/homeHighlighted.png')}/>}
       </TouchableOpacity>
       <TouchableOpacity onPress = {() => (props.navigation.navigate("Stable"))}>
-      <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../../assets/week.png')}/>
+      {page != "Week" && <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../../assets/StickyBar/Week.png')}/>}
+      {page == "Week" && <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../../assets/StickyBar/weekHighlighted.png')}/>}
+
       </TouchableOpacity >
       <TouchableOpacity onPress = {() => (props.navigation.navigate("Standings"))}>
-      <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../../assets/standings_labelled.png')}/>
+      {page != "Standings" && <Image style = {{height: 0.06*windowHeight, width: 0.17*windowWidth}} resizeMode={'cover'} source = {require('../../assets/StickyBar/Standings.png')}/>}
+      {page == "Standings" && <Image style = {{height: 0.06*windowHeight, width: 0.17*windowWidth}} resizeMode={'cover'} source = {require('../../assets/StickyBar/standingsHighlighted.png')}/>}
+
       </TouchableOpacity>
-      <TouchableOpacity onPress = {() => (setPopUp(!popUpVisible))}>
-      <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../../assets/more.png')}/>
+      <TouchableOpacity onPress = {() => (props.navigation.navigate("Payouts"))}>
+      {page != "Payouts" && <Image style = {{height: 0.06*windowHeight, width: 0.17*windowWidth}} resizeMode={'cover'} source = {require('../../assets/StickyBar/Payouts.png')}/>}
+      {page == "Payouts" && <Image style = {{height: 0.06*windowHeight, width: 0.17*windowWidth}} resizeMode={'cover'} source = {require('../../assets/StickyBar/PayoutsHighlighted.png')}/>}
       </TouchableOpacity>
-      {popUpVisible && <View style = {styles.popUp}>
+      {/* {popUpVisible && <View style = {styles.popUp}>
         <Text style = {styles.popUpChild}>Test</Text>
         <Text style = {styles.popUpChild}>Test2</Text>
-        </View>}
+        </View>} */}
       </View>
     )
 }
