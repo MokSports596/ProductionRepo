@@ -4,7 +4,8 @@ import {
   Text,
   View,
   ActivityIndicator,
-  SafeAreaView, Image
+  SafeAreaView,
+  Image,
 } from "react-native";
 import { useState, useEffect } from "react";
 import LoginPage from "./Login";
@@ -55,20 +56,38 @@ export default function Main(props) {
   }
 
   function calcTop() {
-    if (-8*count + 1.2*windowHeight > windowHeight*0.5) {
-      return -8*count + 1.2*windowHeight;
+    if (-8 * count + 1.2 * windowHeight > windowHeight * 0.5) {
+      return -8 * count + 1.2 * windowHeight;
     }
-    return windowHeight*0.5
+    return windowHeight * 0.5;
   }
 
   return (
     <View style={styles.container}>
+      <Image
+        style={{
+          position: "absolute",
+          alignSelf: "center",
+          height: 0.055 * windowHeight,
+          width: 0.5 * windowWidth,
+          top: calcTop(),
+        }}
+        resizeMode={"cover"}
+        source={require("../assets/sports.png")}
+      />
+      <Image
+        style={{
+          position: "absolute",
+          alignSelf: "center",
+          height: 0.08 * windowHeight,
+          width: 0.5 * windowWidth,
+          bottom: calcTop(),
+        }}
+        resizeMode={"cover"}
+        source={require("../assets/MokLogov1.png")}
+      />
 
-      <Image style = {{position: "absolute", alignSelf: "center", height: 0.055*windowHeight, width: 0.5*windowWidth, top: calcTop()}} resizeMode={'cover'} source = {require('../assets/sports.png')}/>
-      <Image style = {{position: "absolute", alignSelf: "center", height: 0.08*windowHeight, width: 0.5*windowWidth, bottom: calcTop()}} resizeMode={'cover'} source = {require('../assets/MokLogov1.png')}/>
-
-
-        {/* {count < 151 && (
+      {/* {count < 151 && (
           <View style={styles.logoContainer}>
             <Text
               style={{
@@ -84,9 +103,7 @@ export default function Main(props) {
           </View>
         )} */}
 
-        {count > 140 && (
-          <LoginPage count={count} navigation={props.navigation} />)
-         }
-      </View>
+      {count > 140 && <LoginPage count={count} navigation={props.navigation} />}
+    </View>
   );
 }
