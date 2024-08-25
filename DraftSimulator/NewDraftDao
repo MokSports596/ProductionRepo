@@ -1,0 +1,166 @@
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using Mok.Web.Data.Dto;
+
+namespace Mok.Web.Data.Dao
+{
+    public class DraftDao : BaseDao
+    {
+        private readonly string connectionString;
+
+        public DraftDao(string connectionString)
+        {
+            this.connectionString = connectionString;
+        }
+
+        public override bool Insert(BaseDto dto)
+        {
+            Draft draft = dto as Draft;
+            if (draft == null)
+                throw new ArgumentException("Invalid DTO type");
+
+            // Implement actual insert logic here
+            Console.WriteLine($"Inserting Draft with ID: {draft.DraftId}");
+            return false;
+        }
+
+        public override bool Read(BaseDto dto)
+        {
+            Draft draft = dto as Draft;
+            if (draft == null)
+                throw new ArgumentException("Invalid DTO type");
+
+            // Implement actual read logic here
+            Console.WriteLine($"Reading Draft with ID: {draft.DraftId}");
+            return false; 
+        }
+        public override bool Update(BaseDto dto)
+        {
+            Draft draft = dto as Draft;
+            if (draft == null)
+                throw new ArgumentException("Invalid DTO type");
+
+            // Implement actual update logic here
+            Console.WriteLine($"Updating Draft with ID: {draft.DraftId}");
+            return true; // Return true if the operation succeeds
+        }
+
+        public override bool Delete(BaseDto dto)
+        {
+            Draft draft = dto as Draft;
+            if (draft == null)
+                throw new ArgumentException("Invalid DTO type");
+
+            // Implement actual delete logic here
+            Console.WriteLine($"Deleting Draft with ID: {draft.DraftId}");
+            return true; // Return true if the operation succeeds
+        }
+
+        public Draft GetDraftById(string draftId)
+        {
+            Draft draft = null;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SELECT * FROM Drafts WHERE DraftId = @DraftId", connection))
+                {
+                    command.Parameters.AddWithValue("@DraftId", draftId);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            draft = new Draft
+                            {
+                                DraftId = reader["DraftId"].ToString(),
+                                LeagueId = reader["LeagueId"].ToString(),
+                                LeagueName = reader["LeagueName"].ToString(),
+                                Status = reader["Status"].ToString(),
+                                Franchises = GetFranchisesByDraftId(draftId),
+                                Teams = GetAllTeams()
+                            };
+                        }
+                    }
+                }
+            }
+
+            return draft;
+        }
+
+        private List<Franchise> GetFranchisesByDraftId(string draftId)
+        {
+            var franchises = new List<Franchise>();
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SELECT * FROM Franchises WHERE DraftId = @DraftId", connection))
+                {
+                    command.Parameters.AddWithValue("@DraftId", draftId);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            franchises.Add(new Franchise
+                            {
+                                Id = reader["FranchiseId"].ToString(),
+                                Name = reader["FranchiseName"].ToString(),
+                                DraftedTeams = GetTeamsByFranchiseId(reader["FranchiseId"].ToString())
+                            });
+                        }
+                    }
+                }
+            }
+
+            return franchises;
+        }
+
+        private List<string> GetTeamsByFranchiseId(string franchiseId)
+        {
+            var teams = new List<string>();
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SELECT TeamId FROM FranchiseTeams WHERE FranchiseId = @FranchiseId", connection))
+                {
+                    command.Parameters.AddWithValue("@FranchiseId", franchiseId);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            teams.Add(reader["TeamId"].ToString());
+                        }
+                    }
+                }
+            }
+
+            return teams;
+        }
+
+        private Dictionary<string, string> GetAllTeams()
+        {
+            var teams = new Dictionary<string, string>();
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SELECT * FROM Teams", connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            teams.Add(reader["TeamName"].ToString(), reader["ConferenceName"].ToString());
+                        }
+                    }
+                }
+            }
+
+            return teams;
+        }
+    }
+}
