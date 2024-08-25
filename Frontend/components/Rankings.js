@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import React from 'react'
+import { StyleSheet } from 'react-native'
 import {
   View,
   Text,
@@ -11,48 +11,48 @@ import {
   Image,
   FlatList,
   ScrollView,
-} from "react-native";
-import { useState } from "react";
+} from 'react-native'
+import { useState } from 'react'
 
 export default function Rankings(props) {
-  const windowWidth = Dimensions.get("window").width;
-  const windowHeight = Dimensions.get("window").height;
+  const windowWidth = Dimensions.get('window').width
+  const windowHeight = Dimensions.get('window').height
 
   styles = StyleSheet.create({
     BodyContainer: {
-      alignItems: "center",
-      justifyContent: "center",
-      alignContent: "center",
-      justifyContent: "center",
-      width: "100%",
-      display: "flex",
+      alignItems: 'center',
+      justifyContent: 'center',
+      alignContent: 'center',
+      justifyContent: 'center',
+      width: '100%',
+      display: 'flex',
     },
     container: {
-      width: "100%",
-      height: "auto",
-      minHeight: "100%",
-      overflow: "hidden",
+      width: '100%',
+      height: 'auto',
+      minHeight: '100%',
+      overflow: 'hidden',
       marginTop: 30,
-      alignContent: "center",
-      alignItems: "center",
-      display: "flex",
+      alignContent: 'center',
+      alignItems: 'center',
+      display: 'flex',
     },
 
     LeagueBox: {
       width: 0.7 * windowWidth,
       height: 300,
-      backgroundColor: "white",
-      alignSelf: "center",
-      marginTop: "30%",
+      backgroundColor: 'white',
+      alignSelf: 'center',
+      marginTop: '30%',
       borderRadius: 0.1 * windowWidth,
-      shadowColor: "#171717",
+      shadowColor: '#171717',
       shadowOffset: { width: 0, height: 6 },
       shadowOpacity: 0.3,
       shadowRadius: 5,
     },
     LeagueBoxTitle: {
-      alignSelf: "center",
-      fontSize: "20px",
+      alignSelf: 'center',
+      fontSize: '20px',
       marginTop: 3,
     },
 
@@ -60,9 +60,9 @@ export default function Rankings(props) {
       width: 0.9 * windowWidth,
       minHeight: 0.15 * windowHeight,
       borderRadius: 0.1 * windowWidth,
-      backgroundColor: "white",
-      borderColor: "#d1d1d1",
-      borderWidth: "1",
+      backgroundColor: 'white',
+      borderColor: '#d1d1d1',
+      borderWidth: '1',
       marginTop: 10,
 
       shadowOffset: { width: 0, height: 6 },
@@ -73,23 +73,23 @@ export default function Rankings(props) {
       marginTop: 16,
     },
     stickyBar: {
-      position: "absolute",
+      position: 'absolute',
       right: 0,
       top: 0.87 * windowHeight,
       height: 0.13 * windowHeight,
-      backgroundColor: "#ac65d7",
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      flexDirection: "row",
+      backgroundColor: '#ac65d7',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'row',
       gap: 0.05 * windowWidth,
     },
     LockHistory: {
-      fontSize: "15",
+      fontSize: '15',
       marginTop: 13,
-      fontWeight: "500",
-      color: "purple",
+      fontWeight: '500',
+      color: 'purple',
     },
     PlayerName: {
       fontSize: 20,
@@ -97,7 +97,7 @@ export default function Rankings(props) {
       marginLeft: 0.06 * windowWidth,
       marginTop: 0.02 * windowHeight,
       fontWeight: 200,
-      textOverflow: "ellipsis",
+      textOverflow: 'ellipsis',
       maxHeight: 0.05 * windowHeight,
     },
     TeamName: {
@@ -106,43 +106,43 @@ export default function Rankings(props) {
       marginLeft: 0.06 * windowWidth,
       marginTop: 0.002 * windowHeight,
       fontWeight: 200,
-      textOverflow: "ellipsis",
+      textOverflow: 'ellipsis',
       maxHeight: 0.04 * windowHeight,
-      color: "gray",
-      textOverflow: "ellipsis",
-      overflow: "hidden",
-      display: "block",
+      color: 'gray',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      display: 'block',
     },
     Points: {
-      position: "absolute",
+      position: 'absolute',
       right: 0.05 * windowWidth,
       marginTop: 0.02 * windowHeight,
       fontSize: 20,
     },
     TotalPoints: {
-      position: "absolute",
+      position: 'absolute',
       right: 0.05 * windowWidth,
       marginTop: 0.05 * windowHeight,
       fontSize: 18,
-      color: "gray",
+      color: 'gray',
     },
     RankingNumber: {
       fontSize: 20,
       marginTop: 0.02 * windowHeight,
       marginLeft: 0.2 * windowWidth,
     },
-  });
+  })
 
   return (
     <View
       style={{
-        alignContent: "center",
-        alignItems: "center",
-        display: "flex",
-        width: "100%",
-        minHeight: "100%",
-        height: "auto",
-        backgroundColor: "#FFFFFF",
+        alignContent: 'center',
+        alignItems: 'center',
+        display: 'flex',
+        width: '100%',
+        minHeight: '100%',
+        height: 'auto',
+        backgroundColor: '#FFFFFF',
       }}
     >
       <ScrollView>
@@ -152,7 +152,7 @@ export default function Rankings(props) {
             fontSize: 25,
             fontWeight: 500,
             marginTop: 0.08 * windowHeight,
-            alignSelf: "center",
+            alignSelf: 'center',
             marginBottom: 0.05 * windowHeight,
           }}
         >
@@ -170,36 +170,36 @@ export default function Rankings(props) {
       </ScrollView>
 
       <View style={styles.stickyBar}>
-        <TouchableOpacity onPress={() => props.navigation.navigate("Home")}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
           <Image
             style={{ height: 0.055 * windowHeight, width: 0.1 * windowWidth }}
-            resizeMode={"cover"}
-            source={require("../assets/home.png")}
+            resizeMode={'cover'}
+            source={require('../assets/home.png')}
           />
         </TouchableOpacity>
         <Image
           style={{ height: 0.06 * windowHeight, width: 0.15 * windowWidth }}
-          resizeMode={"cover"}
-          source={require("../assets/rankings_labelled.png")}
+          resizeMode={'cover'}
+          source={require('../assets/rankings_labelled.png')}
         />
         <Image
           style={{ height: 0.06 * windowHeight, width: 0.15 * windowWidth }}
-          resizeMode={"cover"}
-          source={require("../assets/trade.png")}
+          resizeMode={'cover'}
+          source={require('../assets/trade.png')}
         />
-        <TouchableOpacity onPress={() => props.navigation.navigate("Stable")}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('Stable')}>
           <Image
             style={{ height: 0.06 * windowHeight, width: 0.15 * windowWidth }}
-            resizeMode={"cover"}
-            source={require("../assets/stable.png")}
+            resizeMode={'cover'}
+            source={require('../assets/stable.png')}
           />
         </TouchableOpacity>
         <Image
           style={{ height: 0.06 * windowHeight, width: 0.15 * windowWidth }}
-          resizeMode={"cover"}
-          source={require("../assets/more.png")}
+          resizeMode={'cover'}
+          source={require('../assets/more.png')}
         />
       </View>
     </View>
-  );
+  )
 }

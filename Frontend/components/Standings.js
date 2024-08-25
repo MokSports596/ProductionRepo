@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import React from 'react'
+import { StyleSheet } from 'react-native'
 import {
   View,
   Text,
@@ -12,53 +12,53 @@ import {
   FlatList,
   ScrollView,
   StatusBar,
-} from "react-native";
-import { useState } from "react";
-import TopBar from "./page_components/TopBar.js";
-import Player from "./page_components/Player.js";
-import StickyBar from "./page_components/StickyBar.js";
-import Team from "./page_components/Team.js";
-import TeamLogo from "./page_components/TeamLogo.js";
+} from 'react-native'
+import { useState } from 'react'
+import TopBar from './page_components/TopBar.js'
+import Player from './page_components/Player.js'
+import StickyBar from './page_components/StickyBar.js'
+import Team from './page_components/Team.js'
+import TeamLogo from './page_components/TeamLogo.js'
 export default function Standings(props) {
-  const windowWidth = Dimensions.get("window").width;
-  const windowHeight = Dimensions.get("window").height;
+  const windowWidth = Dimensions.get('window').width
+  const windowHeight = Dimensions.get('window').height
 
   styles = StyleSheet.create({
     BodyContainer: {
-      alignItems: "center",
-      justifyContent: "center",
-      alignContent: "center",
-      justifyContent: "center",
-      width: "100%",
-      display: "flex",
-      gap: "10",
+      alignItems: 'center',
+      justifyContent: 'center',
+      alignContent: 'center',
+      justifyContent: 'center',
+      width: '100%',
+      display: 'flex',
+      gap: '10',
     },
 
     InfoContainer: {
       width: 0.9 * windowWidth,
       minHeight: 0.1 * windowHeight,
       borderRadius: 0.1 * windowWidth,
-      backgroundColor: "rgba(246, 246, 246, 1)",
-      borderColor: "#d1d1d1",
-      borderWidth: "1",
+      backgroundColor: 'rgba(246, 246, 246, 1)',
+      borderColor: '#d1d1d1',
+      borderWidth: '1',
       marginTop: 10,
-      alignSelf: "center",
+      alignSelf: 'center',
 
       shadowOffset: { width: 0, height: 6 },
       shadowOpacity: 0.3,
       shadowRadius: 5,
     },
     stickyBar: {
-      position: "absolute",
+      position: 'absolute',
       right: 0,
       top: 0.9 * windowHeight,
       height: 0.1 * windowHeight,
-      backgroundColor: "#ac65d7",
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      flexDirection: "row",
+      backgroundColor: '#ac65d7',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'row',
       gap: 0.1 * windowWidth,
     },
     PlayerName: {
@@ -67,7 +67,7 @@ export default function Standings(props) {
       marginLeft: 0.06 * windowWidth,
       marginTop: 0.02 * windowHeight,
       fontWeight: 200,
-      textOverflow: "ellipsis",
+      textOverflow: 'ellipsis',
       maxHeight: 0.05 * windowHeight,
     },
     TeamName: {
@@ -76,66 +76,66 @@ export default function Standings(props) {
       marginLeft: 0.06 * windowWidth,
       marginTop: 0.002 * windowHeight,
       fontWeight: 200,
-      textOverflow: "ellipsis",
+      textOverflow: 'ellipsis',
       maxHeight: 0.04 * windowHeight,
-      color: "gray",
-      textOverflow: "ellipsis",
-      overflow: "hidden",
-      display: "block",
+      color: 'gray',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      display: 'block',
     },
     Points: {
-      position: "absolute",
+      position: 'absolute',
       right: 0.05 * windowWidth,
       marginTop: 0.02 * windowHeight,
       fontSize: 20,
     },
     TotalPoints: {
-      position: "absolute",
+      position: 'absolute',
       right: 0.05 * windowWidth,
       marginTop: 0.05 * windowHeight,
       fontSize: 18,
-      color: "gray",
+      color: 'gray',
     },
     RankingNumber: {
       fontSize: 20,
       marginTop: 0.02 * windowHeight,
       marginLeft: 0.2 * windowWidth,
     },
-  });
+  })
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalName, setModalName] = useState("");
-  const [modalUsername, setModalUsername] = useState("");
-  const [Teams, setTeams] = useState("");
-  const [TeamLOKs, setTeamLOKs] = useState("");
-  const [loknloads, setLoknloads] = useState([]);
-  const [week, setWeek] = useState(4);
-  const [threeteams, setthreeteams] = useState([]);
-  const [teamsdata, setteamsdata] = useState([]);
-  const [weekPoints, setWeekpoints] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false)
+  const [modalName, setModalName] = useState('')
+  const [modalUsername, setModalUsername] = useState('')
+  const [Teams, setTeams] = useState('')
+  const [TeamLOKs, setTeamLOKs] = useState('')
+  const [loknloads, setLoknloads] = useState([])
+  const [week, setWeek] = useState(4)
+  const [threeteams, setthreeteams] = useState([])
+  const [teamsdata, setteamsdata] = useState([])
+  const [weekPoints, setWeekpoints] = useState(0)
 
   function HandlePress(userId) {
-    setModalVisible(true);
-    setModalName("TestName");
-    setModalUsername(userId);
-    setTeams(["49ers", "chiefs", "49ers", "dolphins", "chiefs"]);
-    setTeamLOKs([3, 4, 4, 2, 3]);
-    setLoknloads([1, 1, 1, 1, 0]);
-    setthreeteams(["49ers", "chiefs", "dolphins"]);
-    setteamsdata(["+2", "+2", "+2"]);
-    setWeekpoints(5);
+    setModalVisible(true)
+    setModalName('TestName')
+    setModalUsername(userId)
+    setTeams(['49ers', 'chiefs', '49ers', 'dolphins', 'chiefs'])
+    setTeamLOKs([3, 4, 4, 2, 3])
+    setLoknloads([1, 1, 1, 1, 0])
+    setthreeteams(['49ers', 'chiefs', 'dolphins'])
+    setteamsdata(['+2', '+2', '+2'])
+    setWeekpoints(5)
   }
 
   return (
     <View
       style={{
-        alignContent: "center",
-        alignItems: "center",
-        display: "flex",
-        width: "100%",
-        minHeight: "100%",
-        height: "auto",
-        backgroundColor: "#FFFFFF",
+        alignContent: 'center',
+        alignItems: 'center',
+        display: 'flex',
+        width: '100%',
+        minHeight: '100%',
+        height: 'auto',
+        backgroundColor: '#FFFFFF',
       }}
     >
       <ScrollView>
@@ -147,52 +147,52 @@ export default function Standings(props) {
               fontSize: 25,
               fontWeight: 500,
               marginTop: 0.01 * windowHeight,
-              alignSelf: "center",
+              alignSelf: 'center',
               marginBottom: 0.0 * windowHeight,
-              fontFamily: "Poppins",
-              fontSize: "20px",
+              fontFamily: 'Poppins',
+              fontSize: '20px',
               fontWeight: 800,
-              color: "rgba(102, 102, 102, 1)",
+              color: 'rgba(102, 102, 102, 1)',
             }}
           >
             Standings
           </Text>
           <Player
-            name="BAT"
-            ranking="#1"
-            season="6"
-            wk="+4"
-            skins="1"
-            LOKs="5"
+            name='BAT'
+            ranking='#1'
+            season='6'
+            wk='+4'
+            skins='1'
+            LOKs='5'
             isSelf={true}
           ></Player>
 
           <Player
-            name="TestName"
-            ranking="#2"
-            season="50"
-            wk="+2"
-            skins="1"
-            LOKs="5"
-            arrow="up"
+            name='TestName'
+            ranking='#2'
+            season='50'
+            wk='+2'
+            skins='1'
+            LOKs='5'
+            arrow='up'
           ></Player>
           <Player
-            name="TestName"
-            ranking="#2"
-            season="50"
-            wk="0"
-            skins="1"
-            LOKs="5"
-            arrow="down"
+            name='TestName'
+            ranking='#2'
+            season='50'
+            wk='0'
+            skins='1'
+            LOKs='5'
+            arrow='down'
           ></Player>
-          <TouchableOpacity onPress={() => HandlePress("123456")}>
+          <TouchableOpacity onPress={() => HandlePress('123456')}>
             <Player
-              name="TestName"
-              ranking="#2"
-              season="50"
-              wk="-2"
-              skins="1"
-              LOKs="5"
+              name='TestName'
+              ranking='#2'
+              season='50'
+              wk='-2'
+              skins='1'
+              LOKs='5'
               LOKLeader={true}
             ></Player>
           </TouchableOpacity>
@@ -208,8 +208,8 @@ export default function Standings(props) {
             borderRadius: 0.1 * windowWidth,
             marginTop: 10,
 
-            alignSelf: "center",
-            paddingBottom: "1000",
+            alignSelf: 'center',
+            paddingBottom: '1000',
           }}
         ></View>
       </ScrollView>
@@ -224,22 +224,22 @@ export default function Standings(props) {
       <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../assets/standings_labelled.png')}/>
       <Image style = {{height: 0.06*windowHeight, width: 0.15*windowWidth}} resizeMode={'cover'} source = {require('../assets/trades.png')}/>
       </View> */}
-      <StickyBar properties={props} page="Standings"></StickyBar>
+      <StickyBar properties={props} page='Standings'></StickyBar>
       {modalVisible && (
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             width: windowWidth,
             height: windowHeight,
-            justifyContent: "center",
+            justifyContent: 'center',
           }}
         >
           <TouchableOpacity
             style={{
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              backgroundColor: "rgba(0,0,0, 0.4)",
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(0,0,0, 0.4)',
             }}
             onPress={() => setModalVisible(false)}
           ></TouchableOpacity>
@@ -247,22 +247,22 @@ export default function Standings(props) {
             style={{
               width: 0.95 * windowWidth,
               minHeight: 0.6 * windowHeight,
-              backgroundColor: "white",
-              alignSelf: "center",
+              backgroundColor: 'white',
+              alignSelf: 'center',
               borderRadius: 20,
             }}
           >
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Image
                 style={{
-                  position: "absolute",
+                  position: 'absolute',
                   height: 0.05 * windowHeight,
                   width: 0.1 * windowWidth,
                   right: 0.06 * windowWidth,
                   top: 0.02 * windowHeight,
                 }}
-                resizeMode={"cover"}
-                source={require("../assets/Login/X.png")}
+                resizeMode={'cover'}
+                source={require('../assets/Login/X.png')}
               />
             </TouchableOpacity>
             <Text
@@ -270,7 +270,7 @@ export default function Standings(props) {
                 top: 0.04 * windowHeight,
                 left: 0.05 * windowWidth,
                 fontSize: 20,
-                fontWeight: "500",
+                fontWeight: '500',
               }}
             >
               {modalName}
@@ -280,7 +280,7 @@ export default function Standings(props) {
                 top: 0.04 * windowHeight,
                 left: 0.05 * windowWidth,
                 fontSize: 18,
-                color: "gray",
+                color: 'gray',
                 marginTop: 0.01 * windowHeight,
               }}
             >
@@ -289,8 +289,8 @@ export default function Standings(props) {
             <View
               style={{
                 height: 1,
-                width: "100%",
-                backgroundColor: "background: rgba(217, 217, 217, 1);",
+                width: '100%',
+                backgroundColor: 'background: rgba(217, 217, 217, 1);',
                 marginTop: 0.07 * windowHeight,
               }}
             ></View>
@@ -299,7 +299,7 @@ export default function Standings(props) {
                 top: 0.01 * windowHeight,
                 left: 0.05 * windowWidth,
                 fontSize: 18,
-                color: "gray",
+                color: 'gray',
                 marginTop: 0.01 * windowHeight,
               }}
             >
@@ -311,26 +311,26 @@ export default function Standings(props) {
                 minHeight: 50,
                 width: 0.9 * windowWidth,
                 marginTop: -0.02 * windowHeight,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                alignSelf: "center",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                alignSelf: 'center',
               }}
             >
               <Text
                 style={{
                   width: 0.9 * windowWidth,
                   marginBottom: 0.005 * windowHeight,
-                  alignSelf: "center",
-                  textAlign: "center",
-                  fontFamily: "Poppins",
-                  fontSize: "19",
-                  fontWeight: "500",
+                  alignSelf: 'center',
+                  textAlign: 'center',
+                  fontFamily: 'Poppins',
+                  fontSize: '19',
+                  fontWeight: '500',
                   marginTop: 0.02 * windowHeight,
-                  color: "background: rgba(172, 101, 214, 1);",
+                  color: 'background: rgba(172, 101, 214, 1);',
                 }}
               ></Text>
-              <View style={{ display: "flex", flexDirection: "row" }}>
+              <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <Team
                   team={Teams[0]}
                   LOKs={TeamLOKs[0]}
@@ -363,8 +363,8 @@ export default function Standings(props) {
             <View
               style={{
                 height: 1,
-                width: "100%",
-                backgroundColor: "background: rgba(217, 217, 217, 1);",
+                width: '100%',
+                backgroundColor: 'background: rgba(217, 217, 217, 1);',
                 marginTop: 0.01 * windowHeight,
               }}
             ></View>
@@ -373,8 +373,8 @@ export default function Standings(props) {
               style={{
                 width: 0.9 * windowWidth,
                 height: 0.2 * windowHeight,
-                backgroundColor: "background: rgba(246, 246, 246, 1);",
-                alignSelf: "center",
+                backgroundColor: 'background: rgba(246, 246, 246, 1);',
+                alignSelf: 'center',
                 marginTop: 0.03 * windowHeight,
                 borderRadius: 20,
               }}
@@ -384,35 +384,35 @@ export default function Standings(props) {
                   marginLeft: 0.15 * windowWidth,
                   marginTop: 0.01 * windowHeight,
                   fontSize: 17,
-                  fontWeight: "500",
+                  fontWeight: '500',
                 }}
               >
                 Week {week}
               </Text>
               <Image
                 style={{
-                  position: "absolute",
+                  position: 'absolute',
                   height: 0.05 * windowHeight,
                   width: 0.1 * windowWidth,
                   right: 0.03 * windowWidth,
                   top: 0.08 * windowHeight,
                 }}
-                resizeMode={"cover"}
-                source={require("../assets/rightarrow.png")}
+                resizeMode={'cover'}
+                source={require('../assets/rightarrow.png')}
               />
               <Image
                 style={{
-                  position: "absolute",
+                  position: 'absolute',
                   height: 0.05 * windowHeight,
                   width: 0.1 * windowWidth,
                   left: 0.03 * windowWidth,
                   top: 0.08 * windowHeight,
                 }}
-                resizeMode={"cover"}
-                source={require("../assets/leftarrow.png")}
+                resizeMode={'cover'}
+                source={require('../assets/leftarrow.png')}
               />
 
-              <View style={{ display: "flex", flexDirection: "row" }}>
+              <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <View
                   style={{
                     marginLeft: 0.15 * windowWidth,
@@ -452,7 +452,7 @@ export default function Standings(props) {
                 style={{
                   right: 0.15 * windowWidth,
                   top: 0.085 * windowHeight,
-                  position: "absolute",
+                  position: 'absolute',
                   fontSize: 30,
                 }}
               >
@@ -463,5 +463,5 @@ export default function Standings(props) {
         </View>
       )}
     </View>
-  );
+  )
 }

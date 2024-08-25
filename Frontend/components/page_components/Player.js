@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import React from 'react'
+import { StyleSheet } from 'react-native'
 import {
   View,
   Text,
@@ -11,19 +11,19 @@ import {
   Image,
   FlatList,
   ScrollView,
-} from "react-native";
-import { useState } from "react";
+} from 'react-native'
+import { useState } from 'react'
 
 export default function Player({
-  name = "N/A",
-  ranking = "N/A",
-  season = "/",
-  wk = "/",
-  skins = "/",
-  LOKs = "/",
+  name = 'N/A',
+  ranking = 'N/A',
+  season = '/',
+  wk = '/',
+  skins = '/',
+  LOKs = '/',
   LOKLeader = false,
   isSelf = false,
-  arrow = "neutral",
+  arrow = 'neutral',
 }) {
   // const playername = props.name;
   // const playerranking = props.ranking;
@@ -33,9 +33,9 @@ export default function Player({
   // const playerLOKs = props.LOKs;
   // const LOKLeader = props.LOKLeader;
 
-  const windowWidth = Dimensions.get("window").width;
-  const windowHeight = Dimensions.get("window").height;
-  const [modalVisible, setModalVisible] = useState(false);
+  const windowWidth = Dimensions.get('window').width
+  const windowHeight = Dimensions.get('window').height
+  const [modalVisible, setModalVisible] = useState(false)
 
   styles = StyleSheet.create({
     PlayerName: {
@@ -44,7 +44,7 @@ export default function Player({
       marginLeft: 0.06 * windowWidth,
       marginTop: 0.02 * windowHeight,
       fontWeight: 200,
-      textOverflow: "ellipsis",
+      textOverflow: 'ellipsis',
       maxHeight: 0.05 * windowHeight,
     },
     InfoContainer: {
@@ -52,76 +52,76 @@ export default function Player({
       minHeight: 85,
       borderRadius: 0.07 * windowWidth,
       backgroundColor: isSelf
-        ? "border: 1px solid rgba(229, 229, 229, 1)"
-        : "white", //border: 1px solid rgba(229, 229, 229, 1)
+        ? 'border: 1px solid rgba(229, 229, 229, 1)'
+        : 'white', //border: 1px solid rgba(229, 229, 229, 1)
       borderColor: LOKLeader
-        ? "border: 1px solid rgba(172, 101, 214, 1)"
-        : "#d1d1d1",
-      borderWidth: "1",
+        ? 'border: 1px solid rgba(172, 101, 214, 1)'
+        : '#d1d1d1',
+      borderWidth: '1',
       marginTop: 10,
 
       // shadowOffset: { width: 0, height: 6 },
       // shadowOpacity: 0.3,
       // shadowRadius: 5,
-      alignSelf: "center",
-      paddingBottom: "1000",
+      alignSelf: 'center',
+      paddingBottom: '1000',
     },
     Points: {
-      position: "absolute",
+      position: 'absolute',
       right: 0.05 * windowWidth,
       marginTop: 0.02 * windowHeight,
       fontSize: 20,
     },
     TotalPoints: {
-      position: "absolute",
+      position: 'absolute',
       right: 0.49 * windowWidth,
       width: 0.1 * windowWidth,
       marginTop: 0.055 * windowHeight,
       fontSize: 24,
-      color: "black",
-      textAlign: "center",
+      color: 'black',
+      textAlign: 'center',
     },
     RankingNumber: {
       fontSize: 24,
       marginTop: 0.01 * windowHeight,
       marginLeft: 0.15 * windowWidth,
-      color: "background: rgba(102, 102, 102, 1)",
+      color: 'background: rgba(102, 102, 102, 1)',
     },
     WeeklyPoints: {
-      position: "absolute",
+      position: 'absolute',
       right: 0.36 * windowWidth,
       marginTop: 0.055 * windowHeight,
       fontSize: 24,
-      color: "black",
+      color: 'black',
     },
     Skins: {
-      position: "absolute",
+      position: 'absolute',
       right: 0.24 * windowWidth,
       marginTop: 0.055 * windowHeight,
       fontSize: 24,
-      color: "black",
+      color: 'black',
     },
     LOKs: {
-      position: "absolute",
+      position: 'absolute',
       right: 0.1 * windowWidth,
       marginTop: 0.055 * windowHeight,
       fontSize: 24,
-      color: "black",
+      color: 'black',
     },
     LOKLeader: {
-      position: "absolute",
-      fontSize: "20px",
+      position: 'absolute',
+      fontSize: '20px',
       marginTop: -0.03 * windowWidth,
       right: 0.32 * windowWidth,
-      color: "white",
-      backgroundColor: "background: rgba(172, 101, 214, 1)",
-      fontWeight: "bold",
+      color: 'white',
+      backgroundColor: 'background: rgba(172, 101, 214, 1)',
+      fontWeight: 'bold',
       width: 0.3 * windowWidth,
-      textAlign: "center",
+      textAlign: 'center',
       borderRadius: 9,
-      overflow: "hidden",
+      overflow: 'hidden',
     },
-  });
+  })
 
   return (
     <View>
@@ -134,15 +134,15 @@ export default function Player({
 
         <Text
           style={{
-            position: "absolute",
+            position: 'absolute',
             fontSize: 18,
             width: 0.2 * windowWidth,
             marginLeft: 0.28 * windowWidth,
             marginTop: 0.02 * windowHeight,
             fontWeight: 500,
-            textOverflow: "ellipsis",
+            textOverflow: 'ellipsis',
             maxHeight: 0.05 * windowHeight,
-            color: "background: rgba(102, 102, 102, 1)",
+            color: 'background: rgba(102, 102, 102, 1)',
           }}
         >
           Season
@@ -151,15 +151,15 @@ export default function Player({
 
         <Text
           style={{
-            position: "absolute",
+            position: 'absolute',
             fontSize: 18,
             width: 0.2 * windowWidth,
             marginLeft: 0.47 * windowWidth,
             marginTop: 0.02 * windowHeight,
             fontWeight: 500,
-            textOverflow: "ellipsis",
+            textOverflow: 'ellipsis',
             maxHeight: 0.05 * windowHeight,
-            color: "background: rgba(102, 102, 102, 1)",
+            color: 'background: rgba(102, 102, 102, 1)',
           }}
         >
           Wk
@@ -168,15 +168,15 @@ export default function Player({
 
         <Text
           style={{
-            position: "absolute",
+            position: 'absolute',
             fontSize: 18,
             width: 0.2 * windowWidth,
             marginLeft: 0.58 * windowWidth,
             marginTop: 0.02 * windowHeight,
             fontWeight: 500,
-            textOverflow: "ellipsis",
+            textOverflow: 'ellipsis',
             maxHeight: 0.05 * windowHeight,
-            color: "background: rgba(102, 102, 102, 1)",
+            color: 'background: rgba(102, 102, 102, 1)',
           }}
         >
           Skins
@@ -184,60 +184,60 @@ export default function Player({
         <Text style={styles.Skins}>{skins}</Text>
         <Text
           style={{
-            position: "absolute",
+            position: 'absolute',
             fontSize: 18,
             width: 0.2 * windowWidth,
             marginLeft: 0.73 * windowWidth,
             marginTop: 0.02 * windowHeight,
             fontWeight: 500,
-            textOverflow: "ellipsis",
+            textOverflow: 'ellipsis',
             maxHeight: 0.05 * windowHeight,
-            color: "background: rgba(102, 102, 102, 1)",
+            color: 'background: rgba(102, 102, 102, 1)',
           }}
         >
           LOKs
         </Text>
         <Text style={styles.LOKs}>{LOKs}</Text>
-        {arrow == "neutral" && (
+        {arrow == 'neutral' && (
           <Image
             style={{
-              position: "absolute",
+              position: 'absolute',
               height: 0.045 * windowHeight,
               width: 0.1 * windowWidth,
               top: 0.045 * windowHeight,
               left: 0.04 * windowWidth,
             }}
-            resizeMode={"cover"}
-            source={require("../../assets/neutralArrow-removebg-preview.png")}
+            resizeMode={'cover'}
+            source={require('../../assets/neutralArrow-removebg-preview.png')}
           />
         )}
-        {arrow == "down" && (
+        {arrow == 'down' && (
           <Image
             style={{
-              position: "absolute",
+              position: 'absolute',
               height: 0.045 * windowHeight,
               width: 0.1 * windowWidth,
               top: 0.044 * windowHeight,
               left: 0.04 * windowWidth,
             }}
-            resizeMode={"cover"}
-            source={require("../../assets/downArrowRanking-removebg-preview.png")}
+            resizeMode={'cover'}
+            source={require('../../assets/downArrowRanking-removebg-preview.png')}
           />
         )}
-        {arrow == "up" && (
+        {arrow == 'up' && (
           <Image
             style={{
-              position: "absolute",
+              position: 'absolute',
               height: 0.04 * windowHeight,
               width: 0.095 * windowWidth,
               top: 0.047 * windowHeight,
               left: 0.04 * windowWidth,
             }}
-            resizeMode={"cover"}
-            source={require("../../assets/upArrowRanking-removebg-preview.png")}
+            resizeMode={'cover'}
+            source={require('../../assets/upArrowRanking-removebg-preview.png')}
           />
         )}
       </View>
     </View>
-  );
+  )
 }
