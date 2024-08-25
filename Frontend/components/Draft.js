@@ -25,6 +25,14 @@ import DraftTeam from './page_components/DraftTeam.js'
 export default function Draft(props) {
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
+
+  //IMPLEMENT LOGIC FOR THE FOLLOWING:
+  const userId = 1
+  const draftId = 123456
+  const leagueID = 123456
+  const franchiseId = 123456
+
+
   const styles = StyleSheet.create({
     container: {
       borderWidth: 1,
@@ -52,6 +60,60 @@ export default function Draft(props) {
       marginBottom: 0.03 * windowHeight,
     },
   })
+
+  const addTeam = async (teamId) => { //Needs reviewing
+    try {
+//       curl -X POST "http://localhost:5062/api/draft/{draftId}/pick" \
+// -H "Content-Type: application/json" \
+// -d '{
+//     "franchiseId": {franchiseId},
+//     "teamId": {teamId}
+// }'
+
+      const data = await axiosInstance.post('/draft/' + draftId + '/pick', {"franchiseId": franchiseId, "teamId": teamId})
+      console.log('added team')
+    } catch (error) {
+      Alert('There was an error loading the page. Please try again later')
+      if (error.response) {
+        // The request was made, and the server responded with a status code that falls out of the range of 2xx
+        console.error('Error response data:', error.response.data)
+        console.error('Error response status:', error.response.status)
+        console.error('Error response headers:', error.response.headers)
+      } else if (error.request) {
+        // The request was made, but no response was received
+        console.error('Error request:', error.request)
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error message:', error.message)
+      }
+    }
+  }
+
+  
+  const [availableTeams, setAvailableTeams] = useState([])
+
+  const getAvailableTeams = async() => {
+    try {
+            const data = await axiosInstance.get('/'+ draftId + '/available-teams')
+            console.log('added team')
+
+          } catch (error) {
+            Alert('There was an error loading the page. Please try again later')
+            if (error.response) {
+              // The request was made, and the server responded with a status code that falls out of the range of 2xx
+              console.error('Error response data:', error.response.data)
+              console.error('Error response status:', error.response.status)
+              console.error('Error response headers:', error.response.headers)
+            } else if (error.request) {
+              // The request was made, but no response was received
+              console.error('Error request:', error.request)
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.error('Error message:', error.message)
+            }
+          }
+  }
+
 
   return (
     <View
