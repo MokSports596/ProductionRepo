@@ -87,6 +87,30 @@ namespace MokSportsApp.Controllers
             return Ok("Draft completed successfully.");
         }
 
+
+        [HttpGet("getDraftId")]
+        public async Task<IActionResult> GetDraftIdAsync(int userId, int leagueId)
+        {
+            try
+            {
+                var draftId = await _draftService.GetDraftIdByUserIdAndLeagueIdAsync(userId, leagueId);
+
+                if (draftId == null)
+                {
+                    return NotFound(new { status = "error", message = "Draft not found or user not associated with any franchise in the league" });
+                }
+
+                return Ok(new { draftId = draftId, status = "success" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = "error", message = ex.Message });
+            }
+        }
+
+
+
+
         [HttpGet("{draftId}/state")]
         public async Task<ActionResult<DraftStateDto>> GetDraftState(int draftId)
         {

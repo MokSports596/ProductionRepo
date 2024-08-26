@@ -9,6 +9,7 @@ namespace MokSportsApp.Data.Repositories.Interfaces
         Task<Draft?> GetActiveDraftByLeagueIdAsync(int leagueId);
         Task AddDraftAsync(Draft draft);
         Task UpdateDraftAsync(Draft draft);
+        Task<Draft?> GetDraftIdByUserIdAndLeagueIdAsync(int userId, int leagueId);
     }
 
 }

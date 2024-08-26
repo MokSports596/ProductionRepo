@@ -39,6 +39,34 @@ namespace MokSportsApp.Data.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
+
+        public async Task<Draft?> GetDraftIdByUserIdAndLeagueIdAsync(int userId, int leagueId)
+        {
+            // Get the draft for the specified league
+            var draft = await _context.Drafts
+                                    .FirstOrDefaultAsync(d => d.LeagueId == leagueId);
+            if (draft == null)
+            {
+                return null; // No draft found for this league
+            }
+
+            // Parse the draftOrder to get franchise IDs
+            var franchiseIds = draft.DraftOrder.Split(',')
+                                            .Select(int.Parse)
+                                            .ToList();
+
+            // Query the Franchise table to find the user's franchise in this league
+            var franchise = await _context.Franchises
+                                        .FirstOrDefaultAsync(f => f.UserId == userId && franchiseIds.Contains(f.FranchiseId));
+
+            if (franchise == null)
+            {
+                return null; // No franchise found for the given user in the draft
+            }
+
+            return draft;
+        }
+
     }
 
 }

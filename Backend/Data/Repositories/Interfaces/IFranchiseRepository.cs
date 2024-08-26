@@ -16,5 +16,7 @@ namespace MokSportsApp.Data.Repositories.Interfaces
         Task<Franchise?> GetFranchiseByIdAsync(int franchiseId);
         Task<IEnumerable<Franchise>> GetFranchisesByLeagueIdAsync(int leagueId);
         Task UpdateFranchiseAsync(Franchise franchise);
+        Task<Franchise?> GetFranchiseByUserIdAndLeagueIdAsync(int userId, int leagueId);
+
     }
 }

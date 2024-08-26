@@ -13,6 +13,7 @@ namespace MokSportsApp.Services.Interfaces
         Task<IEnumerable<int>> GetAvailableTeamsAsync(int draftId);
         Task<List<int>> GetDraftOrderAsync(int draftId);
         Task<DraftStateDto> GetDraftStateAsync(int draftId);
+        Task<int?> GetDraftIdByUserIdAndLeagueIdAsync(int userId, int leagueId);
     }
 
 }

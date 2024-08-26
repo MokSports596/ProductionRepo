@@ -230,7 +230,11 @@ namespace MokSportsApp.Services.Implementations
             };
         }
 
-
+        public async Task<int?> GetDraftIdByUserIdAndLeagueIdAsync(int userId, int leagueId)
+        {
+            var draft = await _draftRepository.GetDraftIdByUserIdAndLeagueIdAsync(userId, leagueId);
+            return draft?.DraftId;
+        }
 
 
     }
