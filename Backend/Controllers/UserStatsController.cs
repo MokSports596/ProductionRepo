@@ -21,13 +21,20 @@ namespace MokSportsApp.Controllers
         [HttpGet("{userId}/league/{leagueId}/week/{weekId}")]
         public async Task<ActionResult<IEnumerable<UserStats>>> GetUserStatsByUserLeagueAndWeek(int userId, int leagueId, int weekId)
         {
+            Console.WriteLine("GetUserStatsByUserLeagueAndWeek method started");
+
             var stats = await _userStatsService.GetUserStatsByUserLeagueAndWeekAsync(userId, leagueId, weekId);
-            if (stats == null)
+
+            if (stats == null || !stats.Any())
             {
+                Console.WriteLine("No UserStats found");
                 return NotFound();
             }
+
+            Console.WriteLine("UserStats found and returning");
             return Ok(stats);
         }
+
 
         // GET: api/userstats/{id}
         [HttpGet("{id}")]
@@ -69,5 +76,24 @@ namespace MokSportsApp.Controllers
             await _userStatsService.DeleteUserStatsAsync(id);
             return NoContent();
         }
+
+        [HttpGet("franchise/{franchiseId}/week/{weekId}")]
+        public async Task<ActionResult<UserStats>> GetUserStatsByFranchiseAndWeek(int franchiseId, int weekId)
+        {
+            Console.WriteLine($"Received request to get UserStats for franchiseId: {franchiseId}, weekId: {weekId}");
+
+            var stats = await _userStatsService.GetUserStatsByFranchiseAndWeekAsync(franchiseId, weekId);
+
+            if (stats == null)
+            {
+                Console.WriteLine($"No UserStats found for franchiseId: {franchiseId}, weekId: {weekId}");
+                return NotFound();
+            }
+
+            Console.WriteLine($"Successfully retrieved UserStats for franchiseId: {franchiseId}, weekId: {weekId}");
+            return Ok(stats);
+        }
+
+
     }
 }

@@ -13,5 +13,6 @@ namespace MokSportsApp.Data.Repositories.Interfaces
         Task UpdateUserStatsAsync(UserStats userStats);
         Task DeleteUserStatsAsync(int id);
         Task CreateUserStatsAsync(UserStats userStats);
+        Task<UserStats> GetUserStatsByFranchiseIdAsync(int franchiseId, int weekId);
     }
 }

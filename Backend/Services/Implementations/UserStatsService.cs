@@ -62,5 +62,12 @@ namespace MokSportsApp.Services.Implementations
 
             await _userStatsRepository.CreateUserStatsAsync(userStats);
         }
+
+        public async Task<UserStats> GetUserStatsByFranchiseAndWeekAsync(int franchiseId, int weekId)
+        {
+            return await _userStatsRepository.GetUserStatsByFranchiseIdAsync(franchiseId, weekId);
+        }
+
+
     }
 }

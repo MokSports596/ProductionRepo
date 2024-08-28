@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NFLGameEngine")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+db3fbc41d8c26f9172dd4c1148bc95269f131bfc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f56b6abaafc4877d29cb963fa2f3686fad32c13e")]
 [assembly: System.Reflection.AssemblyProductAttribute("NFLGameEngine")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NFLGameEngine")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

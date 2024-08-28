@@ -78,5 +78,11 @@ namespace MokSportsApp.Data.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
+        public async Task<UserStats> GetUserStatsByFranchiseIdAsync(int franchiseId, int weekId)
+        {
+            return await _context.UserStats
+                .FirstOrDefaultAsync(us => us.FranchiseId == franchiseId && us.WeekId == weekId);
+        }
+
     }
 }
