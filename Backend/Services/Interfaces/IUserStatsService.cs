@@ -12,5 +12,6 @@ namespace MokSportsApp.Services.Interfaces
         Task AddOrUpdateUserStatsAsync(UserStats userStats);
         Task UpdateUserStatsAsync(UserStats userStats);
         Task DeleteUserStatsAsync(int id);
+        Task InitializeUserStatsAsync(int franchiseId, int userId, int leagueId);
     }
 }

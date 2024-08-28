@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MokSportsApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6baba4d6e2f3a1f4d543ed3aa7dbf16db3695f7c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4d6cc5d1288eb3728de5cb29322b49f92ba7b6ac")]
 [assembly: System.Reflection.AssemblyProductAttribute("MokSportsApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MokSportsApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

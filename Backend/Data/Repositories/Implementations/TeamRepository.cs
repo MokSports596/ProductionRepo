@@ -52,5 +52,10 @@ namespace MokSportsApp.Data.Repositories.Implementations
             return await _context.Teams.ToListAsync();
         }
 
+        // public async Task<Team?> GetTeamByAbbreviationAsync(string abbreviation)
+        // {
+        //     return await _context.Teams.FirstOrDefaultAsync(t => t.Abbreviation == abbreviation);
+        // }
+
     }
 }

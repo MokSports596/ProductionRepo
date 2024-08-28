@@ -9,10 +9,12 @@ namespace MokSportsApp.Services.Implementations
     public class FranchiseService : IFranchiseService
     {
         private readonly IFranchiseRepository _franchiseRepository;
+        private readonly IUserStatsService _userStatsService;
 
-        public FranchiseService(IFranchiseRepository franchiseRepository)
+        public FranchiseService(IFranchiseRepository franchiseRepository, IUserStatsService userStatsService)
         {
             _franchiseRepository = franchiseRepository;
+            _userStatsService = userStatsService;
         }
 
         public async Task<Franchise> GetFranchiseByIdAsync(int id)
@@ -39,6 +41,10 @@ namespace MokSportsApp.Services.Implementations
         {
             await _franchiseRepository.AddAsync(franchise);
             await _franchiseRepository.SaveChangesAsync();
+
+            // Initialize UserStats for this Franchise
+            await _userStatsService.InitializeUserStatsAsync(franchise.FranchiseId, franchise.UserId, franchise.LeagueId);
+
             return franchise;
         }
 

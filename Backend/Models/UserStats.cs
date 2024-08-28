@@ -6,24 +6,19 @@ namespace MokSportsApp.Models
     public class UserStats
     {
         public int Id { get; set; }
-
-        [ForeignKey("User")]
         public int UserId { get; set; }
-
-        [ForeignKey("League")]
         public int LeagueId { get; set; }
-
-        [ForeignKey("Week")]
-        public int WeekId { get; set; }  // New property to reference Week
-
-        public int SeasonPoints { get; set; }
-        public int WeekPoints { get; set; }
-        public int LoksUsed { get; set; }
-        public int Skins { get; set; }
+        public int WeekId { get; set; }
+        public int SeasonPoints { get; set; } = 0;
+        public int WeekPoints { get; set; } = 0;
+        public int LoksUsed { get; set; } = 0;
+        public int Skins { get; set; } = 0;
+        public int FranchiseId { get; set; }
 
         // Navigation properties
-        public User? User { get; set; } = null!;
-        public League? League { get; set; } = null!;
-        public Week? Week { get; set; } = null!;  // New navigation property for Week
+        public User User { get; set; }
+        public League League { get; set; }
+        public Franchise Franchise { get; set; }
+        public Week Week { get; set; }
     }
 }

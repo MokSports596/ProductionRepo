@@ -44,5 +44,23 @@ namespace MokSportsApp.Services.Implementations
         {
             await _userStatsRepository.DeleteUserStatsAsync(id);
         }
+
+
+        public async Task InitializeUserStatsAsync(int franchiseId, int userId, int leagueId)
+        {
+            var userStats = new UserStats
+            {
+                FranchiseId = franchiseId,
+                UserId = userId,
+                LeagueId = leagueId,
+                SeasonPoints = 0,
+                WeekPoints = 0,
+                LoksUsed = 0,
+                Skins = 0,
+                WeekId = 1 // Start at week 1
+            };
+
+            await _userStatsRepository.CreateUserStatsAsync(userStats);
+        }
     }
 }

@@ -12,6 +12,7 @@ namespace MokSportsApp.Data.Repositories.Interfaces
         Task UpdateTeam(Team team);
         Task DeleteTeam(int teamId);
         Task<IEnumerable<Team>> GetAllTeamsAsync();
-
+        // Task<Team?> GetTeamByAbbreviationAsync(string abbreviation);
     }
+
 }

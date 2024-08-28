@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MokSportsApp.DTOs;
 using System.Threading.Tasks;
+using MokSportsApp.Helpers;
 
 namespace MokSportsApp.Services.Implementations
 {
@@ -65,10 +66,20 @@ namespace MokSportsApp.Services.Implementations
         {
             return await _draftRepository.GetDraftByIdAsync(draftId);
         }
-
-        public async Task<bool> MakeDraftPickAsync(int draftId, int franchiseId, int teamId)
+        
+        public async Task<bool> MakeDraftPickAsync(int draftId, int franchiseId, string teamAbbreviation)
         {
-            // Check if the draft exists and is active
+            // Convert the team abbreviation to team ID using the helper
+            var teamHelper = new TeamHelper();
+            int? teamId = teamHelper.GetTeamIdByAbbreviation(teamAbbreviation);
+
+            if (teamId == null)
+            {
+                Console.WriteLine("Error: Team not found.");
+                return false; // Team not found
+            }
+
+            // Proceed with the rest of the draft logic using teamId.Value
             var draft = await _draftRepository.GetDraftByIdAsync(draftId);
             if (draft == null)
             {
@@ -81,7 +92,6 @@ namespace MokSportsApp.Services.Implementations
                 return false;
             }
 
-            // Check if the franchise exists
             var franchise = await _franchiseRepository.GetFranchiseByIdAsync(franchiseId);
             if (franchise == null)
             {
@@ -89,63 +99,58 @@ namespace MokSportsApp.Services.Implementations
                 return false;
             }
 
-            // Ensure the franchise belongs to the league associated with the draft
             if (franchise.LeagueId != draft.LeagueId)
             {
                 Console.WriteLine("Error: Franchise does not belong to the league associated with this draft.");
                 return false;
             }
 
-            // Check if the team is already drafted
-            var isTeamDrafted = await _draftPickRepository.IsTeamDraftedAsync(draftId, teamId);
+            var isTeamDrafted = await _draftPickRepository.IsTeamDraftedAsync(draftId, teamId.Value);
             if (isTeamDrafted)
             {
                 Console.WriteLine("Error: Team is already drafted.");
                 return false; // Team already drafted
             }
 
-            // Find the next available team slot in the franchise
+            // Assign the team to the next available slot in the franchise
             if (franchise.Team1Id == null)
             {
-                franchise.Team1Id = teamId;
+                franchise.Team1Id = teamId.Value;
             }
             else if (franchise.Team2Id == null)
             {
-                franchise.Team2Id = teamId;
+                franchise.Team2Id = teamId.Value;
             }
             else if (franchise.Team3Id == null)
             {
-                franchise.Team3Id = teamId;
+                franchise.Team3Id = teamId.Value;
             }
             else if (franchise.Team4Id == null)
             {
-                franchise.Team4Id = teamId;
+                franchise.Team4Id = teamId.Value;
             }
             else if (franchise.Team5Id == null)
             {
-                franchise.Team5Id = teamId;
+                franchise.Team5Id = teamId.Value;
             }
             else
             {
                 Console.WriteLine("Error: No available slots in the franchise.");
                 return false; // No available slots in the franchise
             }
- 
-            // Create the draft pick
+
             var draftPick = new DraftPick
             {
                 DraftId = draftId,
                 FranchiseId = franchiseId,
-                TeamId = teamId,
+                TeamId = teamId.Value,
                 PickOrder = draft.CurrentPickIndex + 1,
                 PickTime = DateTime.UtcNow
             };
 
-            // Save the draft pick and update the franchise
             await _draftPickRepository.AddDraftPickAsync(draftPick);
             await _franchiseRepository.UpdateFranchiseAsync(franchise);
 
-            // Update the draft status (advance to the next pick or round)
             draft.CurrentPickIndex++;
             if (draft.CurrentPickIndex >= draft.DraftOrder.Split(',').Length)
             {
@@ -158,10 +163,9 @@ namespace MokSportsApp.Services.Implementations
                 draft.IsCompleted = true;
             }
 
-            // Save the updated draft
             await _draftRepository.UpdateDraftAsync(draft);
 
-            Console.WriteLine("Draft pick successful: Franchise {0} picked Team {1}", franchiseId, teamId);
+            Console.WriteLine("Draft pick successful: Franchise {0} picked Team {1}", franchiseId, teamId.Value);
             return true;
         }
 
@@ -215,25 +219,63 @@ namespace MokSportsApp.Services.Implementations
             var draft = await _draftRepository.GetDraftByIdAsync(draftId);
             if (draft == null)
             {
-                return null;
+                return null; // Draft not found
             }
 
-            var draftOrder = draft.DraftOrder.Split(',').Select(int.Parse).ToList();
-            int currentFranchiseId = draftOrder[draft.CurrentPickIndex];
+            var draftOrderIds = draft.DraftOrder.Split(',').Select(int.Parse).ToList();
+            var draftOrderNames = new List<string>();
+
+            foreach (var franchiseId in draftOrderIds)
+            {
+                var franchise = await _franchiseRepository.GetFranchiseByIdAsync(franchiseId);
+                draftOrderNames.Add(franchise?.FranchiseName); // Use FranchiseName instead of Name
+            }
+
+            var currentFranchiseId = draftOrderIds[draft.CurrentPickIndex];
+            var currentFranchise = await _franchiseRepository.GetFranchiseByIdAsync(currentFranchiseId);
 
             return new DraftStateDto
             {
                 CurrentRound = draft.CurrentRound,
                 CurrentPickIndex = draft.CurrentPickIndex,
-                CurrentFranchiseId = currentFranchiseId,
-                IsCompleted = draft.IsCompleted
+                CurrentFranchiseName = currentFranchise?.FranchiseName, // Use FranchiseName here
+                IsCompleted = draft.IsCompleted,
+                DraftOrder = draftOrderNames, // Return the full draft order with franchise names
             };
         }
+
 
         public async Task<int?> GetDraftIdByUserIdAndLeagueIdAsync(int userId, int leagueId)
         {
             var draft = await _draftRepository.GetDraftIdByUserIdAndLeagueIdAsync(userId, leagueId);
             return draft?.DraftId;
+        }
+
+
+        public async Task<List<string>> GetDraftOrderForRoundAsync(int draftId)
+        {
+            var draft = await _draftRepository.GetDraftByIdAsync(draftId);
+            if (draft == null)
+            {
+                return null; // Draft not found
+            }
+
+            var draftOrderIds = draft.DraftOrder.Split(',').Select(int.Parse).ToList();
+            var draftOrderNames = new List<string>();
+
+            // Determine the order for the current round
+            var roundOrder = (draft.CurrentRound % 2 == 1) 
+                            ? draftOrderIds 
+                            : draftOrderIds.AsEnumerable().Reverse().ToList();
+
+            // Fetch franchise names for the determined order
+            foreach (var franchiseId in roundOrder)
+            {
+                var franchise = await _franchiseRepository.GetFranchiseByIdAsync(franchiseId);
+                draftOrderNames.Add(franchise?.FranchiseName); // Use FranchiseName instead of Name
+            }
+
+            return draftOrderNames;
         }
 
 

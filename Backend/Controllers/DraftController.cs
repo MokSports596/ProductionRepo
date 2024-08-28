@@ -3,6 +3,7 @@ using MokSportsApp.Models;
 using MokSportsApp.Services.Interfaces;
 using System.Threading.Tasks;
 using MokSportsApp.DTOs;
+using MokSportsApp.Helpers;
 
 namespace MokSportsApp.Controllers
 {
@@ -29,12 +30,15 @@ namespace MokSportsApp.Controllers
 
 
         [HttpPost("{draftId}/pick")]
-        public async Task<ActionResult> MakeDraftPick(int draftId, [FromBody] DraftPickRequest draftPickRequest)
+        public async Task<ActionResult> MakeDraftPick(int draftId, [FromBody] DraftPickRequestDto draftPickRequest)
         {
-            var success = await _draftService.MakeDraftPickAsync(draftId, draftPickRequest.FranchiseId, draftPickRequest.TeamId);
+            var success = await _draftService.MakeDraftPickAsync(draftId, draftPickRequest.FranchiseId, draftPickRequest.TeamAbbreviation);
             if (!success) return BadRequest("Pick could not be made.");
             return Ok("Pick made successfully.");
         }
+
+
+
 
 
         [HttpGet("{draftId}")]
@@ -63,6 +67,8 @@ namespace MokSportsApp.Controllers
             }
 
             int rounds = 5; // Assuming 5 rounds
+            var teamHelper = new TeamHelper(); // Initialize TeamHelper to convert teamId to teamAbbreviation
+
             for (int roundNumber = 1; roundNumber <= rounds; roundNumber++)
             {
                 var roundOrder = (roundNumber % 2 == 1) ? draftOrder : draftOrder.AsEnumerable().Reverse().ToList();
@@ -76,7 +82,14 @@ namespace MokSportsApp.Controllers
                     }
 
                     var teamId = availableTeams.First();
-                    var success = await _draftService.MakeDraftPickAsync(draftId, franchiseId, teamId);
+                    var teamAbbreviation = teamHelper.GetAbbreviationByTeamId(teamId); // Convert teamId to teamAbbreviation
+
+                    if (string.IsNullOrEmpty(teamAbbreviation))
+                    {
+                        return BadRequest($"Could not find abbreviation for team with ID {teamId}");
+                    }
+
+                    var success = await _draftService.MakeDraftPickAsync(draftId, franchiseId, teamAbbreviation);
                     if (!success)
                     {
                         return BadRequest($"Failed to make pick for franchise {franchiseId}");
@@ -86,6 +99,7 @@ namespace MokSportsApp.Controllers
 
             return Ok("Draft completed successfully.");
         }
+
 
 
         [HttpGet("getDraftId")]
@@ -130,6 +144,19 @@ namespace MokSportsApp.Controllers
             {
                 return NotFound("Draft order not found.");
             }
+            return Ok(draftOrder);
+        }
+
+
+        [HttpGet("{draftId}/draftOrder")]
+        public async Task<ActionResult<List<string>>> GetDraftOrderForRound(int draftId)
+        {
+            var draftOrder = await _draftService.GetDraftOrderForRoundAsync(draftId);
+            if (draftOrder == null || !draftOrder.Any())
+            {
+                return NotFound("Draft order not found or draft has not started.");
+            }
+
             return Ok(draftOrder);
         }
 

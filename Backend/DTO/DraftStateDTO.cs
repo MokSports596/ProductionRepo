@@ -4,7 +4,9 @@ namespace MokSportsApp.DTOs
     {
         public int CurrentRound { get; set; }
         public int CurrentPickIndex { get; set; }
-        public int CurrentFranchiseId { get; set; }
+        public string CurrentFranchiseName { get; set; } // New property for the franchise name
         public bool IsCompleted { get; set; }
+        public List<string> DraftOrder { get; set; } // Include franchise names in the draft order
     }
+
 }

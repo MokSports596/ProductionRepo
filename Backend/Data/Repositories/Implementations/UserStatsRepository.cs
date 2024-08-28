@@ -71,5 +71,12 @@ namespace MokSportsApp.Data.Repositories.Implementations
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task CreateUserStatsAsync(UserStats userStats)
+        {
+            await _context.UserStats.AddAsync(userStats);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
