@@ -25,9 +25,10 @@ namespace MokSportsApp.Services.Implementations
             return await _userStatsRepository.GetUserStatsByIdAsync(id);
         }
 
-        public async Task<IEnumerable<UserStats>> GetUserStatsByUserLeagueAndWeekAsync(int userId, int leagueId, int weekId)
+        public async Task<UserStats> GetUserStatsByUserLeagueAndWeekAsync(int userId, int leagueId, int weekId)
         {
-            return await _userStatsRepository.GetUserStatsByUserAndLeagueAndWeekAsync(userId, leagueId, weekId);
+            var userStatsCollection = await _userStatsRepository.GetUserStatsByUserAndLeagueAndWeekAsync(userId, leagueId, weekId);
+            return userStatsCollection.FirstOrDefault(); // Get the first matching UserStats or null
         }
 
         public async Task AddOrUpdateUserStatsAsync(UserStats userStats)

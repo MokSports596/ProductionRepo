@@ -28,7 +28,7 @@ namespace MokSportsApp.Controllers
             return Ok("Draft started successfully.");
         }
 
-
+        
         [HttpPost("{draftId}/pick")]
         public async Task<ActionResult> MakeDraftPick(int draftId, [FromBody] DraftPickRequestDto draftPickRequest)
         {
@@ -36,9 +36,6 @@ namespace MokSportsApp.Controllers
             if (!success) return BadRequest("Pick could not be made.");
             return Ok("Pick made successfully.");
         }
-
-
-
 
 
         [HttpGet("{draftId}")]

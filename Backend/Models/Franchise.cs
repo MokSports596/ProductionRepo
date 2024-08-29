@@ -16,6 +16,9 @@ namespace MokSportsApp.Models
         public int? Team4Id { get; set; }
         public int? Team5Id { get; set; }
 
+        public int? LOKTeamId { get; set; } // Team designated as LOK for the week
+        public bool IsLoaded { get; set; } 
+
         // Navigation properties
         public User User { get; set; }
         public League League { get; set; }

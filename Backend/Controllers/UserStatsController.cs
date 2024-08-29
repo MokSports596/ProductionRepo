@@ -25,7 +25,7 @@ namespace MokSportsApp.Controllers
 
             var stats = await _userStatsService.GetUserStatsByUserLeagueAndWeekAsync(userId, leagueId, weekId);
 
-            if (stats == null || !stats.Any())
+            if (stats == null)
             {
                 Console.WriteLine("No UserStats found");
                 return NotFound();

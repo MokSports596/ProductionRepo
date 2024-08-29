@@ -130,5 +130,29 @@ namespace MokSportsApp.Controllers
             return Ok(updated);
         }
 
+
+        [HttpPost("{id}/setLok")]
+        public async Task<IActionResult> SetLOK(int id, [FromBody] int teamId, [FromQuery] int weekId)
+        {
+            var success = await _franchiseService.SetLOKAsync(id, teamId, weekId);
+            if (!success)
+            {
+                return BadRequest(new { message = "Failed to set LOK. Make sure the team is in your stable, and the LOK limits haven't been exceeded." });
+            }
+            return Ok(new { message = "LOK set successfully." });
+        }
+
+        [HttpPost("{id}/setLoad")]
+        public async Task<IActionResult> SetLOAD(int id, [FromQuery] int weekId)
+        {
+            var success = await _franchiseService.SetLOADAsync(id, weekId);
+            if (!success)
+            {
+                return BadRequest(new { message = "Failed to set LOAD. Make sure you have a LOK set and haven't already LOADed this team." });
+            }
+            return Ok(new { message = "LOAD set successfully." });
+        }
+
+
     }
 }
