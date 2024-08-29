@@ -17,9 +17,33 @@ namespace NFLGameEngine.Repositories
 
         public async Task<IEnumerable<Game>> GetCompletedGamesByWeekAsync(int weekId)
         {
-            return await _context.Games
+            // Use a more straightforward approach to map team abbreviations to team IDs
+            var games = await _context.Games
                 .Where(g => g.Week == weekId && g.GameStatus == "Completed")
+                .Select(g => new Game
+                {
+                    Id = g.Id,
+                    GameId = g.GameId,
+                    Season = g.Season,
+                    SeasonType = g.SeasonType,
+                    HomeTeam = _context.TeamMappings
+                        .Where(tm => tm.TeamAbbreviation == g.HomeTeam)
+                        .Select(tm => tm.TeamId.ToString())
+                        .FirstOrDefault(),
+                    AwayTeam = _context.TeamMappings
+                        .Where(tm => tm.TeamAbbreviation == g.AwayTeam)
+                        .Select(tm => tm.TeamId.ToString())
+                        .FirstOrDefault(),
+                    GameDate = g.GameDate,
+                    GameTime = g.GameTime,
+                    GameStatus = g.GameStatus,
+                    HomePoints = g.HomePoints,
+                    AwayPoints = g.AwayPoints,
+                    Week = g.Week
+                })
                 .ToListAsync();
+
+            return games;
         }
 
         public async Task<IEnumerable<Franchise>> GetAllFranchisesAsync()

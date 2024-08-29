@@ -42,5 +42,12 @@ namespace NFLGameEngine.Repositories
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddUserStatsAsync(UserStats userStats)
+        {
+            await _context.UserStats.AddAsync(userStats);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

@@ -42,6 +42,28 @@ namespace NFLGameEngine
                 {
                     try
                     {
+                        // Fetch existing UserStats for this franchise and week
+                        var userStats = await _userStatsRepository.GetUserStatsByFranchiseIdAsync(franchise.FranchiseId, weekId);
+                        
+                        if (userStats == null)
+                        {
+                            // Create a new UserStats entry for the week if none exists
+                            userStats = new UserStats
+                            {
+                                UserId = franchise.UserId,
+                                LeagueId = franchise.LeagueId,
+                                FranchiseId = franchise.FranchiseId,
+                                WeekId = weekId,
+                                SeasonPoints = 0,
+                                WeekPoints = 0,
+                                LoksUsed = 0,
+                                LoadsUsed = 0,
+                                Skins = 0
+                            };
+                            await _userStatsRepository.AddUserStatsAsync(userStats);
+                            Console.WriteLine($"Created new UserStats for FranchiseId {franchise.FranchiseId}, WeekId {weekId}.");
+                        }
+
                         // Initialize the user's stats for the current week
                         double weekPoints = 0;
                         int loksUsed = 0;
@@ -50,49 +72,48 @@ namespace NFLGameEngine
 
                         // Get the LOK and LOAD for this franchise and week
                         var locksLoads = await _dataRepository.GetLocksLoadsForFranchiseAndWeekAsync(franchise.FranchiseId, weekId);
-                        int? lokTeamId = locksLoads?.LOKTeamId;
-                        int? loadTeamId = locksLoads?.LOADTeamId;
+                        int lokTeamId = locksLoads?.LOKTeamId ?? 0;
+                        int loadTeamId = locksLoads?.LOADTeamId ?? 0;
 
                         // Calculate points for each team in the franchise
-                        weekPoints += CalculateTeamScore(franchise.Team1Id, completedGames, lokTeamId, loadTeamId, ref loksUsed, ref loadsUsed);
-                        weekPoints += CalculateTeamScore(franchise.Team2Id, completedGames, lokTeamId, loadTeamId, ref loksUsed, ref loadsUsed);
-                        weekPoints += CalculateTeamScore(franchise.Team3Id, completedGames, lokTeamId, loadTeamId, ref loksUsed, ref loadsUsed);
-                        weekPoints += CalculateTeamScore(franchise.Team4Id, completedGames, lokTeamId, loadTeamId, ref loksUsed, ref loadsUsed);
-                        weekPoints += CalculateTeamScore(franchise.Team5Id, completedGames, lokTeamId, loadTeamId, ref loksUsed, ref loadsUsed);
+                        weekPoints += CalculateTeamScore(franchise.Team1Id ?? 0, completedGames, lokTeamId, loadTeamId, ref loksUsed, ref loadsUsed);
+                        weekPoints += CalculateTeamScore(franchise.Team2Id ?? 0, completedGames, lokTeamId, loadTeamId, ref loksUsed, ref loadsUsed);
+                        weekPoints += CalculateTeamScore(franchise.Team3Id ?? 0, completedGames, lokTeamId, loadTeamId, ref loksUsed, ref loadsUsed);
+                        weekPoints += CalculateTeamScore(franchise.Team4Id ?? 0, completedGames, lokTeamId, loadTeamId, ref loksUsed, ref loadsUsed);
+                        weekPoints += CalculateTeamScore(franchise.Team5Id ?? 0, completedGames, lokTeamId, loadTeamId, ref loksUsed, ref loadsUsed);
 
                         // Update the user stats
-                        var userStats = await _userStatsRepository.GetUserStatsByFranchiseIdAsync(franchise.FranchiseId, weekId);
-                        if (userStats != null)
-                        {
-                            userStats.WeekPoints = (int)Math.Round(weekPoints);
-                            userStats.SeasonPoints += (int)Math.Round(weekPoints); // Accumulate season points
-                            userStats.LoksUsed += loksUsed;
-                            userStats.LoadsUsed += loadsUsed;
-                            userStats.Skins = skins;
+                        userStats.WeekPoints = (int)Math.Round(weekPoints);
+                        userStats.SeasonPoints += (int)Math.Round(weekPoints); // Accumulate season points
+                        userStats.LoksUsed += loksUsed;
+                        userStats.LoadsUsed += loadsUsed;
+                        userStats.Skins = skins;
 
-                            await _userStatsRepository.UpdateUserStatsAsync(userStats);
-                        }
-                        else
-                        {
-                            Console.WriteLine($"No user stats found for franchise {franchise.FranchiseId} and week {weekId}.");
-                        }
+                        await _userStatsRepository.UpdateUserStatsAsync(userStats);
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Error processing scores for franchise {franchise.FranchiseId}: {ex.Message}");
+                        if (ex.InnerException != null)
+                        {
+                            Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error processing scores for week {weekId}: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                }
             }
         }
 
-
-        private double CalculateTeamScore(int? teamId, IEnumerable<Game> completedGames, int? lokTeamId, int? loadTeamId, ref int loksUsed, ref int loadsUsed)
+        private double CalculateTeamScore(int teamId, IEnumerable<Game> completedGames, int lokTeamId, int loadTeamId, ref int loksUsed, ref int loadsUsed)
         {
-            if (teamId == null)
+            if (teamId == 0)
             {
                 return 0; // If no team exists in this slot, skip scoring
             }
@@ -168,5 +189,6 @@ namespace NFLGameEngine
 
             return points;
         }
+
     }
 }

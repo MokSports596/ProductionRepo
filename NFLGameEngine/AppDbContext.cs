@@ -9,6 +9,7 @@ namespace NFLGameEngine
         public DbSet<Franchise> Franchises { get; set; }
         public DbSet<UserStats> UserStats { get; set; }
         public DbSet<FranchiseLocksLoads> FranchiseLocksLoads { get; set; }
+        public DbSet<TeamMapping> TeamMappings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -18,6 +19,16 @@ namespace NFLGameEngine
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Configure the TeamMapping entity
+            modelBuilder.Entity<TeamMapping>(entity =>
+            {
+                entity.ToTable("TeamMapping");
+
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.TeamId).IsRequired();
+                entity.Property(e => e.TeamAbbreviation).IsRequired().HasMaxLength(5);
+            });
+
             // Configure the Game entity
             modelBuilder.Entity<Game>(entity =>
             {
