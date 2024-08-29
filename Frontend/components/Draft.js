@@ -89,7 +89,7 @@ export default function Draft(props) {
     }
   }
 
-  
+
   const [availableTeams, setAvailableTeams] = useState([])
 
   const getAvailableTeams = async() => {

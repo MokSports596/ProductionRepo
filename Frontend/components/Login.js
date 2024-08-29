@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import axiosInstance from './axiosInstance'
 import { getItem, setItem } from './page_components/Async'
+import axios from 'axios'
 
 export default function LoginPage(props) {
   const windowWidth = Dimensions.get('window').width
@@ -44,6 +45,20 @@ export default function LoginPage(props) {
       await setItem('email', response.data['email'])
       await setItem('password', password)
       await setItem('userId', response.data['userId'])
+      await setItem('name', response.data['firstName'])
+      const userId = response.data['userId']
+      const data2 = await axiosInstance.get('/user/' + userId + '/leagues')
+      console.log(data2.data)
+      await setItem('leagueId', data2.data['$values'][0]['leagueId'])
+      const leagueId = data2.data['$values'][0]['leagueId']
+      const data3 = await axiosInstance.get('/draft/getDraftId/userId=' + userId + '&leagueId=' + leagueId)
+      //test link get:
+      //http://localhost:5062/api/draft/getDraftId/userId=16&leagueId=11
+      await setItem('draftId', data3.data[])
+
+
+
+
     } catch (error) {
       // Handle login error
       console.error(error)

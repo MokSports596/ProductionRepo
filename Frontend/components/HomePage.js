@@ -22,11 +22,43 @@ import Team from './page_components/Team.js'
 import Game from './page_components/Game.js'
 import Predraft from './PreDraft.js'
 import { useState, useEffect } from 'react'
+import { setItem, getItem } from './page_components/Async.js'
 export default function HomePage(props) {
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
+
+  const [gameWeek, setGameWeek] = useState(1)
+
+  //INITAL VALUES LOADED UPON ENTERING:
   const predraft = false //IMPLEMENT PREDRAFT CALL
-  const [week, setWeek] = useState(1)
+  const [currentWeek, setWeek] = useState(1) //NEEDS TO BE UPDATED CONSTANTLY!!
+  const [leagueID, setLeagueID] = useState(null)
+  const setInitialValues = async () => {
+    try {
+      console.log('/user/' + userId + '/leagues')
+      const data = await axiosInstance.get('/user/' + userId + '/leagues')
+      console.log(data.data)
+      setLeagueID(data.data['$values'][0]['leagueId'])
+      console.log('retrived data')
+      console.log(gameData)
+    } catch (error) {
+      Alert('There was an error loading the page. Please try again later')
+      if (error.response) {
+        // The request was made, and the server responded with a status code that falls out of the range of 2xx
+        console.error('Error response data:', error.response.data)
+        console.error('Error response status:', error.response.status)
+        console.error('Error response headers:', error.response.headers)
+      } else if (error.request) {
+        // The request was made, but no response was received
+        console.error('Error request:', error.request)
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error message:', error.message)
+      }
+    }
+  }
+
+
   // UpdateGameData()
   if (predraft == true) {
     return <Predraft></Predraft>
@@ -127,8 +159,8 @@ export default function HomePage(props) {
   ])
   const UpdateGameData = async () => {
     try {
-      console.log('/game/week/' + week)
-      const data = await axiosInstance.get('/game/week/' + week)
+      console.log('/game/week/' + gameWeek)
+      const data = await axiosInstance.get('/game/week/' + gameWeek)
       console.log(data.data)
       setGameData(data.data['$values'])
       console.log('retrived data')
@@ -151,15 +183,15 @@ export default function HomePage(props) {
   }
   useEffect(() => {
     UpdateGameData()
-  }, [week])
+  }, [gameWeek])
 
   const incrementWeek = async () => {
-    setWeek(week + 1)
+    setGameWeek(gameWeek + 1)
   }
 
   const decrementWeek = async () => {
     if (week > 1) {
-      setWeek(week - 1)
+      setGameWeek(gameWeek - 1)
     }
   }
 
@@ -296,7 +328,7 @@ export default function HomePage(props) {
                   borderRadius: '10px',
                 }}
               >
-                Week {week}
+                Week {gameWeek}
               </Text>
               <TouchableOpacity
                 style={{
