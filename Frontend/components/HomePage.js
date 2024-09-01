@@ -23,6 +23,8 @@ import Game from './page_components/Game.js'
 import Predraft from './PreDraft.js'
 import { useState, useEffect } from 'react'
 import { setItem, getItem } from './page_components/Async.js'
+import Draft from './Draft.js'
+
 export default function HomePage(props) {
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
@@ -30,38 +32,57 @@ export default function HomePage(props) {
   const [gameWeek, setGameWeek] = useState(1)
 
   //INITAL VALUES LOADED UPON ENTERING:
-  const predraft = false //IMPLEMENT PREDRAFT CALL
   const [currentWeek, setWeek] = useState(1) //NEEDS TO BE UPDATED CONSTANTLY!!
-  const [leagueID, setLeagueID] = useState(null)
-  const setInitialValues = async () => {
+  const [leagueID, setLeagueId] = useState(null)
+  const [draftId, setDraftId] = useState(null)
+  const [userId, setUserId] = useState(null)
+  const [firstName, setFirstName] = useState(null)
+  const [draftState, setDraftState] = useState([])
+
+  const getInitialValues = async () => {
     try {
-      console.log('/user/' + userId + '/leagues')
-      const data = await axiosInstance.get('/user/' + userId + '/leagues')
-      console.log(data.data)
-      setLeagueID(data.data['$values'][0]['leagueId'])
-      console.log('retrived data')
-      console.log(gameData)
+
+      const uID = await getItem('userId', response.data['userId'])
+      const FN = await getItem('name', response.data['firstName'])
+      setUserId(uID)
+      setFirstName(FN)
+      
+      const userId = response.data['userId']
+      const data2 = await axiosInstance.get('/user/' + userId + '/leagues')
+      console.log(data2.data)
+      const lID = await getItem('leagueId')
+      setLeagueId(lID)
+      //test link get:
+      //http://localhost:5062/api/draft/getDraftId/userId=16&leagueId=11
+      const dID = await getItem('draftId')
+      setDraftId(dID)
+      const DS = await axiosInstance.get('/draft/' + draftId + '/state').data
+      setDraftState(DS)
     } catch (error) {
       Alert('There was an error loading the page. Please try again later')
-      if (error.response) {
-        // The request was made, and the server responded with a status code that falls out of the range of 2xx
-        console.error('Error response data:', error.response.data)
-        console.error('Error response status:', error.response.status)
-        console.error('Error response headers:', error.response.headers)
-      } else if (error.request) {
-        // The request was made, but no response was received
-        console.error('Error request:', error.request)
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error('Error message:', error.message)
-      }
     }
+  }
+
+  useEffect(() => {
+    getInitialValues()
+  }, [])
+  const predraft = false
+  if (draftId == null){
+ predraft = true //IMPLEMENT PREDRAFT CALL
   }
 
 
   // UpdateGameData()
   if (predraft == true) {
     return <Predraft></Predraft>
+  }
+
+  const indraft = false
+  if (draftState["isCompleted"] == false){
+    indraft = true
+  }
+  if (indraft){
+    return <Draft></Draft>
   }
 
   const styles = StyleSheet.create({

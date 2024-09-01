@@ -19,12 +19,49 @@ export default function Predraft(props) {
 
   //IMPLEMENT WORKING LOGIC FOR THE FOLLOWING LINES:
   const isLeagueManager = true
-  const draftId = 123456
-  const leagueId = 123456
 
   //Page nav
   const [onPayout, setonPayout] = useState(false)
   const [onLeagueSetup, setonLeagueSetup] = useState(false)
+  const [numOfPlayers, setNumOfPlayers] = useState(0)
+  const [leagueId, setLeagueId] = useState(null)
+  const [draftId, setDraftId] = useState(null)
+  const [userId, setUserId] = useState(null)
+  const [firstName, setFirstName] = useState(null)
+
+  const getInitialValues = async () => {
+    try {
+
+      const uID = await getItem('userId', response.data['userId'])
+      const FN = await getItem('name', response.data['firstName'])
+      setUserId(uID)
+      setFirstName(FN)
+      
+      const userId = response.data['userId']
+      const data2 = await axiosInstance.get('/user/' + userId + '/leagues')
+      console.log(data2.data)
+      const lID = await getItem('leagueId')
+      setLeagueId(lID)
+      //test link get:
+      //http://localhost:5062/api/draft/getDraftId/userId=16&leagueId=11
+      const dID = await getItem('draftId')
+      setDraftId(dID)
+      
+    } catch (error) {
+      Alert('There was an error loading the page. Please try again later')
+    }
+  }
+
+  useEffect(() => {
+    getInitialValues()
+  }, [])
+
+
+
+
+
+
+
 
   const styles = StyleSheet.create({
     title: {

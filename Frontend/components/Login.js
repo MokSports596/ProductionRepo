@@ -40,8 +40,8 @@ export default function LoginPage(props) {
         password,
       })
       // Handle successful login
+      try{
       console.log(response.data)
-      props.navigation.navigate('Home')
       await setItem('email', response.data['email'])
       await setItem('password', password)
       await setItem('userId', response.data['userId'])
@@ -51,11 +51,18 @@ export default function LoginPage(props) {
       console.log(data2.data)
       await setItem('leagueId', data2.data['$values'][0]['leagueId'])
       const leagueId = data2.data['$values'][0]['leagueId']
-      const data3 = await axiosInstance.get('/draft/getDraftId/userId=' + userId + '&leagueId=' + leagueId)
+      const data3 = await axiosInstance.get('/draft/getDraftId?userId=' + userId + '&leagueId=' + leagueId)
       //test link get:
-      //http://localhost:5062/api/draft/getDraftId/userId=16&leagueId=11
-      await setItem('draftId', data3.data[])
+      //http://localhost:5062/api/draft/getDraftId?userId=16&leagueId=11
+      if (data3.data["status"] == "error"){
+        await setItem('draftId', null)
+      }
+      else {await setItem('draftId', data3.data["draftId"])}
+      console.log("Retrieved data successfully")
+      props.navigation.navigate('Home')
 
+    }
+    catch (error){}
 
 
 
