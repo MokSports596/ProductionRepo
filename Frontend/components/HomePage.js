@@ -22,7 +22,6 @@ import Team from './page_components/Team.js'
 import Game from './page_components/Game.js'
 import Predraft from './PreDraft.js'
 import { useState, useEffect } from 'react'
-import { setItem, getItem } from './page_components/Async.js'
 import Draft from './Draft.js'
 
 export default function HomePage(props) {
@@ -66,16 +65,13 @@ export default function HomePage(props) {
   useEffect(() => {
     getInitialValues()
   }, [])
-  const predraft = false
+  
   if (draftId == null){
- predraft = true //IMPLEMENT PREDRAFT CALL
+    return(<Predraft></Predraft>)
   }
 
 
   // UpdateGameData()
-  if (predraft == true) {
-    return <Predraft></Predraft>
-  }
 
   const indraft = false
   if (draftState["isCompleted"] == false){

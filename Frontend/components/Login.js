@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -51,14 +51,19 @@ export default function LoginPage(props) {
       console.log(data2.data)
       await setItem('leagueId', data2.data['$values'][0]['leagueId'])
       const leagueId = data2.data['$values'][0]['leagueId']
+      await setItem('leaguePin', data2.data['$values'][0]['pin'])
+      console.log(leagueId)
+      try{
       const data3 = await axiosInstance.get('/draft/getDraftId?userId=' + userId + '&leagueId=' + leagueId)
+      await setItem('draftId', data3.data["draftId"])
+    } catch (error){
+      await setItem('draftId', null)
+      
+    }
       //test link get:
       //http://localhost:5062/api/draft/getDraftId?userId=16&leagueId=11
-      if (data3.data["status"] == "error"){
-        await setItem('draftId', null)
-      }
-      else {await setItem('draftId', data3.data["draftId"])}
-      console.log("Retrieved data successfully")
+      
+      console.log("Stored local data successfully")
       props.navigation.navigate('Home')
 
     }
@@ -72,9 +77,50 @@ export default function LoginPage(props) {
       alert('Login failed. Please check your credentials.')
     }
   }
+  function getRandomSixDigitNumber() {
+    return Math.floor(100000 + Math.random() * 900000);
+  }
+  
 
   const handleSignUp = async () => {
-    if (isCreatingLeague) {
+    if (isCreatingLeague == "true") {
+      try {
+        console.log("Creating League . . .")
+        const response = await axiosInstance.post('/user/signup', {
+          fullName: name,
+          email,
+          password,
+        })
+        console.log(response.data)
+        const userId = response.data['userId']
+        console.log(userId)
+        const randompin = getRandomSixDigitNumber().toString()
+        const link = '/league/create?userId=' + userId
+        console.log(link)
+        console.log(randompin.toString())
+        const league = await axiosInstance.post(
+          link,
+          {
+            "leagueName": 'league',
+            "pin": randompin
+          }
+        )
+        console.log(league.data)
+
+        // Handle successful signup
+        setPage('login') // Switch to login view after successful signup
+        return
+      }catch (error) {
+        if (error.response) {
+          console.error('Error response data:', error.response.data);
+          console.error('Error response status:', error.response.status);
+          console.error('Error response headers:', error.response.headers);
+        } else {
+          console.error('Error message:', error.message);
+        }
+      }
+    } else {
+      console.log("Joining league . . .")
       try {
         const response = await axiosInstance.post('/user/signup', {
           fullName: name,
@@ -84,23 +130,30 @@ export default function LoginPage(props) {
         console.log(response.data)
         const userId = response.data['userId']
         console.log(userId)
+        const link = '/league/join?userId=' + userId
+        console.log(link)
+        console.log(code)
         const league = await axiosInstance.post(
-          '/league/create?userId=${userId}',
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
+          link,
+            {
+              "leagueName": 'league',
+              "pin": code
+            }
+
         )
         console.log(league.data)
 
         // Handle successful signup
         setPage('login') // Switch to login view after successful signup
         return
-      } catch (error) {
-        // Handle signup error
-        console.error(error)
-        alert('Signup failed. Please try again.')
+      }catch (error) {
+        if (error.response) {
+          console.error('Error response data:', error.response.data);
+          console.error('Error response status:', error.response.status);
+          console.error('Error response headers:', error.response.headers);
+        } else {
+          console.error('Error message:', error.message);
+        }
       }
     }
     // try {
@@ -113,6 +166,7 @@ export default function LoginPage(props) {
     //   alert('Signup failed. Please try again.');
     // }
   }
+
 
   const styles = StyleSheet.create({
     title: {
@@ -280,6 +334,7 @@ export default function LoginPage(props) {
     creatingLeague(false)
     setPage('league')
   }
+
   return (
     <View
       style={{

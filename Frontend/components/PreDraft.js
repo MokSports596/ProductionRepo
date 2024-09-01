@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -7,54 +7,89 @@ import {
   Dimensions,
   StyleSheet,
   Image,
-  StatusBar,
+  StatusBar, FlatList
 } from 'react-native'
 import axiosInstance from './axiosInstance'
 import { getItem, setItem } from './page_components/Async'
-
 export default function Predraft(props) {
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
 
 
   //IMPLEMENT WORKING LOGIC FOR THE FOLLOWING LINES:
-  const isLeagueManager = true
+  const [isLeagueManager, setLeagueManager] = useState(false)
 
   //Page nav
   const [onPayout, setonPayout] = useState(false)
   const [onLeagueSetup, setonLeagueSetup] = useState(false)
-  const [numOfPlayers, setNumOfPlayers] = useState(0)
   const [leagueId, setLeagueId] = useState(null)
   const [draftId, setDraftId] = useState(null)
   const [userId, setUserId] = useState(null)
   const [firstName, setFirstName] = useState(null)
+  const [players, setPlayers] = useState([])
+  const [leaguePin, setLeaguePin] = useState(0)
 
   const getInitialValues = async () => {
     try {
 
-      const uID = await getItem('userId', response.data['userId'])
-      const FN = await getItem('name', response.data['firstName'])
+      const uID = await getItem('userId')
+      const FN = await getItem('name')
       setUserId(uID)
       setFirstName(FN)
       
-      const userId = response.data['userId']
-      const data2 = await axiosInstance.get('/user/' + userId + '/leagues')
-      console.log(data2.data)
+      
       const lID = await getItem('leagueId')
       setLeagueId(lID)
+
+
       //test link get:
       //http://localhost:5062/api/draft/getDraftId/userId=16&leagueId=11
       const dID = await getItem('draftId')
       setDraftId(dID)
-      
+      const LP = await getItem('leaguePin')
+      setLeaguePin(LP)
+      console.log(leagueId)
+      // const p = await axiosInstance.get('/league/'+leagueId+'/users')
+      // console.log(p.data["$values"])
+      // setPlayers(p.data["$values"])
+      console.log("Loaded Predraft Data Successfully")
+
     } catch (error) {
-      Alert('There was an error loading the page. Please try again later')
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      } else {
+        console.error('Error message:', error.message);
+      }
+    }
+  }
+  const updatePlayers = async() => {
+    try {
+    const p = await axiosInstance.get('/league/'+leagueId+'/users')
+    console.log(p.data["$values"])
+    setPlayers(p.data["$values"])
+    if (p.data["$values"][0]["userId"] == userId) {
+      setLeagueManager(true)
+    }
+  }
+    catch (error) {
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      } else {
+        console.error('Error message:', error.message);
+      }
     }
   }
 
   useEffect(() => {
     getInitialValues()
   }, [])
+
+  useEffect(() => {updatePlayers()}, [leagueId])
+  
 
 
 
@@ -230,12 +265,16 @@ export default function Predraft(props) {
   })
 
   const BeginDraft = async () => {
+    // if (players.length < 6) {
+    //   return
+    // }
+
     try {
-      const data = await axiosInstance.post('/draft/start/?leagueId=' + leagueId)
+      console.log(leagueId)
+      const data = await axiosInstance.post('/draft/start',{"leagueId":leagueId.toString()})
       console.log(data.data)
       console.log('retrived data')
     } catch (error) {
-      Alert('There was an error loading the page. Please try again later')
       if (error.response) {
         // The request was made, and the server responded with a status code that falls out of the range of 2xx
         console.error('Error response data:', error.response.data)
@@ -289,13 +328,18 @@ export default function Predraft(props) {
                 source={require('../assets/swoop.png')}
               />
             </View>
-            <Text style={styles.title}>League ID: 283394</Text>
+            <Text style={styles.title}>Pin: {leaguePin}</Text>
 
             <View style={styles.container}>
-              <Text style={styles.player}>BigA**Truck (You)</Text>
-              <Text style={styles.player}>NavinsJohnson (Navin)</Text>
-              <Text style={styles.player}>BigA**Truck (You)</Text>
-              <Text style={styles.player}>BigA**Truck (You)</Text>
+            <FlatList
+                  data={players}
+                  renderItem={({ item }) => (
+                    <Text
+                      style = {styles.player}>{item.firstName}</Text>
+                    
+                  )}
+                  keyExtractor={(item) => item.id}
+                />
               <View style={{ marginTop: 0.2 * windowHeight }}>
                 {!isLeagueManager && (
                   <View>
@@ -319,12 +363,12 @@ export default function Predraft(props) {
                     >
                       <Text style={styles.buttonText}>League Setup</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonNotSelectable} onPress = {BeginDraft}>
+                    <TouchableOpacity style={players.length < 6 ? styles.buttonNotSelectable: styles.button} onPress = {BeginDraft}>
                       <Text style={styles.buttonText}>Begin Draft</Text>
                     </TouchableOpacity>
-                    <Text style={styles.purpleText}>
-                      You need 2 more members!
-                    </Text>
+                    {players.length < 6 && <Text style={styles.purpleText}>
+                      You need {6 - players.length} more members!
+                    </Text>}
                   </View>
                 )}
               </View>
