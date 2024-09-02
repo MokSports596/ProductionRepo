@@ -27,10 +27,81 @@ export default function Draft(props) {
   const windowHeight = Dimensions.get('window').height
 
   //IMPLEMENT LOGIC FOR THE FOLLOWING:
-  const userId = 1
-  const draftId = 123456
-  const leagueID = 123456
-  const franchiseId = 123456
+  const [franchiseId, setFranchiseId] = useState(null)
+  const [onPayout, setonPayout] = useState(false)
+  const [onLeagueSetup, setonLeagueSetup] = useState(false)
+  const [leagueId, setLeagueId] = useState(null)
+  const [draftId, setDraftId] = useState(null)
+  const [userId, setUserId] = useState(null)
+  const [firstName, setFirstName] = useState(null)
+  const [players, setPlayers] = useState([])
+
+  const getInitialValues = async () => {
+    try {
+
+      const uID = await getItem('userId')
+      const FN = await getItem('name')
+      setUserId(uID)
+      setFirstName(FN)
+      
+      
+      const lID = await getItem('leagueId')
+      setLeagueId(lID)
+
+
+      //test link get:
+      //http://localhost:5062/api/draft/getDraftId/userId=16&leagueId=11
+      const dID = await getItem('draftId')
+      setDraftId(dID)
+      console.log(leagueId)
+
+      const data = await axiosInstance.get('/franchise/user/' + userId + '/league/' + leagueId)
+      setFranchiseId(data.data["franchiseId"])
+
+      // const p = await axiosInstance.get('/league/'+leagueId+'/users')
+      // console.log(p.data["$values"])
+      // setPlayers(p.data["$values"])
+      console.log("Loaded Draft Data Successfully")
+
+    } catch (error) {
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      } else {
+        console.error('Error message:', error.message);
+      }
+    }
+  }
+  const updatePlayers = async() => {
+    try {
+    const p = await axiosInstance.get('/league/'+leagueId+'/users')
+    console.log(p.data["$values"])
+    setPlayers(p.data["$values"])
+    if (p.data["$values"][0]["userId"] == userId) {
+      setLeagueManager(true)
+    }
+  }
+    catch (error) {
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      } else {
+        console.error('Error message:', error.message);
+      }
+    }
+  }
+
+  useEffect(() => {
+    getInitialValues()
+  }, [])
+
+  useEffect(() => {updatePlayers()}, [leagueId])
+  
+
+
+
 
 
   const styles = StyleSheet.create({

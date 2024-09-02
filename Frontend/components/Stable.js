@@ -474,6 +474,7 @@ export default function Stable(props) {
                       score2={item.awayPoints}
                       gameDate={item.gameDate}
                       gameTime={item.gameTime}
+                      gameStatus  = {item.gameStatus}
                     />
                   )}
                   keyExtractor={(item) => item.id}

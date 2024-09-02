@@ -30,7 +30,6 @@ export default function LoginPage(props) {
   const handleLogIn = async () => {
     if (email.trim() === '' || password.trim() === '') {
       alert('Please enter both email and password.')
-      props.navigation.navigate('Home')
       return
     }
 
@@ -52,6 +51,7 @@ export default function LoginPage(props) {
       await setItem('leagueId', data2.data['$values'][0]['leagueId'])
       const leagueId = data2.data['$values'][0]['leagueId']
       await setItem('leaguePin', data2.data['$values'][0]['pin'])
+      const franchise = await axiosInstance.post('/franchise', {"UserId": userId, "leagueId": leagueId})
       console.log(leagueId)
       try{
       const data3 = await axiosInstance.get('/draft/getDraftId?userId=' + userId + '&leagueId=' + leagueId)
@@ -83,7 +83,7 @@ export default function LoginPage(props) {
   
 
   const handleSignUp = async () => {
-    if (isCreatingLeague == "true") {
+    if (isCreatingLeague == true) {
       try {
         console.log("Creating League . . .")
         const response = await axiosInstance.post('/user/signup', {
@@ -105,8 +105,6 @@ export default function LoginPage(props) {
             "pin": randompin
           }
         )
-        console.log(league.data)
-
         // Handle successful signup
         setPage('login') // Switch to login view after successful signup
         return
@@ -141,7 +139,8 @@ export default function LoginPage(props) {
             }
 
         )
-        console.log(league.data)
+        console.log(league.data["leagueId"])
+
 
         // Handle successful signup
         setPage('login') // Switch to login view after successful signup
@@ -334,6 +333,11 @@ export default function LoginPage(props) {
     creatingLeague(false)
     setPage('league')
   }
+
+  useEffect(() => {
+    console.log(isCreatingLeague)
+  }, [isCreatingLeague])
+  
 
   return (
     <View

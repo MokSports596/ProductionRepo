@@ -50,7 +50,7 @@ export default function Game({
     },
   })
 
-  if (gameStatus == 'Scheduled') {
+  if (gameStatus == "Scheduled") {
     return (
       <View style={styles.InfoContainer}>
         <View style={{ display: 'flex' }}>
@@ -66,8 +66,8 @@ export default function Game({
             <TeamLogo team={team1}></TeamLogo>
             <Text style={{ fontSize: 20 }}>
               {' '}
-              {team1} - {score1}
-            </Text>
+              {team1}
+            </Text> 
           </View>
           <View
             style={{
@@ -81,11 +81,11 @@ export default function Game({
             <TeamLogo team={team2}></TeamLogo>
             <Text style={{ fontSize: 20 }}>
               {' '}
-              {team2} - {score2}
+              {team2}
             </Text>
           </View>
         </View>
-        {isFinal && (
+        
           <View
             style={{
               position: 'absolute',
@@ -94,9 +94,9 @@ export default function Game({
               alignItems: 'center',
             }}
           >
-            <Text style={{ fontSize: 20 }}>Final</Text>
+            <Text style={{ fontSize: 20 }}>{gameDate.slice(5,10)}</Text>
           </View>
-        )}
+        
         {isLok && (
           <View
             style={{

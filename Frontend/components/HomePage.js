@@ -41,8 +41,8 @@ export default function HomePage(props) {
   const getInitialValues = async () => {
     try {
 
-      const uID = await getItem('userId', response.data['userId'])
-      const FN = await getItem('name', response.data['firstName'])
+      const uID = await getItem('userId')
+      const FN = await getItem('name')
       setUserId(uID)
       setFirstName(FN)
       
@@ -65,21 +65,21 @@ export default function HomePage(props) {
   useEffect(() => {
     getInitialValues()
   }, [])
-  
-  if (draftId == null){
-    return(<Predraft></Predraft>)
-  }
+
+  // if (draftId == null){
+  //   return(<Predraft></Predraft>)
+  // }
 
 
-  // UpdateGameData()
+  // // UpdateGameData()
 
-  const indraft = false
-  if (draftState["isCompleted"] == false){
-    indraft = true
-  }
-  if (indraft){
-    return <Draft></Draft>
-  }
+  // const indraft = false
+  // if (draftState["isCompleted"] == false){
+  //   indraft = true
+  // }
+  // if (indraft){
+  //   return <Draft></Draft>
+  // }
 
   const styles = StyleSheet.create({
     container: {
@@ -178,10 +178,10 @@ export default function HomePage(props) {
     try {
       console.log('/game/week/' + gameWeek)
       const data = await axiosInstance.get('/game/week/' + gameWeek)
-      console.log(data.data)
+      // console.log(data.data)
       setGameData(data.data['$values'])
       console.log('retrived data')
-      console.log(gameData)
+      // console.log(gameData)
     } catch (error) {
       Alert('There was an error loading the page. Please try again later')
       if (error.response) {
@@ -207,7 +207,7 @@ export default function HomePage(props) {
   }
 
   const decrementWeek = async () => {
-    if (week > 1) {
+    if (gameWeek > 1) {
       setGameWeek(gameWeek - 1)
     }
   }
@@ -254,14 +254,14 @@ export default function HomePage(props) {
         </View>
 
         <View style={styles.BodyContainer}>
-          <Text style={styles.Username}>Welcome BigAssTruck!</Text>
+          <Text style={styles.Username}>Welcome {firstName}!</Text>
           {
             // After 11 letters, this has potential to move onto the next line. Either limit to 11 letters or let it go to next line
           }
 
           <Player
             isSelf={true}
-            name='BigAssTruck'
+            name={firstName}
             season='4'
             wk='+6'
             skins='1'
@@ -405,7 +405,7 @@ export default function HomePage(props) {
                 <FlatList
                   data={gameData}
                   renderItem={({ item }) => (
-                    <Game team1={item.homeTeam} team2={item.awayTeam} />
+                    <Game team1={item.homeTeam} team2={item.awayTeam} gameStatus = {item.gameStatus} gameDate = {item.gameDate}/>
                   )}
                   keyExtractor={(item) => item.id}
                 />
