@@ -13,7 +13,7 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import TopBar from './page_components/TopBar.js'
 import Player from './page_components/Player.js'
 import StickyBar from './page_components/StickyBar.js'
@@ -22,6 +22,41 @@ import TeamLogo from './page_components/TeamLogo.js'
 export default function Standings(props) {
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
+
+  const [currentWeek, setMasterWeek] = useState(1) //NEEDS TO BE UPDATED CONSTANTLY!!
+  const [leagueID, setLeagueId] = useState(null)
+  const [draftId, setDraftId] = useState(null)
+  const [userId, setUserId] = useState(null)
+  const [firstName, setFirstName] = useState(null)
+  const [draftState, setDraftState] = useState([])
+
+  const getInitialValues = async () => {
+    try {
+
+      const uID = await getItem('userId')
+      const FN = await getItem('name')
+      setUserId(uID)
+      setFirstName(FN)
+      
+      const userId = response.data['userId']
+      const data2 = await axiosInstance.get('/user/' + userId + '/leagues')
+      console.log(data2.data)
+      const lID = await getItem('leagueId')
+      setLeagueId(lID)
+      //test link get:
+      //http://localhost:5062/api/draft/getDraftId/userId=16&leagueId=11
+      const dID = await getItem('draftId')
+      setDraftId(dID)
+      const DS = await axiosInstance.get('/draft/' + draftId + '/state').data
+      setDraftState(DS)
+    } catch (error) {
+      Alert('There was an error loading the page. Please try again later')
+    }
+  }
+
+  useEffect(() => {
+    getInitialValues()
+  }, [])
 
   styles = StyleSheet.create({
     BodyContainer: {
@@ -109,7 +144,7 @@ export default function Standings(props) {
   const [Teams, setTeams] = useState('')
   const [TeamLOKs, setTeamLOKs] = useState('')
   const [loknloads, setLoknloads] = useState([])
-  const [week, setWeek] = useState(4)
+  const [week, setWeek] = useState(1)
   const [threeteams, setthreeteams] = useState([])
   const [teamsdata, setteamsdata] = useState([])
   const [weekPoints, setWeekpoints] = useState(0)

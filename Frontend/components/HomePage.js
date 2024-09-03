@@ -37,6 +37,8 @@ export default function HomePage(props) {
   const [userId, setUserId] = useState(null)
   const [firstName, setFirstName] = useState(null)
   const [draftState, setDraftState] = useState([])
+  const [userstats, setUserstats] = useState([])
+  const [bruh, set] = useState([])
 
   const getInitialValues = async () => {
     try {
@@ -45,26 +47,40 @@ export default function HomePage(props) {
       const FN = await getItem('name')
       setUserId(uID)
       setFirstName(FN)
+
       
-      const userId = response.data['userId']
+
       const data2 = await axiosInstance.get('/user/' + userId + '/leagues')
+
       console.log(data2.data)
       const lID = await getItem('leagueId')
       setLeagueId(lID)
       //test link get:
       //http://localhost:5062/api/draft/getDraftId/userId=16&leagueId=11
+      console.log('here!')
+      set([lID, uID, currentWeek])
       const dID = await getItem('draftId')
       setDraftId(dID)
-      const DS = await axiosInstance.get('/draft/' + draftId + '/state').data
-      setDraftState(DS)
+      // const DS = await axiosInstance.get('/draft/' + draftId + '/state').data
+      // setDraftState(DS)
+     
     } catch (error) {
       Alert('There was an error loading the page. Please try again later')
     }
+  }
+  const finalinitialvalues = async () => {
+    const US = await axiosInstance.get('/userstats/' + bruh[0] + '/league/' + bruh[1] + '/week/' + bruh[2])
+
+    setUserstats(US.data)
+
+    console.log(US.data)
   }
 
   useEffect(() => {
     getInitialValues()
   }, [])
+
+  useEffect(() => {finalinitialvalues()}, [bruh])
 
   // if (draftId == null){
   //   return(<Predraft></Predraft>)
@@ -262,10 +278,10 @@ export default function HomePage(props) {
           <Player
             isSelf={true}
             name={firstName}
-            season='4'
-            wk='+6'
-            skins='1'
-            LOKs='3'
+            season={userstats["seasonPoints"]}
+            wk={'+' + userstats["weekPoints"]}
+            skins={userstats["skins"]}
+            LOKs={userstats["loksUsed"]}
             ranking='#3'
           />
 
