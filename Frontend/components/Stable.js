@@ -21,11 +21,86 @@ import StickyBar from './page_components/StickyBar.js'
 import TeamLogo from './page_components/TeamLogo.js'
 import Game from './page_components/Game.js'
 import axiosInstance from './axiosInstance.js'
+import { getItem, setItem } from './page_components/Async.js'
 export default function Stable(props) {
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
 
   const [country, setCountry] = React.useState()
+
+  const [currentWeek, setMasterWeek] = useState(1) //NEEDS TO BE UPDATED CONSTANTLY!!
+  const [leagueID, setLeagueId] = useState(null)
+  const [draftId, setDraftId] = useState(null)
+  const [userId, setUserId] = useState(null)
+  const [firstName, setFirstName] = useState(null)
+  const [draftState, setDraftState] = useState([])
+  const [players, setPlayers] = useState([])
+  const [playerData, setPlayerData] = useState([])
+
+  const getInitialValues = async () => {
+    try {
+
+      const uID = await getItem('userId')
+      const FN = await getItem('name')
+      setUserId(uID)
+      setFirstName(FN)
+      
+      const data2 = await axiosInstance.get('/user/' + uID + '/leagues')
+      console.log(data2.data)
+      const lID = await getItem('leagueId')
+      setLeagueId(lID)
+      //test link get:
+      //http://localhost:5062/api/draft/getDraftId/userId=16&leagueId=11
+      const dID = await getItem('draftId')
+      setDraftId(dID)
+      const DS = await axiosInstance.get('/draft/' + draftId + '/state').data
+      setDraftState(DS)
+      console.log("Loaded Standings Data Successfully!")
+    } catch (error) {
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      } else {
+        console.error('Error message:', error.message);
+      }
+    }
+  }
+const updatePlayers = async() => {
+    try {
+    const p = await axiosInstance.get('/league/'+leagueID+'/users')
+    console.log(p.data["$values"])
+    setPlayers(p.data["$values"])
+    const playerData = []
+    for (let i = 0; i < p.data["$values"].length; i++) {
+      const response = await axiosInstance.get('/userstats/' + p.data["$values"][i]["userId"] + '/league/' + leagueID + '/week/' + currentWeek)
+      const data = response.data
+      data["firstName"] = p.data["$values"][i]["firstName"]
+      playerData.push(data)
+    }
+    playerData.sort(function(a,b) {
+      return b["weekPoints"] - a["weekPoints"]
+  });
+    setPlayerData(playerData)
+    console.log(playerData)
+  }
+    catch (error) {
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      } else {
+        console.error('Error message:', error.message);
+      }
+    }
+  }
+
+  useEffect(() => {
+    getInitialValues()
+  }, [])
+
+  useEffect(() => {updatePlayers()}, [leagueID])
+  
 
   function goToHome() {
     props.navigation.navigate('Home')
@@ -348,39 +423,14 @@ export default function Stable(props) {
               </Text>
             </View>
             <View style={styles.subContainer}>
-              <Player
-                rank='4'
-                team='BigAssTruck'
-                weekPoints='6 Pts'
-                HSLS='HS'
-                MNF='49ers'
-                MNF2='chiefs'
-                isHighLighted={true}
-              ></Player>
-              <Player
-                rank='4'
-                team='BigAssTruck'
-                weekPoints='6 Pts'
-                HSLS='HS'
-                MNF='49ers'
-                MNF2='chiefs'
-                isHighLighted={true}
-              ></Player>
-              <Player
-                rank='4'
-                team='BigAssTruck'
-                weekPoints='6 Pts'
-                HSLS='HS'
-                MNF='49ers'
-                MNF2='chiefs'
-              ></Player>
-              <Player
-                rank='4'
-                team='BigAssTruck'
-                weekPoints='6 Pts'
-                HSLS='LS'
-                MNF='49ers'
-              ></Player>
+            <FlatList
+                  data={playerData}
+                  renderItem={({ item , index}) => (
+                    <Player rank = {index + 1} team={item.firstName} season={item["seasonPoints"]} weekPoints ={item["weekPoints"] + ' Pts'} />
+                  )}
+                  keyExtractor={(item) => item.userId}
+                />
+              
             </View>
           </View>
 
@@ -459,6 +509,7 @@ export default function Stable(props) {
                   paddingBottom: 0.03 * windowHeight,
                   width: 0.85 * windowWidth,
                   gap: 15,
+                  display: "flex", alignSelf: "center"
                 }}
               >
                 {
@@ -474,7 +525,7 @@ export default function Stable(props) {
                       score2={item.awayPoints}
                       gameDate={item.gameDate}
                       gameTime={item.gameTime}
-                      gameStatus  = {item.gameStatus}
+                      gameStatus  = {item.gameStatus} 
                     />
                   )}
                   keyExtractor={(item) => item.id}

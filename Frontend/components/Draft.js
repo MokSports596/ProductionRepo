@@ -56,7 +56,7 @@ export default function Draft(props) {
       console.log(leagueId)
 
       const data = await axiosInstance.get('/franchise/user/' + userId + '/league/' + leagueId)
-      setFranchiseId(data.data["franchiseId"])
+      setFranchiseId(data.data["franchiseId"]) //This has not been tested
 
       // const p = await axiosInstance.get('/league/'+leagueId+'/users')
       // console.log(p.data["$values"])

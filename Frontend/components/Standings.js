@@ -19,6 +19,8 @@ import Player from './page_components/Player.js'
 import StickyBar from './page_components/StickyBar.js'
 import Team from './page_components/Team.js'
 import TeamLogo from './page_components/TeamLogo.js'
+import axiosInstance from './axiosInstance.js'
+import { getItem, setItem } from './page_components/Async.js'
 export default function Standings(props) {
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
@@ -29,6 +31,8 @@ export default function Standings(props) {
   const [userId, setUserId] = useState(null)
   const [firstName, setFirstName] = useState(null)
   const [draftState, setDraftState] = useState([])
+  const [players, setPlayers] = useState([])
+  const [playerData, setPlayerData] = useState([])
 
   const getInitialValues = async () => {
     try {
@@ -38,8 +42,7 @@ export default function Standings(props) {
       setUserId(uID)
       setFirstName(FN)
       
-      const userId = response.data['userId']
-      const data2 = await axiosInstance.get('/user/' + userId + '/leagues')
+      const data2 = await axiosInstance.get('/user/' + uID + '/leagues')
       console.log(data2.data)
       const lID = await getItem('leagueId')
       setLeagueId(lID)
@@ -49,14 +52,52 @@ export default function Standings(props) {
       setDraftId(dID)
       const DS = await axiosInstance.get('/draft/' + draftId + '/state').data
       setDraftState(DS)
+      console.log("Loaded Standings Data Successfully!")
     } catch (error) {
-      Alert('There was an error loading the page. Please try again later')
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      } else {
+        console.error('Error message:', error.message);
+      }
+    }
+  }
+const updatePlayers = async() => {
+    try {
+    const p = await axiosInstance.get('/league/'+leagueID+'/users')
+    console.log(p.data["$values"])
+    setPlayers(p.data["$values"])
+    const playerData = []
+    for (let i = 0; i < p.data["$values"].length; i++) {
+      const response = await axiosInstance.get('/userstats/' + p.data["$values"][i]["userId"] + '/league/' + leagueID + '/week/' + currentWeek)
+      const data = response.data
+      data["firstName"] = p.data["$values"][i]["firstName"]
+      playerData.push(data)
+    }
+    playerData.sort(function(a,b) {
+      return b["seasonPoints"] - a["seasonPoints"]
+  });
+    setPlayerData(playerData)
+    console.log(playerData)
+  }
+    catch (error) {
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      } else {
+        console.error('Error message:', error.message);
+      }
     }
   }
 
   useEffect(() => {
     getInitialValues()
   }, [])
+
+  useEffect(() => {updatePlayers()}, [leagueID])
+  
 
   styles = StyleSheet.create({
     BodyContainer: {
@@ -192,34 +233,14 @@ export default function Standings(props) {
           >
             Standings
           </Text>
-          <Player
-            name='BAT'
-            ranking='#1'
-            season='6'
-            wk='+4'
-            skins='1'
-            LOKs='5'
-            isSelf={true}
-          ></Player>
-
-          <Player
-            name='TestName'
-            ranking='#2'
-            season='50'
-            wk='+2'
-            skins='1'
-            LOKs='5'
-            arrow='up'
-          ></Player>
-          <Player
-            name='TestName'
-            ranking='#2'
-            season='50'
-            wk='0'
-            skins='1'
-            LOKs='5'
-            arrow='down'
-          ></Player>
+          <FlatList
+                  data={playerData}
+                  renderItem={({ item, index }) => (
+                    <Player ranking = {index + 1} name={item.firstName} season={item["seasonPoints"]} wk={item["weekPoints"]} skins = {item["skins"]} LOKs = {item["loksUsed"]} />
+                  )}
+                  keyExtractor={(item) => item.userId}
+                />
+{/*           
           <TouchableOpacity onPress={() => HandlePress('123456')}>
             <Player
               name='TestName'
@@ -230,11 +251,8 @@ export default function Standings(props) {
               LOKs='5'
               LOKLeader={true}
             ></Player>
-          </TouchableOpacity>
-          <Player></Player>
-          <Player></Player>
-
-          <Player></Player>
+          </TouchableOpacity> */}
+          
         </View>
         <View
           style={{

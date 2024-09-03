@@ -50,30 +50,46 @@ export default function HomePage(props) {
 
       
 
-      const data2 = await axiosInstance.get('/user/' + userId + '/leagues')
+      const data2 = await axiosInstance.get('/user/' + uID + '/leagues')
 
       console.log(data2.data)
       const lID = await getItem('leagueId')
+
+      set([lID, uID, currentWeek])
+
       setLeagueId(lID)
       //test link get:
       //http://localhost:5062/api/draft/getDraftId/userId=16&leagueId=11
-      console.log('here!')
-      set([lID, uID, currentWeek])
+      console.log('here!!')
       const dID = await getItem('draftId')
       setDraftId(dID)
       // const DS = await axiosInstance.get('/draft/' + draftId + '/state').data
       // setDraftState(DS)
      
     } catch (error) {
-      Alert('There was an error loading the page. Please try again later')
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      } else {
+        console.error('Error message:', error.message);
+      }
     }
   }
   const finalinitialvalues = async () => {
-    const US = await axiosInstance.get('/userstats/' + bruh[0] + '/league/' + bruh[1] + '/week/' + bruh[2])
+    console.log('bruh')
+    console.log(bruh[0])
+    console.log(bruh[1])
+    console.log(bruh[2])
+
+
+
+    const US = await axiosInstance.get('/userstats/' + bruh[1] + '/league/' + bruh[0] + '/week/' + bruh[2])
+    console.log(US.data)
+
 
     setUserstats(US.data)
 
-    console.log(US.data)
   }
 
   useEffect(() => {
@@ -282,7 +298,7 @@ export default function HomePage(props) {
             wk={'+' + userstats["weekPoints"]}
             skins={userstats["skins"]}
             LOKs={userstats["loksUsed"]}
-            ranking='#3'
+            // ranking='#3'
           />
 
           <Text
