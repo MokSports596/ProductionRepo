@@ -1,0 +1,6 @@
+@MokSportsApp_HostAddress = http://localhost:5062
+
+GET {{MokSportsApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
