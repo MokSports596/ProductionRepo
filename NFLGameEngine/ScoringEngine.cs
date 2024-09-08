@@ -54,7 +54,7 @@ namespace NFLGameEngine
                                 LeagueId = franchise.LeagueId,
                                 FranchiseId = franchise.FranchiseId,
                                 WeekId = weekId,
-                                SeasonPoints = 0,
+                                SeasonPoints = 0, // Initialize to 0 to avoid nulls
                                 WeekPoints = 0,
                                 LoksUsed = 0,
                                 LoadsUsed = 0,
@@ -82,8 +82,11 @@ namespace NFLGameEngine
                         weekPoints += CalculateTeamScore(franchise.Team4Id ?? 0, completedGames, lokTeamId, loadTeamId, ref loksUsed, ref loadsUsed);
                         weekPoints += CalculateTeamScore(franchise.Team5Id ?? 0, completedGames, lokTeamId, loadTeamId, ref loksUsed, ref loadsUsed);
 
-                        // Update the user stats
-                        userStats.WeekPoints = (int)Math.Round(weekPoints);
+                        // Ensure SeasonPoints is initialized properly
+                        userStats.SeasonPoints = userStats.SeasonPoints == null ? 0 : userStats.SeasonPoints;
+
+                        // Ensure values are never null
+                        userStats.WeekPoints = (int)Math.Round(weekPoints); 
                         userStats.SeasonPoints += (int)Math.Round(weekPoints); // Accumulate season points
                         userStats.LoksUsed += loksUsed;
                         userStats.LoadsUsed += loadsUsed;
@@ -111,6 +114,7 @@ namespace NFLGameEngine
             }
         }
 
+
         private double CalculateTeamScore(int teamId, IEnumerable<Game> completedGames, int lokTeamId, int loadTeamId, ref int loksUsed, ref int loadsUsed)
         {
             if (teamId == 0)
@@ -128,8 +132,10 @@ namespace NFLGameEngine
             }
 
             bool isHomeTeam = game.HomeTeam == teamId.ToString();
-            int? teamPoints = isHomeTeam ? game.HomePoints : game.AwayPoints;
-            int? opponentPoints = isHomeTeam ? game.AwayPoints : game.HomePoints;
+
+            // Handle nullable int (int?) correctly
+            int teamPoints = isHomeTeam ? game.HomePoints.GetValueOrDefault() : game.AwayPoints.GetValueOrDefault();
+            int opponentPoints = isHomeTeam ? game.AwayPoints.GetValueOrDefault() : game.HomePoints.GetValueOrDefault();
 
             // Apply scoring rules
             if (teamPoints > opponentPoints)
@@ -152,8 +158,8 @@ namespace NFLGameEngine
             }
 
             // Check for high score and low score across all games
-            int maxScore = completedGames.Max(g => Math.Max(g.HomePoints ?? 0, g.AwayPoints ?? 0));
-            int minScore = completedGames.Min(g => Math.Min(g.HomePoints ?? 0, g.AwayPoints ?? 0));
+            int maxScore = completedGames.Max(g => Math.Max(g.HomePoints.GetValueOrDefault(), g.AwayPoints.GetValueOrDefault()));
+            int minScore = completedGames.Min(g => Math.Min(g.HomePoints.GetValueOrDefault(), g.AwayPoints.GetValueOrDefault()));
 
             if (teamPoints == maxScore)
             {
@@ -189,6 +195,5 @@ namespace NFLGameEngine
 
             return points;
         }
-
     }
 }
