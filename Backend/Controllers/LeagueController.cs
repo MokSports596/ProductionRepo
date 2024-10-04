@@ -25,6 +25,17 @@ namespace MokSportsApp.Controllers
         {
             try
             {
+                // Generate unique 6-digit PIN
+                var random = new Random();
+                string pin;
+                do
+                {
+                    pin = random.Next(100000, 999999).ToString();
+                }
+                while (await _leagueService.IsPinTakenAsync(pin)); // Ensure the generated PIN is unique
+
+                league.Pin = pin; // Assign the generated unique PIN to the league
+
                 var createdLeague = await _leagueService.CreateLeagueAsync(league, userId);
                 return CreatedAtAction(nameof(GetLeagueById), new { id = createdLeague.LeagueId }, createdLeague);
             }
@@ -32,6 +43,18 @@ namespace MokSportsApp.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        [HttpGet("{id}/pin")]
+        public async Task<ActionResult<string>> GetLeaguePin(int id)
+        {
+            var league = await _leagueService.GetLeagueByIdAsync(id);
+            if (league == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(league.Pin);
         }
 
         // GET: api/league/{id}

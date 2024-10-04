@@ -1,0 +1,6 @@
+module Pods_Mok {
+  umbrella header "Pods-Mok-umbrella.h"
+
+  export *
+  module * { export * }
+}

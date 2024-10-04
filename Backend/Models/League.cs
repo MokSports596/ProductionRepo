@@ -6,7 +6,7 @@ namespace MokSportsApp.Models
     {
         public int LeagueId { get; set; }
         public string LeagueName { get; set; }
-        public string Pin { get; set; }
+        public string? Pin { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
 

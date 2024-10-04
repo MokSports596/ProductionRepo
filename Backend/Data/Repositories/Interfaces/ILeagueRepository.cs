@@ -11,5 +11,6 @@ namespace MokSportsApp.Data.Repositories.Interfaces
         Task AddAsync(League league);
         Task SaveChangesAsync();
         Task<League?> GetByIdAsync(int id);
+        Task<bool> IsPinTakenAsync(string pin);
     }
 }

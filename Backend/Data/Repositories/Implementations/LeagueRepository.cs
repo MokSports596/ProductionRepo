@@ -43,5 +43,10 @@ namespace MokSportsApp.Data.Repositories.Implementations
         {
             return await _context.Leagues.FindAsync(id);
         }
+
+        public async Task<bool> IsPinTakenAsync(string pin) // Add this method
+        {
+            return await _context.Leagues.AnyAsync(l => l.Pin == pin);
+        }
     }
 }

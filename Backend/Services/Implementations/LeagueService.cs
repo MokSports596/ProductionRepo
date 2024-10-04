@@ -85,5 +85,12 @@ namespace MokSportsApp.Services.Implementations
         {
             return await _leagueRepository.GetByIdAsync(id);
         }
+
+
+        public async Task<bool> IsPinTakenAsync(string pin)
+        {
+            return await _leagueRepository.IsPinTakenAsync(pin);
+        }
+
     }
 }
