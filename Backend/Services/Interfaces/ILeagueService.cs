@@ -6,9 +6,11 @@ namespace MokSportsApp.Services.Interfaces
 {
     public interface ILeagueService
     {
+        Task<bool> IsSeasonAvailable(int seasonId);
+
         Task<League> CreateLeagueAsync(League league, int userId);
         Task<List<League>> GetLeaguesByPinAsync(string pin);
-        Task JoinLeagueAsync(int userId, string pin, string leagueName);
+        Task JoinLeagueAsync(int userId, string pin);
         Task<League?> GetLeagueByIdAsync(int id);
     }
 }

@@ -1,14 +1,19 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MokSportsApp.Models
 {
     public class League
     {
         public int LeagueId { get; set; }
-        public string LeagueName { get; set; }
+        public int SeasonId { get; set; }
+        //public string LeagueName { get; set; }
         public string Pin { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        [ForeignKey("SeasonId")]
+        public Season SeasonFK { get; set; }
 
         public ICollection<UserStats> UserStats { get; set; } = new List<UserStats>();
         public ICollection<UserLeague> UserLeagues { get; set; } = new List<UserLeague>();

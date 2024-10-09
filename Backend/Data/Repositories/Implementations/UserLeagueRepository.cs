@@ -50,6 +50,27 @@ namespace MokSportsApp.Data.Repositories.Implementations
                                 .ToListAsync();
         }
 
+        public async Task<bool> IsUserPartOfAnotherLeague(int leagueId, int userId)
+        {
+            var query = _context.UserLeagues.Where(a => a.UserId == userId && a.LeagueId != leagueId);
+
+            var userLeagueId = await (from q in query
+                                      join l in _context.Leagues
+                                      on q.LeagueId equals l.LeagueId
+                                      join s in _context.Seasons.Where(a => a.Status == SeasonStatus.Active)
+                                      on l.SeasonId equals s.Id
+                                      select q.Id).FirstOrDefaultAsync();
+            return userLeagueId > 0 ? true : false;
+        }
+
+        public async Task<bool> CanUserJoinLeague(int leagueId)
+        {
+            var count = await _context.UserLeagues.Where(a => a.LeagueId == leagueId).CountAsync();
+
+            if (count == 6) return false;
+
+            return true;
+        }
 
     }
 }

@@ -6,8 +6,9 @@ namespace MokSportsApp.Data.Repositories.Interfaces
 {
     public interface ILeagueRepository
     {
-        Task<League?> GetByPinAndNameAsync(string pin, string name);
-        Task<List<League>> GetLeaguesByPinAsync(string pin); // This method should be here
+        Task<bool> IsSeasonAvailable(int seasonId);
+        Task<League?> GetByPinAndNameAsync(string pin);
+        Task<List<League>> GetLeaguesByPinAsync(string pin);
         Task AddAsync(League league);
         Task SaveChangesAsync();
         Task<League?> GetByIdAsync(int id);
