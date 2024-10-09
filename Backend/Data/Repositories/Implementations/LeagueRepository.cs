@@ -16,10 +16,15 @@ namespace MokSportsApp.Data.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<League?> GetByPinAndNameAsync(string pin, string name)
+        public async Task<bool> IsSeasonAvailable(int seasonId)
+        {
+            return await _context.Seasons.AnyAsync(a => a.Id == seasonId);
+        }
+
+        public async Task<League?> GetByPinAndNameAsync(string pin)
         {
             return await _context.Leagues
-                .FirstOrDefaultAsync(l => l.Pin == pin && l.LeagueName == name);
+                .FirstOrDefaultAsync(l => l.Pin == pin);
         }
 
         public async Task<List<League>> GetLeaguesByPinAsync(string pin) // Implementation of the method

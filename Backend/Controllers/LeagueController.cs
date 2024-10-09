@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MokSportsApp.DTO;
 using MokSportsApp.Models;
 using MokSportsApp.Services.Interfaces;
 using System.Collections.Generic;
@@ -21,11 +22,19 @@ namespace MokSportsApp.Controllers
 
         // POST: api/league/create
         [HttpPost("create")]
-        public async Task<ActionResult<League>> CreateLeague([FromBody] League league, [FromQuery] int userId)
+        public async Task<ActionResult<League>> CreateLeague([FromBody] LeagueDTO league, [FromQuery] int userId)
         {
             try
             {
-                var createdLeague = await _leagueService.CreateLeagueAsync(league, userId);
+                if (!await _leagueService.IsSeasonAvailable(league.SeasonId)) return NotFound("Season not found");
+
+                var _league = new League()
+                {
+                    SeasonId = league.SeasonId,
+                    Pin = league.Pin
+                };
+
+                var createdLeague = await _leagueService.CreateLeagueAsync(_league, userId);
                 return CreatedAtAction(nameof(GetLeagueById), new { id = createdLeague.LeagueId }, createdLeague);
             }
             catch (InvalidOperationException ex)
@@ -64,7 +73,7 @@ namespace MokSportsApp.Controllers
         {
             try
             {
-                await _leagueService.JoinLeagueAsync(userId, request.Pin, request.LeagueName);
+                await _leagueService.JoinLeagueAsync(userId, request.Pin);
                 return Ok(new { message = "Successfully joined the league." });
             }
             catch (InvalidOperationException ex)
@@ -94,7 +103,6 @@ namespace MokSportsApp.Controllers
     // DTO for joining a league
     public class JoinLeagueRequest
     {
-        public string LeagueName { get; set; }
         public string Pin { get; set; }
     }
 }

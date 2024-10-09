@@ -6,6 +6,7 @@ using MokSportsApp.Services.Interfaces;
 using MokSportsApp.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MokSportsApp.DTO;
 
 namespace MokSportsApp.Tests.Controllers
 {
@@ -26,12 +27,12 @@ namespace MokSportsApp.Tests.Controllers
         public async Task CreateLeague_ReturnsCreatedAtAction_WhenLeagueIsCreated()
         {
             // Arrange
-            var league = new League { LeagueId = 1, league_name = "Test League", Pin = "123456" };
+            var league = new League { LeagueId = 1, Pin = "123456" };
             _mockLeagueService.Setup(service => service.CreateLeagueAsync(It.IsAny<League>(), It.IsAny<int>()))
                 .ReturnsAsync(league);
 
             // Act
-            var result = await _controller.CreateLeague(league, 1);
+            var result = await _controller.CreateLeague(new LeagueDTO() { Pin = league.Pin, SeasonId = league.SeasonId }, 1);
 
             // Assert
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
@@ -43,7 +44,7 @@ namespace MokSportsApp.Tests.Controllers
         public async Task GetLeagueById_ReturnsOk_WhenLeagueExists()
         {
             // Arrange
-            var league = new League { LeagueId = 1, LeagueName = "Test League" };
+            var league = new League { LeagueId = 1 };
             _mockLeagueService.Setup(service => service.GetLeagueByIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(league);
 
@@ -73,8 +74,8 @@ namespace MokSportsApp.Tests.Controllers
         public async Task JoinLeague_ReturnsOk_WhenUserJoinsLeagueSuccessfully()
         {
             // Arrange
-            var request = new JoinLeagueRequest { LeagueName = "Test League", Pin = "123456" };
-            _mockLeagueService.Setup(service => service.JoinLeagueAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
+            var request = new JoinLeagueRequest { Pin = "2025" };
+            _mockLeagueService.Setup(service => service.JoinLeagueAsync(It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(Task.CompletedTask);
 
             // Act

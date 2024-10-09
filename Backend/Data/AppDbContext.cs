@@ -18,6 +18,7 @@ namespace MokSportsApp.Data
         public DbSet<Game> Games { get; set; }
         public DbSet<Draft> Drafts { get; set; }
         public DbSet<DraftPick> DraftPicks { get; set; }
+        public DbSet<Season> Seasons { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,44 +40,44 @@ namespace MokSportsApp.Data
 
             modelBuilder.Entity<Franchise>(entity =>
             {
-            entity.ToTable("Franchises");
+                entity.ToTable("Franchises");
 
-            entity.HasKey(e => e.FranchiseId);
+                entity.HasKey(e => e.FranchiseId);
 
-            entity.Property(e => e.FranchiseName).HasColumnName("FranchiseName");
+                entity.Property(e => e.FranchiseName).HasColumnName("FranchiseName");
 
-            entity.HasOne(f => f.User)
-                  .WithMany(u => u.Franchises)
-                  .HasForeignKey(f => f.UserId);
+                entity.HasOne(f => f.User)
+                      .WithMany(u => u.Franchises)
+                      .HasForeignKey(f => f.UserId);
 
-            entity.HasOne(f => f.League)
-                  .WithMany(l => l.Franchises)
-                  .HasForeignKey(f => f.LeagueId);
+                entity.HasOne(f => f.League)
+                      .WithMany(l => l.Franchises)
+                      .HasForeignKey(f => f.LeagueId);
 
-            entity.HasOne(f => f.Team1)
-                  .WithMany()
-                  .HasForeignKey(f => f.Team1Id)
-                  .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(f => f.Team1)
+                      .WithMany()
+                      .HasForeignKey(f => f.Team1Id)
+                      .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(f => f.Team2)
-                  .WithMany()
-                  .HasForeignKey(f => f.Team2Id)
-                  .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(f => f.Team2)
+                      .WithMany()
+                      .HasForeignKey(f => f.Team2Id)
+                      .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(f => f.Team3)
-                  .WithMany()
-                  .HasForeignKey(f => f.Team3Id)
-                  .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(f => f.Team3)
+                      .WithMany()
+                      .HasForeignKey(f => f.Team3Id)
+                      .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(f => f.Team4)
-                  .WithMany()
-                  .HasForeignKey(f => f.Team4Id)
-                  .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(f => f.Team4)
+                      .WithMany()
+                      .HasForeignKey(f => f.Team4Id)
+                      .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(f => f.Team5)
-                  .WithMany()
-                  .HasForeignKey(f => f.Team5Id)
-                  .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(f => f.Team5)
+                      .WithMany()
+                      .HasForeignKey(f => f.Team5Id)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
 
@@ -135,7 +136,7 @@ namespace MokSportsApp.Data
 
                 entity.HasKey(e => e.LeagueId);
                 entity.Property(e => e.LeagueId).HasColumnName("LeagueId");
-                entity.Property(e => e.LeagueName).HasColumnName("LeagueName");
+                //entity.Property(e => e.LeagueName).HasColumnName("LeagueName");
                 entity.Property(e => e.CreatedAt).HasColumnName("created_at");
                 entity.Property(e => e.CreatedBy).HasColumnName("created_by");
                 entity.Property(e => e.Pin).HasColumnName("pin");
@@ -207,36 +208,36 @@ namespace MokSportsApp.Data
                       .HasMaxLength(255)
                       .IsRequired(false); // Nullable in the database
 
-                entity.Property(e => e.Week).IsRequired(); 
+                entity.Property(e => e.Week).IsRequired();
             });
 
             modelBuilder.Entity<Draft>(entity =>
             {
-                  entity.ToTable("Drafts");
-                  entity.HasKey(d => d.DraftId);
+                entity.ToTable("Drafts");
+                entity.HasKey(d => d.DraftId);
 
-                  entity.HasOne(d => d.League)
-                  .WithMany(l => l.Drafts)
-                  .HasForeignKey(d => d.LeagueId);
+                entity.HasOne(d => d.League)
+                .WithMany(l => l.Drafts)
+                .HasForeignKey(d => d.LeagueId);
 
             });
 
             modelBuilder.Entity<DraftPick>(entity =>
             {
-                  entity.ToTable("DraftPicks");
-                  entity.HasKey(dp => dp.DraftPickId);
+                entity.ToTable("DraftPicks");
+                entity.HasKey(dp => dp.DraftPickId);
 
-                  entity.HasOne(dp => dp.Draft)
-                  .WithMany(d => d.DraftPicks)
-                  .HasForeignKey(dp => dp.DraftId);
+                entity.HasOne(dp => dp.Draft)
+                .WithMany(d => d.DraftPicks)
+                .HasForeignKey(dp => dp.DraftId);
 
-                  entity.HasOne(dp => dp.Franchise)
-                  .WithMany(f => f.DraftPicks)
-                  .HasForeignKey(dp => dp.FranchiseId);
+                entity.HasOne(dp => dp.Franchise)
+                .WithMany(f => f.DraftPicks)
+                .HasForeignKey(dp => dp.FranchiseId);
 
-                  entity.HasOne(dp => dp.Team)
-                  .WithMany(t => t.DraftPicks)
-                  .HasForeignKey(dp => dp.TeamId);
+                entity.HasOne(dp => dp.Team)
+                .WithMany(t => t.DraftPicks)
+                .HasForeignKey(dp => dp.TeamId);
             });
         }
     }

@@ -22,6 +22,7 @@ builder.Services.AddScoped<IUserLeagueRepository, UserLeagueRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IDraftRepository, DraftRepository>();
 builder.Services.AddScoped<IDraftPickRepository, DraftPickRepository>();
+builder.Services.AddScoped<ISeasonRepository, SeasonRepository>();
 
 
 // Register your services
@@ -33,6 +34,7 @@ builder.Services.AddScoped<ILeagueService, LeagueService>();
 builder.Services.AddScoped<IUserLeagueService, UserLeagueService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IDraftService, DraftService>();
+builder.Services.AddScoped<ISeasonService, SeasonService>();
 
 
 // Configure JSON serialization to handle circular references

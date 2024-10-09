@@ -11,5 +11,8 @@ namespace MokSportsApp.Data.Repositories.Interfaces
         Task<List<User>> GetUsersByLeagueIdAsync(int leagueId);
         Task<List<League>> GetLeaguesForUserAsync(int userId);
         Task<UserLeague?> GetByUserIdAndLeagueIdAsync(int userId, int leagueId);
+        Task<bool> CanUserJoinLeague(int leagueId);
+
+        Task<bool> IsUserPartOfAnotherLeague(int leagueId, int userId);
     }
 }
