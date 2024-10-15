@@ -689,3 +689,5 @@
 /Users/meghashyam/Desktop/ModProduction/Backend/obj/Debug/net8.0/MokSportsApp.pdb
 /Users/meghashyam/Desktop/ModProduction/Backend/obj/Debug/net8.0/MokSportsApp.genruntimeconfig.cache
 /Users/meghashyam/Desktop/ModProduction/Backend/obj/Debug/net8.0/ref/MokSportsApp.dll
+/Users/meghashyam/Desktop/ModProduction/Backend/bin/Debug/net8.0/DotNetEnv.dll
+/Users/meghashyam/Desktop/ModProduction/Backend/bin/Debug/net8.0/Sprache.dll

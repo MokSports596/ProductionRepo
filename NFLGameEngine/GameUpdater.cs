@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using NFLGameEngine.Models;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
+using DotNetEnv; // Import DotNetEnv to load environment variables
 
 namespace NFLGameEngine
 {
@@ -18,6 +19,13 @@ namespace NFLGameEngine
 
         // Cache to store scores per date to avoid redundant API calls
         private readonly ConcurrentDictionary<string, JObject?> scoresCache = new ConcurrentDictionary<string, JObject?>();
+
+        // Constructor to load environment variables
+        public GameUpdater()
+        {
+            // Load environment variables from .env file
+            Env.Load();
+        }
 
         // Method to fetch and update game data for a specific week
         public async Task UpdateWeek(int weekToFetch)
@@ -109,8 +117,17 @@ namespace NFLGameEngine
                 return cachedScores;
             }
 
+            // Retrieve the API key from the environment variable
+            string apiKey = Environment.GetEnvironmentVariable("NFL_API_KEY");
+
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                Console.WriteLine("API key is missing. Make sure it is set in the environment variables.");
+                return null;
+            }
+
             var url = $"https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLScoresOnly?gameDate={gameDate}&topPerformers=true";
-            var scores = await SendRequestWithRetries<JObject>(url);
+            var scores = await SendRequestWithRetries<JObject>(url, apiKey);
 
             // Cache the scores for future use
             scoresCache[gameDate] = scores;
@@ -118,8 +135,8 @@ namespace NFLGameEngine
             return scores;
         }
 
-        // Method to send HTTP requests with retry logic
-        private async Task<T?> SendRequestWithRetries<T>(string url) where T : class
+        // Method to send HTTP requests with retry logic, passing the API key dynamically
+        private async Task<T?> SendRequestWithRetries<T>(string url, string apiKey) where T : class
         {
             for (int attempt = 0; attempt < MaxRetries; attempt++)
             {
@@ -130,7 +147,7 @@ namespace NFLGameEngine
                     Headers =
                     {
                         { "Accept", "application/json" },
-                        { "x-rapidapi-key", "005fffe3bemsh0ccee48c9d8de37p1274c5jsn792f60867fc1" }, // Replace with your actual API key
+                        { "x-rapidapi-key", apiKey },  // Use the API key from environment variable
                         { "x-rapidapi-host", "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com" },
                     },
                 };
