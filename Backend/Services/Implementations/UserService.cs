@@ -6,6 +6,7 @@ using MokSportsApp.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace MokSportsApp.Services.Implementations
 {
@@ -33,17 +34,18 @@ namespace MokSportsApp.Services.Implementations
             return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
         }
 
-        public async Task<User> AuthenticateUser(string email, string password)
+        public async Task<User> AuthenticateUser(string email, string password, string token)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
             if (user == null || !user.VerifyPassword(password))
             {
                 return null;
             }
+            await AddDeviceToken(token, user.UserId);
             return user;
         }
 
-        public async Task AddUser(User user)
+        public async Task AddUser(User user, string deviceToken)
         {
             // Manually assign a UserId
             user.UserId = await GetNextUserId();
@@ -54,6 +56,9 @@ namespace MokSportsApp.Services.Implementations
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
+
+            await AddDeviceToken(deviceToken, user.UserId);
+
         }
 
         public async Task UpdateUser(User user)
@@ -94,6 +99,16 @@ namespace MokSportsApp.Services.Implementations
                                 .Where(ul => ul.UserId == userId)
                                 .Select(ul => ul.League)
                                 .ToListAsync();
+        }
+
+        public async Task AddDeviceToken(string token, int userId)
+        {
+            var userDevice = await _context.UserDevices.FirstOrDefaultAsync(a => a.Token == token && a.UserId == userId);
+            if (userDevice == null)
+            {
+                await _context.UserDevices.AddAsync(new UserDevice() { UserId = userId, Token = token });
+                await _context.SaveChangesAsync();
+            }
         }
 
 

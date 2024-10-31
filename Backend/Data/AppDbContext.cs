@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MokSportsApp.Models;
+using MokSportsApp.Services.Implementations;
+using System.Diagnostics;
 
 namespace MokSportsApp.Data
 {
@@ -19,6 +21,8 @@ namespace MokSportsApp.Data
         public DbSet<Draft> Drafts { get; set; }
         public DbSet<DraftPick> DraftPicks { get; set; }
         public DbSet<Season> Seasons { get; set; }
+        public DbSet<Trade> Trades { get; set; }
+        public DbSet<UserDevice> UserDevices { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
