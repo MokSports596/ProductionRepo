@@ -2,9 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using MokSportsApp.Models;
 using MokSportsApp.Services.Interfaces;
 using MokSportsApp.DTOs;
-using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace MokSportsApp.Controllers
 {
@@ -51,14 +48,14 @@ namespace MokSportsApp.Controllers
                 Email = signupDto.Email,
                 PasswordHash = signupDto.Password // Temporarily using PasswordHash property to hold plaintext password
             };
-            await _userService.AddUser(user);
+            await _userService.AddUser(user, signupDto.DeviceToken);
             return CreatedAtAction(nameof(GetUserById), new { id = user.UserId }, user);
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<User>> Login([FromBody] LoginDto loginDto)
         {
-            var user = await _userService.AuthenticateUser(loginDto.Email, loginDto.Password);
+            var user = await _userService.AuthenticateUser(loginDto.Email, loginDto.Password, loginDto.DeviceToken);
             if (user == null)
             {
                 return Unauthorized();
