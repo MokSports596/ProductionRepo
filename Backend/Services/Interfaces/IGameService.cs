@@ -1,3 +1,4 @@
+using MokSportsApp.DTO;
 using MokSportsApp.Models;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,11 @@ namespace MokSportsApp.Services.Interfaces
         Task<IEnumerable<Game>> GetAllGamesAsync();
         Task<IEnumerable<Game>> GetGamesByDateAsync(DateTime date);
         Task<IEnumerable<Game>> GetGamesByTeamAsync(string teamName);
-        Task<List<Game>> GetGamesByWeekAsync(int week); 
+        Task<List<Game>> GetGamesByWeekAsync(int week);
+        Task<List<MatchListDTO>> GetMatchListForLOK();
+        Task<List<KeyValuePair<int, string>>> GetDeviceToken(MatchListDTO input);
+        Task<KeyValuePair<Week, List<StandingNotificationDTO>>> GetWeeklyStandingNotification();
+        Task SendWeeklyTopPerformingPlayerAlerts();
+        Task SendWeeklyTeamUpdates();
     }
 }

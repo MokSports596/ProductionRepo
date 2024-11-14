@@ -117,6 +117,21 @@ namespace MokSportsApp.Data.Repositories.Implementations
             _context.Franchises.Update(franchise);
             await _context.SaveChangesAsync();
         }
-        
+
+        public async Task<List<int>> GetPlayerIds(List<int> teamIds)
+        {
+            var playerIds = new List<int>();
+            foreach (var teamId in teamIds)
+            {
+                var userIds = await _context.Franchises.Where(a => a.Team1Id == teamId
+                    || a.Team2Id == teamId
+                    || a.Team3Id == teamId
+                    || a.Team4Id == teamId
+                    || a.Team5Id == teamId).Select(a => a.UserId).ToListAsync();
+                playerIds.AddRange(userIds);
+            }
+            return playerIds;
+        }
+
     }
 }

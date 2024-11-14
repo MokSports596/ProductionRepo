@@ -6,11 +6,11 @@ namespace MokSportsApp.Services.Interfaces
 {
     public interface ITradeService
     {
-        Task<List<Trade>> GetAllPendingTrades();
+        Task<List<TradeTeam>> GetAllPendingTrades();
         Task<List<TradeListDTO>> GetAllTrades(int userId);
-        Task<Trade> GetTrade(int tradeId);
+        Task<TradeTeam> GetTrade(int tradeId);
         Task TradeTeams(TradeDTO tradeDTO);
-        Task UpdateTradeRange(Trade[] trades);
+        Task UpdateTradeRange(TradeTeam[] trades);
         Task UpdateTradeStatus(UpdateTradeStatusDTO input);
     }
 }

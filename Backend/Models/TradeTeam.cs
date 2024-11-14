@@ -10,8 +10,8 @@ namespace MokSportsApp.Models
         Abandoned
     }
 
-    [Table("Trades")]
-    public class Trade
+    [Table("TradeTeams")]
+    public class TradeTeam
     {
         public int Id { get; set; }
         public int LeagueId { get; set; }

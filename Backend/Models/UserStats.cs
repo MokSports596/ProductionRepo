@@ -20,6 +20,7 @@ namespace MokSportsApp.Models
         public int WeekPoints { get; set; }
         public int LoksUsed { get; set; }
         public int Skins { get; set; }
+        public int FranchiseId { get; set; }
 
         // Navigation properties
         public User? User { get; set; } = null!;

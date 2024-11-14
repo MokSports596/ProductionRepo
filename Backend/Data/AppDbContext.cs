@@ -21,8 +21,9 @@ namespace MokSportsApp.Data
         public DbSet<Draft> Drafts { get; set; }
         public DbSet<DraftPick> DraftPicks { get; set; }
         public DbSet<Season> Seasons { get; set; }
-        public DbSet<Trade> Trades { get; set; }
+        public DbSet<TradeTeam> Trades { get; set; }
         public DbSet<UserDevice> UserDevices { get; set; }
+        public DbSet<Week> Weeks { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

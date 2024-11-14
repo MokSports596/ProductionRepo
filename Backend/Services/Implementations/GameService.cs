@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using MokSportsApp.Data.Repositories.Interfaces;
+using MokSportsApp.DTO;
 using MokSportsApp.Models;
 using MokSportsApp.Services.Interfaces;
 using System;
@@ -40,5 +42,30 @@ namespace MokSportsApp.Services.Implementations
         {
             return await _gameRepository.GetByWeekAsync(week);
         }
+
+        public async Task<List<MatchListDTO>> GetMatchListForLOK()
+        {
+            return await _gameRepository.GetMatchListForLOK();
+        }
+
+        public async Task<List<KeyValuePair<int, string>>> GetDeviceToken(MatchListDTO input)
+        {
+            return await _gameRepository.GetDeviceToken(input);
+        }
+        public async Task<KeyValuePair<Week, List<StandingNotificationDTO>>> GetWeeklyStandingNotification()
+        {
+            return await _gameRepository.GetWeeklyStandingNotification();
+        }
+
+        public async Task SendWeeklyTopPerformingPlayerAlerts()
+        {
+            await _gameRepository.SendWeeklyTopPerformingPlayerAlerts();
+        }
+
+        public async Task SendWeeklyTeamUpdates()
+        {
+            await _gameRepository.SendWeeklyTeamUpdates();
+        }
+
     }
 }

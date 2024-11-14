@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using MokSportsApp.Data.Repositories.Interfaces;
 using MokSportsApp.Models;
 using MokSportsApp.Services.Interfaces;
@@ -73,5 +74,7 @@ namespace MokSportsApp.Services.Implementations
             await _franchiseRepository.SaveChangesAsync();
             return true;
         }
+
+
     }
 }

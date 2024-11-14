@@ -27,29 +27,55 @@ export default function LoginPage(props) {
   const [isCreatingLeague, creatingLeague] = useState(false)
 
   const handleLogIn = async () => {
+    console.log('email', email, 'pass', password);
     if (email.trim() === '' || password.trim() === '') {
-      alert('Please enter both email and password.')
-      props.navigation.navigate('Home')
-      return
+      alert('Please enter both email and password.');
+      return;
     }
-
+  
     try {
-      const response = await axiosInstance.post('/user/login', {
-        email,
-        password,
-      })
+      const deviceToken = 'abc';
+      const response = await axiosInstance.post(
+        '/user/login',
+        {
+          email: email,
+          password: password,
+          deviceToken: deviceToken
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+  
       // Handle successful login
-      console.log(response.data)
-      props.navigation.navigate('Home')
-      await setItem('email', response.data['email'])
-      await setItem('password', password)
-      await setItem('userId', response.data['userId'])
+      console.log(response.data);
+  
+      // Store user data in async storage
+      await setItem('email', response.data['email']);
+      await setItem('password', password);
+      await setItem('userId', response.data['userId']);
+  
+      // Show alert and navigate to Home on "OK"
+      Alert.alert(
+        'Login Successful',
+        'You have successfully logged in.',
+        [
+          {
+            text: 'OK',
+            onPress: () => props.navigation.navigate('Home')
+          }
+        ]
+      );
+  
     } catch (error) {
       // Handle login error
-      console.error(error)
-      alert('Login failed. Please check your credentials.')
+      console.error(error);
+      console.log('log', error?.message);
+      alert('Login failed. Please check your credentials.');
     }
-  }
+  };
 
   const handleSignUp = async () => {
     if (isCreatingLeague) {
