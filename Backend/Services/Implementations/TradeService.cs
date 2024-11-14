@@ -17,7 +17,7 @@ namespace MokSportsApp.Services.Implementations
             _tradeRepository = tradeRepository;
         }
 
-        public async Task<List<Trade>> GetAllPendingTrades()
+        public async Task<List<TradeTeam>> GetAllPendingTrades()
         {
             return await _tradeRepository.GetAllPendingTrades();
         }
@@ -82,7 +82,7 @@ namespace MokSportsApp.Services.Implementations
         }
 
 
-        public async Task<Trade> GetTrade(int tradeId)
+        public async Task<TradeTeam> GetTrade(int tradeId)
         {
             var trade = await _tradeRepository.GetTrade(tradeId);
 
@@ -94,7 +94,7 @@ namespace MokSportsApp.Services.Implementations
             return trade;
         }
 
-        public async Task UpdateTradeRange(Trade[] trades)
+        public async Task UpdateTradeRange(TradeTeam[] trades)
         {
             await _tradeRepository.UpdateTradeRange(trades);
         }

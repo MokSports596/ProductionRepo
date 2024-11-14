@@ -47,5 +47,20 @@ namespace MokSportsApp.Services.Implementations
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<List<int>> GetTeamsId(List<string> teamsAbbrList)
+        {
+            var teamsId = await _context.Teams
+                .Where(a => teamsAbbrList.Any(x => x == a.Abbreviation))
+                .Select(a => a.TeamId)
+                .ToListAsync();
+
+            return teamsId;
+        }
+
+
+
+
+
     }
 }

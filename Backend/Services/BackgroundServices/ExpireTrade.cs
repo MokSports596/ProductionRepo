@@ -2,7 +2,6 @@
 using MokSportsApp.Data.Repositories.Interfaces;
 using MokSportsApp.Models;
 using MokSportsApp.Services.Interfaces;
-using System.Diagnostics;
 
 namespace MokSportsApp.Services.BackgroundServices
 {
@@ -17,11 +16,11 @@ namespace MokSportsApp.Services.BackgroundServices
         public async Task ExecuteAsync()
         {
             var trades = await _tradeService.GetAllPendingTrades();
-
+            
             if (trades.Count == 0) return;
 
 
-            var tradesToAbandone = new List<Trade>();
+            var tradesToAbandone = new List<TradeTeam>();
 
             foreach (var trade in trades)
             {

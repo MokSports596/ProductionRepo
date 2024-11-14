@@ -2,7 +2,6 @@
 using MokSportsApp.Data.Repositories.Interfaces;
 using MokSportsApp.DTO;
 using MokSportsApp.Models;
-using System.Diagnostics;
 using System.Globalization;
 
 namespace MokSportsApp.Data.Repositories.Implementations
@@ -19,7 +18,7 @@ namespace MokSportsApp.Data.Repositories.Implementations
 
         public async Task TradeTeams(TradeDTO tradeDTO)
         {
-            var trade = new Trade()
+            var trade = new TradeTeam()
             {
                 CreatedBy = tradeDTO.CreatedBy,
                 CreationTime = DateTime.Now,
@@ -141,7 +140,7 @@ namespace MokSportsApp.Data.Repositories.Implementations
             || a.Team5Id == teamId));
         }
 
-        public async Task UpdateTradeStatus(Trade trade, UpdateTradeStatusDTO input)
+        public async Task UpdateTradeStatus(TradeTeam trade, UpdateTradeStatusDTO input)
         {
             trade.Status = input.Status;
 
@@ -157,19 +156,20 @@ namespace MokSportsApp.Data.Repositories.Implementations
             }
 
             await _context.SaveChangesAsync();
+
         }
 
-        public async Task<Trade> GetTrade(int tradeId)
+        public async Task<TradeTeam> GetTrade(int tradeId)
         {
             return await _context.Trades.FirstOrDefaultAsync(a => a.Id == tradeId);
         }
 
-        public async Task<List<Trade>> GetAllPendingTrades()
+        public async Task<List<TradeTeam>> GetAllPendingTrades()
         {
             return await _context.Trades.Where(a => a.Status == TradeStatus.Pending).ToListAsync();
         }
 
-        public async Task UpdateTradeRange(Trade[] trades)
+        public async Task UpdateTradeRange(TradeTeam[] trades)
         {
             _context.Trades.UpdateRange(trades);
             await _context.SaveChangesAsync();
@@ -272,6 +272,7 @@ namespace MokSportsApp.Data.Repositories.Implementations
                    dayOfWeek == DayOfWeek.Sunday ||
                    dayOfWeek == DayOfWeek.Monday;
         }
+
 
     }
 }

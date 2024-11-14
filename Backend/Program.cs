@@ -74,24 +74,32 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+#region Firebase
+
 // Initialize Firebase Admin SDK
 //FirebaseApp.Create(new AppOptions()
 //{
-//    //Credential = GoogleCredential.FromFile(pathToServiceAccount),
 //    Credential = GoogleCredential.FromJsonParameters(new JsonCredentialParameters()
 //    {
 //        Type = "service_account",
-//        ProjectId = "YOUR_PROJECT_ID",
-//        PrivateKeyId = "YOUR_PRIVATE_KEY_ID",
-//        PrivateKey = "YOUR_PRIVATE_KEY",
-//        ClientEmail = "YOUR_CLIENT_EMAIL",
-//        ClientId = "YOUR_CLIENT_EMAIL_ID",
+//        ProjectId = "MY_PROJECT_ID",
+//        PrivateKeyId = "MY_PRIVATE_KEY_ID",
+//        PrivateKey = "PRIVATE_KEY",
+//        ClientEmail = "EMAIL",
+//        ClientId = "CLIENT_ID",
 //        TokenUri = "https://oauth2.googleapis.com/token",
 //        UniverseDomain = "googleapis.com",
 //    })
 //});
 
+#endregion
+
 RecurringJob.AddOrUpdate<ExpireTrade>("ExpireTrades", job => job.ExecuteAsync(), Cron.Hourly);
+RecurringJob.AddOrUpdate<LockTeamsNotification>("LockTeamsNotification", job => job.ExecuteAsync(), "0 0 * * 2-4"); //At 12:00 AM, Tuesday through Thursday
+RecurringJob.AddOrUpdate<WeeklyStandingNotification>("WeeklyStandingSundayNotification", job => job.ExecuteAsync(), "59 11 * * 7"); //At 11:59 on Sunday
+RecurringJob.AddOrUpdate<WeeklyStandingNotification>("WeeklyStandingMondayNotification", job => job.ExecuteAsync(), "55 17 * * 1"); //At 05:55 on Monday.
+RecurringJob.AddOrUpdate<WeeklyTeamPerformanceNotification>("WeeklyTeamPerformanceNotification", job => job.ExecuteAsync(), "0 0 * * 2"); //At 12:00 AM on Tuesday.
+RecurringJob.AddOrUpdate<WeeklyTopPlayerNotification>("WeeklyTopPlayerNotification", job => job.ExecuteAsync(), "0 0 * * 2"); //At 12:00 AM on Tuesday.
 
 app.UseHttpsRedirection();
 
