@@ -3,16 +3,23 @@
     "name": "Mok",
     "slug": "Mok",
     "version": "1.0.0",
+    "newArchEnabled": true,
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "config": {
+      "pushNotifications": {
+        "projectId": "MokSports"
+      }
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dylanconnolly.Mok"
     },
     "android": {
       "adaptiveIcon": {
@@ -22,6 +29,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e2151941-27d3-4ca0-8022-bcfef82249c7"
+      }
     }
   }
 }

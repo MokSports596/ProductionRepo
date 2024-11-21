@@ -16,6 +16,7 @@ import { Dimensions } from 'react-native'
 export default function Main(props) {
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
+
   const [count, setCount] = useState(0)
 
   const styles = StyleSheet.create({

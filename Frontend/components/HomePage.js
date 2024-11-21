@@ -223,7 +223,7 @@ export default function HomePage(props) {
           <Text
             style={{
               fontFamily: 'Poppins',
-              fontSize: '20px',
+              fontSize: 20,
               fontWeight: 'bold',
               lineHeight: '24px',
               textAlign: 'left',
@@ -264,7 +264,7 @@ export default function HomePage(props) {
                 alignSelf: 'center',
                 textAlign: 'center',
                 fontFamily: 'Poppins',
-                fontSize: '19',
+                fontSize: 19,
                 fontWeight: '500',
                 marginTop: 0.02 * windowHeight,
                 color: 'background: rgba(172, 101, 214, 1);',
