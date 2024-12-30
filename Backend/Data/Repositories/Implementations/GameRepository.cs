@@ -264,5 +264,51 @@ namespace MokSportsApp.Data.Repositories.Implementations
             return result;
         }
 
+        public async Task<List<GameFranchiseDTO>> GetGamesWithFranchiseByWeekAsync(int week)
+        {
+            const string sql = @"
+                SELECT
+                    g.Id,
+                    g.GameId,
+                    g.Season,
+                    g.SeasonType,
+                    g.AwayTeam,
+                    g.HomeTeam,
+                    g.GameDate,
+                    g.GameTime,
+                    g.GameStatus,
+                    g.AwayPoints,
+                    g.HomePoints,
+                    g.Quarter1,
+                    g.Quarter2,
+                    g.Quarter3,
+                    g.Quarter4,
+                    g.TotalPoints,
+                    g.SportsBookOdds,
+                    g.ESPNLink,
+                    g.Week,
+
+                    ISNULL(fh.FranchiseName, 'Unowned') AS HomeFranchise,
+                    ISNULL(fa.FranchiseName, 'Unowned') AS AwayFranchise
+                FROM Games g
+                LEFT JOIN Teams t1 
+                    ON g.HomeTeam = t1.Abbreviation
+                LEFT JOIN Franchises fh
+                    ON t1.TeamId IN (fh.Team1Id, fh.Team2Id, fh.Team3Id, fh.Team4Id, fh.Team5Id)
+                LEFT JOIN Teams t2
+                    ON g.AwayTeam = t2.Abbreviation
+                LEFT JOIN Franchises fa
+                    ON t2.TeamId IN (fa.Team1Id, fa.Team2Id, fa.Team3Id, fa.Team4Id, fa.Team5Id)
+                WHERE g.Week = {0}
+                ORDER BY g.GameDate ASC;
+            ";
+
+            var results = await _context.Set<GameFranchiseDTO>()
+                .FromSqlRaw(sql, week)
+                .ToListAsync();
+
+            return results;
+        }
+
     }
 }
