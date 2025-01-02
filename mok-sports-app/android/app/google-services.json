@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "966292539697",
+    "project_id": "moksport",
+    "storage_bucket": "moksport.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966292539697:android:5a493e72f5887016e14810",
+        "android_client_info": {
+          "package_name": "com.moksports"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoTgSnfmf3M43IOT1WbrSdAMrGwcCNNHE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
