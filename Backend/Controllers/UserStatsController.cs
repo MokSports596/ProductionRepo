@@ -69,5 +69,27 @@ namespace MokSportsApp.Controllers
             await _userStatsService.DeleteUserStatsAsync(id);
             return NoContent();
         }
+
+        // GET: api/userstats/franchise/{franchiseId}/remaining-loks
+        [HttpGet("franchise/{franchiseId}/remaining-loks")]
+        public async Task<ActionResult<Dictionary<int, int>>> GetRemainingLoksByFranchise(int franchiseId)
+        {
+            var remainingLoks = await _userStatsService.GetRemainingLoksByFranchiseAsync(franchiseId);
+            if (remainingLoks == null || remainingLoks.Count == 0)
+            {
+                return NotFound("No LOK data found for the specified franchise.");
+            }
+
+            return Ok(remainingLoks);
+        }
+
+        // GET: api/userstats/team/{teamId}/week/{weekId}/is-loked
+        [HttpGet("team/{teamId}/week/{weekId}/is-loked")]
+        public async Task<ActionResult<bool>> IsTeamLoked(int teamId, int weekId)
+        {
+            var isLoked = await _userStatsService.IsTeamLokedAsync(teamId, weekId);
+            return Ok(new { teamId, weekId, isLoked });
+        }
+
     }
 }

@@ -48,5 +48,31 @@ namespace MokSportsApp.Data.Repositories.Implementations
         {
             return await _context.Leagues.FindAsync(id);
         }
+
+        public async Task<List<LeagueStandingDto>> GetLeagueStandingsAsync(int leagueId)
+        {
+            // Query franchises and points grouped by franchise
+            var standings = await _context.UserStats
+                .Where(us => us.LeagueId == leagueId)
+                .GroupBy(us => us.FranchiseId)
+                .Select(group => new LeagueStandingDto
+                {
+                    FranchiseId = group.Key,
+                    UserId = group.First().UserId,
+                    Points = group.Sum(g => g.SeasonPoints)
+                })
+                .OrderByDescending(s => s.Points)
+                .ToListAsync();
+
+            // Assign ranks based on points
+            int rank = 1;
+            foreach (var standing in standings)
+            {
+                standing.Rank = rank++;
+            }
+
+            return standings;
+        }
+
     }
 }

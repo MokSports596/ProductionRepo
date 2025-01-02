@@ -71,5 +71,22 @@ namespace MokSportsApp.Data.Repositories.Implementations
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<Dictionary<int, int>> GetLoksUsedByFranchiseAsync(int franchiseId)
+        {
+            return await _context.FranchiseLocksLoads
+                                .Where(fll => fll.FranchiseId == franchiseId && fll.LOKTeamId != null)
+                                .GroupBy(fll => fll.LOKTeamId)
+                                .Select(group => new { TeamId = group.Key, LoksUsed = group.Count() })
+                                .ToDictionaryAsync(g => g.TeamId.Value, g => g.LoksUsed);
+        }
+
+        public async Task<bool> IsTeamLokedAsync(int teamId, int weekId)
+        {
+            return await _context.FranchiseLocksLoads
+                                .AnyAsync(fll => fll.LOKTeamId == teamId && fll.WeekId == weekId);
+        }
+
+
     }
 }

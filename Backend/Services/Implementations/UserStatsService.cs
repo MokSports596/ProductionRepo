@@ -44,5 +44,42 @@ namespace MokSportsApp.Services.Implementations
         {
             await _userStatsRepository.DeleteUserStatsAsync(id);
         }
+
+        public async Task<Dictionary<int, int>> GetRemainingLoksByFranchiseAsync(int franchiseId)
+        {
+            var loksUsed = await _userStatsRepository.GetLoksUsedByFranchiseAsync(franchiseId);
+
+            // Define max LOKs allowed per slot
+            const int maxLoksPerSlot = 3; // Adjust this based on your league size
+            var remainingLoks = new Dictionary<int, int>();
+
+            foreach (var teamSlotId in loksUsed.Keys)
+            {
+                remainingLoks[teamSlotId] = maxLoksPerSlot - loksUsed[teamSlotId];
+            }
+
+            // Ensure teams with no LOKs used are accounted for (if relevant)
+            var allTeamSlots = await _context.Franchises
+                                            .Where(f => f.FranchiseId == franchiseId)
+                                            .SelectMany(f => new List<int?> { f.Team1Id, f.Team2Id, f.Team3Id, f.Team4Id, f.Team5Id })
+                                            .ToListAsync();
+
+            foreach (var teamId in allTeamSlots.Where(t => t.HasValue).Select(t => t.Value))
+            {
+                if (!remainingLoks.ContainsKey(teamId))
+                {
+                    remainingLoks[teamId] = maxLoksPerSlot;
+                }
+            }
+
+            return remainingLoks;
+        }
+
+        public async Task<bool> IsTeamLokedAsync(int teamId, int weekId)
+        {
+            return await _userStatsRepository.IsTeamLokedAsync(teamId, weekId);
+        }
+
+
     }
 }
