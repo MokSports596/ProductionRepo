@@ -106,7 +106,7 @@ namespace MokSportsApp.Controllers
         public string Pin { get; set; }
     }
 
-        // GET: api/league/{leagueId}/standings
+    // GET: api/league/{leagueId}/standings
     [HttpGet("{leagueId}/standings")]
     public async Task<ActionResult<IEnumerable<LeagueStandingDto>>> GetLeagueStandings(int leagueId)
     {

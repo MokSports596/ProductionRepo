@@ -24,7 +24,7 @@ namespace MokSportsApp.Data
         public DbSet<TradeTeam> Trades { get; set; }
         public DbSet<UserDevice> UserDevices { get; set; }
         public DbSet<Week> Weeks { get; set; }
-
+        public DbSet<Skin> Skins { get; set; } // Added Skins DbSet
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -85,9 +85,6 @@ namespace MokSportsApp.Data
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
-
-
-
             modelBuilder.Entity<Team>().ToTable("Teams");
 
             modelBuilder.Entity<UserStats>(entity =>
@@ -97,7 +94,7 @@ namespace MokSportsApp.Data
 
                 entity.Property(e => e.UserId).HasColumnName("UserId");
                 entity.Property(e => e.LeagueId).HasColumnName("LeagueId");
-                entity.Property(e => e.WeekId).HasColumnName("WeekId");  // New column for Week
+                entity.Property(e => e.WeekId).HasColumnName("WeekId");
 
                 entity.Property(e => e.SeasonPoints).HasColumnName("SeasonPoints");
                 entity.Property(e => e.WeekPoints).HasColumnName("WeekPoints");
@@ -112,17 +109,16 @@ namespace MokSportsApp.Data
                     .WithMany(l => l.UserStats)
                     .HasForeignKey(us => us.LeagueId);
 
-                entity.HasOne(us => us.Week)  // Define the relationship between UserStats and Week
+                entity.HasOne(us => us.Week)
                     .WithMany(w => w.UserStats)
                     .HasForeignKey(us => us.WeekId);
             });
 
-            // Configure UserLeague
             modelBuilder.Entity<UserLeague>(entity =>
             {
                 entity.ToTable("UserLeagues");
 
-                entity.HasKey(ul => ul.Id); // Primary key on the Id column
+                entity.HasKey(ul => ul.Id);
 
                 entity.Property(ul => ul.UserId).HasColumnName("user_id");
                 entity.Property(ul => ul.LeagueId).HasColumnName("league_id");
@@ -135,84 +131,44 @@ namespace MokSportsApp.Data
                       .WithMany(l => l.UserLeagues)
                       .HasForeignKey(ul => ul.LeagueId);
             });
+
             modelBuilder.Entity<League>(entity =>
             {
                 entity.ToTable("Leagues");
 
                 entity.HasKey(e => e.LeagueId);
                 entity.Property(e => e.LeagueId).HasColumnName("LeagueId");
-                //entity.Property(e => e.LeagueName).HasColumnName("LeagueName");
                 entity.Property(e => e.CreatedAt).HasColumnName("created_at");
                 entity.Property(e => e.CreatedBy).HasColumnName("created_by");
                 entity.Property(e => e.Pin).HasColumnName("pin");
-
             });
-
 
             modelBuilder.Entity<Game>(entity =>
             {
-                entity.ToTable("Games"); // Ensure this maps to the correct table in your database
+                entity.ToTable("Games");
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.GameId)
                       .IsRequired()
                       .HasMaxLength(50);
 
-                entity.Property(e => e.Season)
-                      .IsRequired();
+                entity.Property(e => e.Season).IsRequired();
+                entity.Property(e => e.SeasonType).HasMaxLength(50).IsRequired();
+                entity.Property(e => e.AwayTeam).HasMaxLength(50).IsRequired();
+                entity.Property(e => e.HomeTeam).HasMaxLength(50).IsRequired();
+                entity.Property(e => e.GameDate).IsRequired();
+                entity.Property(e => e.GameTime).HasMaxLength(10).IsRequired();
+                entity.Property(e => e.GameStatus).HasMaxLength(50).IsRequired();
 
-                entity.Property(e => e.SeasonType)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-                entity.Property(e => e.AwayTeam)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-                entity.Property(e => e.HomeTeam)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-                entity.Property(e => e.GameDate)
-                      .IsRequired();
-
-                entity.Property(e => e.GameTime)
-                      .IsRequired()
-                      .HasMaxLength(10);
-
-                entity.Property(e => e.GameStatus)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-                entity.Property(e => e.AwayPoints)
-                      .IsRequired(false); // Nullable in the database
-
-                entity.Property(e => e.HomePoints)
-                      .IsRequired(false); // Nullable in the database
-
-                entity.Property(e => e.Quarter1)
-                      .IsRequired(false); // Nullable in the database
-
-                entity.Property(e => e.Quarter2)
-                      .IsRequired(false); // Nullable in the database
-
-                entity.Property(e => e.Quarter3)
-                      .IsRequired(false); // Nullable in the database
-
-                entity.Property(e => e.Quarter4)
-                      .IsRequired(false); // Nullable in the database
-
-                entity.Property(e => e.TotalPoints)
-                      .IsRequired(false); // Nullable in the database
-
-                entity.Property(e => e.SportsBookOdds)
-                      .HasMaxLength(255)
-                      .IsRequired(false); // Nullable in the database
-
-                entity.Property(e => e.ESPNLink)
-                      .HasMaxLength(255)
-                      .IsRequired(false); // Nullable in the database
-
+                entity.Property(e => e.AwayPoints).IsRequired(false);
+                entity.Property(e => e.HomePoints).IsRequired(false);
+                entity.Property(e => e.Quarter1).IsRequired(false);
+                entity.Property(e => e.Quarter2).IsRequired(false);
+                entity.Property(e => e.Quarter3).IsRequired(false);
+                entity.Property(e => e.Quarter4).IsRequired(false);
+                entity.Property(e => e.TotalPoints).IsRequired(false);
+                entity.Property(e => e.SportsBookOdds).HasMaxLength(255).IsRequired(false);
+                entity.Property(e => e.ESPNLink).HasMaxLength(255).IsRequired(false);
                 entity.Property(e => e.Week).IsRequired();
             });
 
@@ -224,7 +180,6 @@ namespace MokSportsApp.Data
                 entity.HasOne(d => d.League)
                 .WithMany(l => l.Drafts)
                 .HasForeignKey(d => d.LeagueId);
-
             });
 
             modelBuilder.Entity<DraftPick>(entity =>
@@ -243,6 +198,29 @@ namespace MokSportsApp.Data
                 entity.HasOne(dp => dp.Team)
                 .WithMany(t => t.DraftPicks)
                 .HasForeignKey(dp => dp.TeamId);
+            });
+
+            modelBuilder.Entity<Skin>(entity =>
+            {
+                entity.ToTable("Skins");
+
+                entity.HasKey(s => s.SkinId);
+
+                entity.Property(s => s.LeagueId).HasColumnName("LeagueId");
+                entity.Property(s => s.Week).HasColumnName("Week");
+                entity.Property(s => s.Score).HasColumnName("Score");
+                entity.Property(s => s.WinnerId).HasColumnName("WinnerId");
+                entity.Property(s => s.RolledOver).HasColumnName("RolledOver");
+                entity.Property(s => s.CreatedAt).HasColumnName("CreatedAt");
+
+                entity.HasOne(s => s.League)
+                      .WithMany(l => l.Skins)
+                      .HasForeignKey(s => s.LeagueId);
+
+                entity.HasOne(s => s.Winner)
+                      .WithMany(f => f.WinningSkins)
+                      .HasForeignKey(s => s.WinnerId)
+                      .OnDelete(DeleteBehavior.SetNull);
             });
         }
     }
