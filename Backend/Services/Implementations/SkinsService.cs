@@ -70,10 +70,12 @@ namespace MokSportsApp.Services.Implementations
             }
         }
 
-        public void ValidateWeek(int week)
+        public async Task ValidateWeek(int week)
         {
             if (week < 1 || week > 18)
                 throw new InvalidOperationException("Week must be between 1 and 18.");
+
+            await Task.CompletedTask; // Ensure async compliance
         }
     }
 }

@@ -2,17 +2,22 @@ using MokSportsApp.Data.Repositories.Interfaces;
 using MokSportsApp.Models;
 using MokSportsApp.Services.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using MokSportsApp.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace MokSportsApp.Services.Implementations
 {
     public class UserStatsService : IUserStatsService
     {
         private readonly IUserStatsRepository _userStatsRepository;
+        private readonly AppDbContext _context;
 
-        public UserStatsService(IUserStatsRepository userStatsRepository)
+        public UserStatsService(IUserStatsRepository userStatsRepository, AppDbContext context)
         {
             _userStatsRepository = userStatsRepository;
+            _context = context;
         }
 
         public async Task<IEnumerable<UserStats>> GetUserStatsByUserAndLeagueAsync(int userId, int leagueId)
@@ -50,7 +55,7 @@ namespace MokSportsApp.Services.Implementations
             var loksUsed = await _userStatsRepository.GetLoksUsedByFranchiseAsync(franchiseId);
 
             // Define max LOKs allowed per slot
-            const int maxLoksPerSlot = 3; // Adjust this based on your league size
+            const int maxLoksPerSlot = 3;
             var remainingLoks = new Dictionary<int, int>();
 
             foreach (var teamSlotId in loksUsed.Keys)
@@ -58,11 +63,11 @@ namespace MokSportsApp.Services.Implementations
                 remainingLoks[teamSlotId] = maxLoksPerSlot - loksUsed[teamSlotId];
             }
 
-            // Ensure teams with no LOKs used are accounted for (if relevant)
+            // Get all team slots for the franchise
             var allTeamSlots = await _context.Franchises
-                                            .Where(f => f.FranchiseId == franchiseId)
-                                            .SelectMany(f => new List<int?> { f.Team1Id, f.Team2Id, f.Team3Id, f.Team4Id, f.Team5Id })
-                                            .ToListAsync();
+                .Where(f => f.FranchiseId == franchiseId)
+                .SelectMany(f => new List<int?> { f.Team1Id, f.Team2Id, f.Team3Id, f.Team4Id, f.Team5Id })
+                .ToListAsync();
 
             foreach (var teamId in allTeamSlots.Where(t => t.HasValue).Select(t => t.Value))
             {
@@ -79,7 +84,5 @@ namespace MokSportsApp.Services.Implementations
         {
             return await _userStatsRepository.IsTeamLokedAsync(teamId, weekId);
         }
-
-
     }
 }

@@ -62,7 +62,7 @@ namespace MokSportsApp.Data.Repositories.Implementations
                 .Select(s => new FranchiseScore
                 {
                     FranchiseId = s.FranchiseId,
-                    Score = s.Score
+                    Score = s.Points // Corrected property name
                 })
                 .ToListAsync();
         }

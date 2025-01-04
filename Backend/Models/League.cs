@@ -7,7 +7,6 @@ namespace MokSportsApp.Models
     {
         public int LeagueId { get; set; }
         public int SeasonId { get; set; }
-        //public string LeagueName { get; set; }
         public string Pin { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -19,5 +18,6 @@ namespace MokSportsApp.Models
         public ICollection<UserLeague> UserLeagues { get; set; } = new List<UserLeague>();
         public ICollection<Franchise> Franchises { get; set; } = new List<Franchise>();
         public ICollection<Draft> Drafts { get; set; } = new List<Draft>();
+        public ICollection<Skin> Skins { get; set; } = new List<Skin>(); // Added navigation property
     }
 }

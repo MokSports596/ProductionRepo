@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/nchiang/repos/ProductionRepo/Backend/MokSportsApp.csproj": {}
+    "/Users/meghashyam/Desktop/ModProduction/Backend/MokSportsApp.csproj": {}
   },
   "projects": {
-    "/Users/nchiang/repos/ProductionRepo/Backend/MokSportsApp.csproj": {
+    "/Users/meghashyam/Desktop/ModProduction/Backend/MokSportsApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/nchiang/repos/ProductionRepo/Backend/MokSportsApp.csproj",
+        "projectUniqueName": "/Users/meghashyam/Desktop/ModProduction/Backend/MokSportsApp.csproj",
         "projectName": "MokSportsApp",
-        "projectPath": "/Users/nchiang/repos/ProductionRepo/Backend/MokSportsApp.csproj",
-        "packagesPath": "/Users/nchiang/.nuget/packages/",
-        "outputPath": "/Users/nchiang/repos/ProductionRepo/Backend/obj/",
+        "projectPath": "/Users/meghashyam/Desktop/ModProduction/Backend/MokSportsApp.csproj",
+        "packagesPath": "/Users/meghashyam/.nuget/packages/",
+        "outputPath": "/Users/meghashyam/Desktop/ModProduction/Backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/nchiang/.nuget/NuGet/NuGet.Config"
+          "/Users/meghashyam/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,12 +32,25 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "FirebaseAdmin": {
+              "target": "Package",
+              "version": "[3.0.1, )"
+            },
+            "Hangfire": {
+              "target": "Package",
+              "version": "[1.8.14, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.7, )"
@@ -88,7 +101,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.4/libexec/sdk/8.0.104/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

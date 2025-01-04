@@ -86,7 +86,7 @@ namespace MokSportsApp.Controllers
             }
         }
 
-
+        // GET: api/league/user/{userId}
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<League>>> GetLeaguesForUser(int userId)
         {
@@ -98,6 +98,18 @@ namespace MokSportsApp.Controllers
             return Ok(leagues);
         }
 
+        // GET: api/league/{leagueId}/standings
+        [HttpGet("{leagueId}/standings")]
+        public async Task<ActionResult<IEnumerable<LeagueStandingDto>>> GetLeagueStandings(int leagueId)
+        {
+            var standings = await _leagueService.GetLeagueStandingsAsync(leagueId);
+            if (standings == null || standings.Count == 0)
+            {
+                return NotFound(new { message = "No standings found for this league." });
+            }
+
+            return Ok(standings);
+        }
     }
 
     // DTO for joining a league
@@ -105,18 +117,4 @@ namespace MokSportsApp.Controllers
     {
         public string Pin { get; set; }
     }
-
-    // GET: api/league/{leagueId}/standings
-    [HttpGet("{leagueId}/standings")]
-    public async Task<ActionResult<IEnumerable<LeagueStandingDto>>> GetLeagueStandings(int leagueId)
-    {
-        var standings = await _leagueService.GetLeagueStandingsAsync(leagueId);
-        if (standings == null || standings.Count == 0)
-        {
-            return NotFound(new { message = "No standings found for this league." });
-        }
-
-        return Ok(standings);
-    }
-
 }

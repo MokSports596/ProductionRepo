@@ -2,6 +2,7 @@ using MokSportsApp.Data.Repositories.Interfaces;
 using MokSportsApp.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MokSportsApp.Data.Repositories.Implementations
@@ -75,10 +76,10 @@ namespace MokSportsApp.Data.Repositories.Implementations
         public async Task<Dictionary<int, int>> GetLoksUsedByFranchiseAsync(int franchiseId)
         {
             return await _context.FranchiseLocksLoads
-                                .Where(fll => fll.FranchiseId == franchiseId && fll.LOKTeamId != null)
-                                .GroupBy(fll => fll.LOKTeamId)
+                                .Where(fll => fll.FranchiseId == franchiseId && fll.LOKTeamId != 0) // Updated condition
+                                .GroupBy(fll => fll.LOKTeamId) // Removed .Value
                                 .Select(group => new { TeamId = group.Key, LoksUsed = group.Count() })
-                                .ToDictionaryAsync(g => g.TeamId.Value, g => g.LoksUsed);
+                                .ToDictionaryAsync(g => g.TeamId, g => g.LoksUsed);
         }
 
         public async Task<bool> IsTeamLokedAsync(int teamId, int weekId)
@@ -86,7 +87,5 @@ namespace MokSportsApp.Data.Repositories.Implementations
             return await _context.FranchiseLocksLoads
                                 .AnyAsync(fll => fll.LOKTeamId == teamId && fll.WeekId == weekId);
         }
-
-
     }
 }

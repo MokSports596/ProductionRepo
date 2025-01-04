@@ -25,7 +25,11 @@ namespace MokSportsApp.Models
         public Team? Team4 { get; set; }
         public Team? Team5 { get; set; }
 
+        // Draft picks
         public ICollection<DraftPick> DraftPicks { get; set; } = new List<DraftPick>();
-    }
 
+        // Added properties
+        public int TotalSkinsWon { get; set; } = 0; // Tracks the total skins won
+        public ICollection<Skin> WinningSkins { get; set; } = new List<Skin>(); // Navigation for skins won
+    }
 }
