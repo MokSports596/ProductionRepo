@@ -3,6 +3,8 @@ using MokSportsApp.Models;
 using MokSportsApp.Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MokSportsApp.DTOs;
+
 
 namespace MokSportsApp.Controllers
 {
@@ -19,10 +21,10 @@ namespace MokSportsApp.Controllers
 
         // GET: api/userstats/{userId}/league/{leagueId}/week/{weekId}
         [HttpGet("{userId}/league/{leagueId}/week/{weekId}")]
-        public async Task<ActionResult<IEnumerable<UserStats>>> GetUserStatsByUserLeagueAndWeek(int userId, int leagueId, int weekId)
+        public async Task<ActionResult<IEnumerable<UserStatsWithFranchiseDTO>>> GetUserStatsByUserLeagueAndWeek(int userId, int leagueId, int weekId)
         {
             var stats = await _userStatsService.GetUserStatsByUserLeagueAndWeekAsync(userId, leagueId, weekId);
-            if (stats == null)
+            if (stats == null || !stats.Any())
             {
                 return NotFound();
             }

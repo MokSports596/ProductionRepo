@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MokSportsApp.DTOs;
 
 namespace MokSportsApp.Data.Repositories.Implementations
 {
@@ -87,5 +88,31 @@ namespace MokSportsApp.Data.Repositories.Implementations
             return await _context.FranchiseLocksLoads
                                 .AnyAsync(fll => fll.LOKTeamId == teamId && fll.WeekId == weekId);
         }
+
+        public async Task<IEnumerable<UserStatsWithFranchiseDTO>> GetUserStatsWithFranchiseByUserAndLeagueAndWeekAsync(int userId, int leagueId, int weekId)
+        {
+            return await _context.UserStats
+                .Where(us => us.UserId == userId && us.LeagueId == leagueId && us.WeekId == weekId)
+                .Join(
+                    _context.Franchises,
+                    userStats => userStats.FranchiseId,
+                    franchise => franchise.FranchiseId,
+                    (userStats, franchise) => new UserStatsWithFranchiseDTO
+                    {
+                        UserId = userStats.UserId,
+                        LeagueId = userStats.LeagueId,
+                        WeekId = userStats.WeekId,
+                        SeasonPoints = userStats.SeasonPoints,
+                        WeekPoints = userStats.WeekPoints,
+                        LoksUsed = userStats.LoksUsed,
+                        Skins = userStats.Skins,
+                        FranchiseName = franchise.FranchiseName // Correct column name
+                    }
+                )
+                .ToListAsync();
+        }
+
+
+
     }
 }

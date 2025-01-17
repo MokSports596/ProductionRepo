@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MokSportsApp.Data;
 using Microsoft.EntityFrameworkCore;
+using MokSportsApp.DTOs;
 
 namespace MokSportsApp.Services.Implementations
 {
@@ -30,9 +31,9 @@ namespace MokSportsApp.Services.Implementations
             return await _userStatsRepository.GetUserStatsByIdAsync(id);
         }
 
-        public async Task<IEnumerable<UserStats>> GetUserStatsByUserLeagueAndWeekAsync(int userId, int leagueId, int weekId)
+        public async Task<IEnumerable<UserStatsWithFranchiseDTO>> GetUserStatsByUserLeagueAndWeekAsync(int userId, int leagueId, int weekId)
         {
-            return await _userStatsRepository.GetUserStatsByUserAndLeagueAndWeekAsync(userId, leagueId, weekId);
+            return await _userStatsRepository.GetUserStatsWithFranchiseByUserAndLeagueAndWeekAsync(userId, leagueId, weekId);
         }
 
         public async Task AddOrUpdateUserStatsAsync(UserStats userStats)
