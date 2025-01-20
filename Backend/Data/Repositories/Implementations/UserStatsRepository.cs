@@ -112,6 +112,39 @@ namespace MokSportsApp.Data.Repositories.Implementations
                 .ToListAsync();
         }
 
+        public async Task<Dictionary<int, int>> GetRemainingLoksForFranchiseAsync(int franchiseId)
+        {
+            const int maxLoksPerTeam = 4; // Default maximum LOKs per team
+
+            // Get all teams in the franchise
+            var allTeamSlots = await _context.Franchises
+                .Where(f => f.FranchiseId == franchiseId)
+                .SelectMany(f => new List<int?> { f.Team1Id, f.Team2Id, f.Team3Id, f.Team4Id, f.Team5Id })
+                .ToListAsync();
+
+            // Count LOKs used for each team
+            var loksUsed = await _context.FranchiseLocksLoads
+                .Where(fll => fll.FranchiseId == franchiseId && fll.LOKTeamId != 0)
+                .GroupBy(fll => fll.LOKTeamId)
+                .Select(group => new { TeamId = group.Key, LoksUsed = group.Count() })
+                .ToDictionaryAsync(g => g.TeamId, g => g.LoksUsed);
+
+            // Calculate remaining LOKs
+            var remainingLoks = new Dictionary<int, int>();
+            foreach (var teamId in allTeamSlots.Where(t => t.HasValue).Select(t => t.Value))
+            {
+                if (loksUsed.ContainsKey(teamId))
+                {
+                    remainingLoks[teamId] = maxLoksPerTeam - loksUsed[teamId];
+                }
+                else
+                {
+                    remainingLoks[teamId] = maxLoksPerTeam; // Default if no LOKs used
+                }
+            }
+
+            return remainingLoks;
+        }
 
 
     }

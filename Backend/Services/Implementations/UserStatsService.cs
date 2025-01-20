@@ -51,35 +51,20 @@ namespace MokSportsApp.Services.Implementations
             await _userStatsRepository.DeleteUserStatsAsync(id);
         }
 
-        public async Task<Dictionary<int, int>> GetRemainingLoksByFranchiseAsync(int franchiseId)
+        public async Task<List<TeamLoksDTO>> GetRemainingLoksByFranchiseAsync(int franchiseId)
         {
-            var loksUsed = await _userStatsRepository.GetLoksUsedByFranchiseAsync(franchiseId);
+            var remainingLoks = await _userStatsRepository.GetRemainingLoksForFranchiseAsync(franchiseId);
 
-            // Define max LOKs allowed per slot
-            const int maxLoksPerSlot = 3;
-            var remainingLoks = new Dictionary<int, int>();
-
-            foreach (var teamSlotId in loksUsed.Keys)
+            // Build response DTOs for each team
+            var response = remainingLoks.Select(lok => new TeamLoksDTO
             {
-                remainingLoks[teamSlotId] = maxLoksPerSlot - loksUsed[teamSlotId];
-            }
+                TeamId = lok.Key,
+                RemainingLoks = lok.Value
+            }).ToList();
 
-            // Get all team slots for the franchise
-            var allTeamSlots = await _context.Franchises
-                .Where(f => f.FranchiseId == franchiseId)
-                .SelectMany(f => new List<int?> { f.Team1Id, f.Team2Id, f.Team3Id, f.Team4Id, f.Team5Id })
-                .ToListAsync();
-
-            foreach (var teamId in allTeamSlots.Where(t => t.HasValue).Select(t => t.Value))
-            {
-                if (!remainingLoks.ContainsKey(teamId))
-                {
-                    remainingLoks[teamId] = maxLoksPerSlot;
-                }
-            }
-
-            return remainingLoks;
+            return response;
         }
+
 
         public async Task<bool> IsTeamLokedAsync(int teamId, int weekId)
         {

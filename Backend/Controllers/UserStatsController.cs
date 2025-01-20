@@ -74,9 +74,10 @@ namespace MokSportsApp.Controllers
 
         // GET: api/userstats/franchise/{franchiseId}/remaining-loks
         [HttpGet("franchise/{franchiseId}/remaining-loks")]
-        public async Task<ActionResult<Dictionary<int, int>>> GetRemainingLoksByFranchise(int franchiseId)
+        public async Task<ActionResult<List<TeamLoksDTO>>> GetRemainingLoksByFranchise(int franchiseId)
         {
             var remainingLoks = await _userStatsService.GetRemainingLoksByFranchiseAsync(franchiseId);
+
             if (remainingLoks == null || remainingLoks.Count == 0)
             {
                 return NotFound("No LOK data found for the specified franchise.");
@@ -84,6 +85,7 @@ namespace MokSportsApp.Controllers
 
             return Ok(remainingLoks);
         }
+
 
         // GET: api/userstats/team/{teamId}/week/{weekId}/is-loked
         [HttpGet("team/{teamId}/week/{weekId}/is-loked")]
