@@ -2,6 +2,8 @@ using MokSportsApp.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MokSportsApp.DTOs;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace MokSportsApp.Data.Repositories.Interfaces
 {
