@@ -19,5 +19,6 @@ namespace MokSportsApp.Data.Repositories.Interfaces
         Task<KeyValuePair<Week, List<StandingNotificationDTO>>> GetWeeklyStandingNotification();
         Task SendWeeklyTopPerformingPlayerAlerts();
         Task SendWeeklyTeamUpdates();
+        Task<List<GameFranchiseDTO>> GetGamesWithFranchiseByWeekAsync(int week);
     }
 }

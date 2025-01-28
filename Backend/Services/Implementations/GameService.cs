@@ -67,5 +67,11 @@ namespace MokSportsApp.Services.Implementations
             await _gameRepository.SendWeeklyTeamUpdates();
         }
 
+
+        public async Task<List<GameFranchiseDTO>> GetGamesWithFranchiseByWeekAsync(int week)
+        {
+            return await _gameRepository.GetGamesWithFranchiseByWeekAsync(week);
+        }       
+
     }
 }

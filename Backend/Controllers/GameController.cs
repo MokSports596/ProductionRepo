@@ -4,8 +4,9 @@ using MokSportsApp.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MokSportsApp.DTO;
 
-namespace MokSportsApp.Controllers
+namespace MokSportsApp.Controlers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -73,5 +74,31 @@ namespace MokSportsApp.Controllers
             }
             return Ok(games);
         }
+        
+        // GET: api/game/franchise/week/{week}
+        [HttpGet("franchise/week/{week}")]
+        public async Task<ActionResult<IEnumerable<GameFranchiseDTO>>> GetGamesWithFranchisesByWeek(int week)
+        {
+            var results = await _gameService.GetGamesWithFranchiseByWeekAsync(week);
+
+            if (results == null || results.Count == 0)
+            {
+                return NotFound(new { message = $"No games found for week {week}." });
+            }
+
+            return Ok(results);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
