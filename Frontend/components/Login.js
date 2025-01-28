@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -11,6 +11,8 @@ import {
 } from 'react-native'
 import axiosInstance from './axiosInstance'
 import { getItem, setItem } from './page_components/Async'
+import * as Notifications from 'expo-notifications';
+
 
 export default function LoginPage(props) {
   const windowWidth = Dimensions.get('window').width
@@ -25,6 +27,27 @@ export default function LoginPage(props) {
   const [code, setCode] = useState('')
   const [username, setUsername] = useState('')
   const [isCreatingLeague, creatingLeague] = useState(false)
+  const [deviceToken, setDeviceToken] = useState(null);
+
+  useEffect(() => {
+    // Request permission to send push notifications
+    const getPushToken = async () => {
+      try {
+        const { status } = await Notifications.requestPermissionsAsync();
+        if (status === 'granted') {
+          const token = await Notifications.getExpoPushTokenAsync();
+          setDeviceToken(token.data);
+          console.log("Device token:", token.data);
+        } else {
+          console.log('Permission not granted for push notifications');
+        }
+      } catch (error) {
+        console.error("Error getting push token", error);
+      }
+    };
+
+    getPushToken();
+  }, []);
 
   const handleLogIn = async () => {
     console.log('email', email, 'pass', password);
@@ -34,7 +57,6 @@ export default function LoginPage(props) {
     }
   
     try {
-      const deviceToken = 'abc';
       const response = await axiosInstance.post(
         '/user/login',
         {
@@ -80,10 +102,12 @@ export default function LoginPage(props) {
   const handleSignUp = async () => {
     if (isCreatingLeague) {
       try {
+        console.log("Signing up . . . ")
         const response = await axiosInstance.post('/user/signup', {
           fullName: name,
           email,
           password,
+          deviceToken
         })
         console.log(response.data)
         const userId = response.data['userId']
