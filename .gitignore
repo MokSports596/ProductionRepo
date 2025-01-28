@@ -1,1 +1,8 @@
 .DS_Store
+/Backend/bin
+/Backend/obj
+/DraftSimulator/obj
+/MokSportsApp.Tests/bin
+/MokSportsApp.Tests/obj
+NFLGameENgine/obj
+NFLSimulation/obj
