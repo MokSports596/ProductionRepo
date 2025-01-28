@@ -20,5 +20,7 @@ namespace MokSportsApp.Data.Repositories.Interfaces
         Task SendWeeklyTopPerformingPlayerAlerts();
         Task SendWeeklyTeamUpdates();
         Task<List<GameFranchiseDTO>> GetGamesWithFranchiseByWeekAsync(int week);
+        Task<List<WeeklyTeamPointsDto>> GetWeeklyTeamPoints(int week, int leagueId, int userId);
+        Task<List<WeeklyStats>> GetWeeklyStandings(int leagueId);
     }
 }

@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using MokSportsApp.Models;
-using MokSportsApp.DTO;  // <-- Make sure this "using" is present if your DTO is in MokSportsApp.DTO
 using System.Diagnostics;
 
 namespace MokSportsApp.Data
@@ -24,18 +23,12 @@ namespace MokSportsApp.Data
         public DbSet<TradeTeam> Trades { get; set; }
         public DbSet<UserDevice> UserDevices { get; set; }
         public DbSet<Week> Weeks { get; set; }
-
-        // ---------------------------------------------------------------
-        // NEW: A DbSet for your DTO if you want to query it directly 
-        //      as _context.GameFranchiseData.FromSqlRaw(...).
-        //      It's optional, but many people prefer having it.
-        // ---------------------------------------------------------------
-        public DbSet<GameFranchiseDTO>? GameFranchiseData { get; set; }
+        public DbSet<Skin> Skins { get; set; } 
+        public DbSet<FranchiseLocksLoads> FranchiseLocksLoads { get; set; } // Added FranchiseLocksLoads DbSet
+        public DbSet<Score> Scores { get; set; } // Added Scores DbSet
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Existing entity configurations...
-
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("Users");
@@ -91,145 +84,42 @@ namespace MokSportsApp.Data
                       .WithMany()
                       .HasForeignKey(f => f.Team5Id)
                       .OnDelete(DeleteBehavior.Restrict);
-            });
 
-            modelBuilder.Entity<Team>().ToTable("Teams");
+                entity.HasMany(f => f.WinningSkins) // Added navigation property
+                      .WithOne(s => s.Winner)
+                      .HasForeignKey(s => s.WinnerId);
 
-            modelBuilder.Entity<UserStats>(entity =>
-            {
-                entity.ToTable("UserStats");
-                entity.HasKey(e => e.Id);
-
-                entity.Property(e => e.UserId).HasColumnName("UserId");
-                entity.Property(e => e.LeagueId).HasColumnName("LeagueId");
-                entity.Property(e => e.WeekId).HasColumnName("WeekId");
-
-                entity.Property(e => e.SeasonPoints).HasColumnName("SeasonPoints");
-                entity.Property(e => e.WeekPoints).HasColumnName("WeekPoints");
-                entity.Property(e => e.LoksUsed).HasColumnName("LoksUsed");
-                entity.Property(e => e.Skins).HasColumnName("Skins");
-
-                entity.HasOne(us => us.User)
-                    .WithMany(u => u.UserStats)
-                    .HasForeignKey(us => us.UserId);
-
-                entity.HasOne(us => us.League)
-                    .WithMany(l => l.UserStats)
-                    .HasForeignKey(us => us.LeagueId);
-
-                entity.HasOne(us => us.Week)  // Relationship between UserStats and Week
-                    .WithMany(w => w.UserStats)
-                    .HasForeignKey(us => us.WeekId);
-            });
-
-            modelBuilder.Entity<UserLeague>(entity =>
-            {
-                entity.ToTable("UserLeagues");
-
-                entity.HasKey(ul => ul.Id);
-
-                entity.Property(ul => ul.UserId).HasColumnName("user_id");
-                entity.Property(ul => ul.LeagueId).HasColumnName("league_id");
-
-                entity.HasOne(ul => ul.User)
-                      .WithMany(u => u.UserLeagues)
-                      .HasForeignKey(ul => ul.UserId);
-
-                entity.HasOne(ul => ul.League)
-                      .WithMany(l => l.UserLeagues)
-                      .HasForeignKey(ul => ul.LeagueId);
+                entity.Property(f => f.TotalSkinsWon) // Added scalar property
+                      .HasDefaultValue(0);
             });
 
             modelBuilder.Entity<League>(entity =>
             {
                 entity.ToTable("Leagues");
-                entity.HasKey(e => e.LeagueId);
 
+                entity.HasKey(e => e.LeagueId);
                 entity.Property(e => e.LeagueId).HasColumnName("LeagueId");
                 entity.Property(e => e.CreatedAt).HasColumnName("created_at");
                 entity.Property(e => e.CreatedBy).HasColumnName("created_by");
                 entity.Property(e => e.Pin).HasColumnName("pin");
+
+                entity.HasMany(l => l.Skins) // Added navigation property
+                      .WithOne(s => s.League)
+                      .HasForeignKey(s => s.LeagueId);
             });
 
-            modelBuilder.Entity<Game>(entity =>
+            modelBuilder.Entity<Skin>(entity =>
             {
-                entity.ToTable("Games");
-                entity.HasKey(e => e.Id);
+                entity.ToTable("Skins");
 
-                entity.Property(e => e.GameId)
-                      .IsRequired()
-                      .HasMaxLength(50);
+                entity.HasKey(s => s.SkinId);
 
-                entity.Property(e => e.Season).IsRequired();
-
-                entity.Property(e => e.SeasonType)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-                entity.Property(e => e.AwayTeam)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-                entity.Property(e => e.HomeTeam)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-                entity.Property(e => e.GameDate).IsRequired();
-                entity.Property(e => e.GameTime)
-                      .IsRequired()
-                      .HasMaxLength(10);
-
-                entity.Property(e => e.GameStatus)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-                entity.Property(e => e.AwayPoints).IsRequired(false);
-                entity.Property(e => e.HomePoints).IsRequired(false);
-                entity.Property(e => e.Quarter1).IsRequired(false);
-                entity.Property(e => e.Quarter2).IsRequired(false);
-                entity.Property(e => e.Quarter3).IsRequired(false);
-                entity.Property(e => e.Quarter4).IsRequired(false);
-                entity.Property(e => e.TotalPoints).IsRequired(false);
-                entity.Property(e => e.SportsBookOdds).HasMaxLength(255).IsRequired(false);
-                entity.Property(e => e.ESPNLink).HasMaxLength(255).IsRequired(false);
-
-                entity.Property(e => e.Week).IsRequired();
-            });
-
-            modelBuilder.Entity<Draft>(entity =>
-            {
-                entity.ToTable("Drafts");
-                entity.HasKey(d => d.DraftId);
-
-                entity.HasOne(d => d.League)
-                      .WithMany(l => l.Drafts)
-                      .HasForeignKey(d => d.LeagueId);
-            });
-
-            modelBuilder.Entity<DraftPick>(entity =>
-            {
-                entity.ToTable("DraftPicks");
-                entity.HasKey(dp => dp.DraftPickId);
-
-                entity.HasOne(dp => dp.Draft)
-                      .WithMany(d => d.DraftPicks)
-                      .HasForeignKey(dp => dp.DraftId);
-
-                entity.HasOne(dp => dp.Franchise)
-                      .WithMany(f => f.DraftPicks)
-                      .HasForeignKey(dp => dp.FranchiseId);
-
-                entity.HasOne(dp => dp.Team)
-                      .WithMany(t => t.DraftPicks)
-                      .HasForeignKey(dp => dp.TeamId);
-            });
-
-            
-            modelBuilder.Entity<GameFranchiseDTO>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView(null);
+                entity.Property(s => s.LeagueId).HasColumnName("LeagueId");
+                entity.Property(s => s.Week).HasColumnName("Week");
+                entity.Property(s => s.Score).HasColumnName("Score");
+                entity.Property(s => s.WinnerId).HasColumnName("WinnerId");
+                entity.Property(s => s.RolledOver).HasColumnName("RolledOver");
+                entity.Property(s => s.CreatedAt).HasColumnName("CreatedAt");
             });
         }
     }

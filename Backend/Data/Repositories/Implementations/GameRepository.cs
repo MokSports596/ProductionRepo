@@ -16,6 +16,40 @@ namespace MokSportsApp.Data.Repositories.Implementations
             _context = context;
         }
 
+        public async Task<List<WeeklyTeamPointsDto>> GetWeeklyTeamPoints(int week, int leagueId, int userId)
+        {
+            var weeklyGames = await GetGamesWithFranchiseByWeekAsync(week);
+
+            var sql = @$"select t.* from teams t
+                            inner join franchises f on t.teamId in (f.Team1Id,f.Team2Id,f.Team3Id,f.Team4Id,f.Team5Id)
+                            where f.UserId = {userId} and f.LeagueId = {leagueId}";
+
+            var userTeams = await _context.Set<Team>()
+                .FromSqlRaw(sql)
+                .ToListAsync();
+
+            var list1 = weeklyGames.Where(a => userTeams.Select(x => x.Abbreviation).Any(x => x == a.AwayTeam)).ToList();
+            var list2 = weeklyGames.Where(a => userTeams.Select(x => x.Abbreviation).Any(x => x == a.HomeTeam)).ToList();
+
+            var result = list1.Select(a => new WeeklyTeamPointsDto
+            {
+                TeamName = a.AwayTeam,
+                Points = a.AwayPoints.HasValue ? a.AwayPoints.Value : 0,
+                GameDate = a.GameDate
+            }).ToList();
+
+            result.Union(list2.Select(a => new WeeklyTeamPointsDto
+            {
+                TeamName = a.HomeTeam,
+                Points = a.HomePoints.HasValue ? a.HomePoints.Value : 0,
+                GameDate = a.GameDate
+            }).ToList());
+
+            return result;
+
+        }
+
+
         public async Task<Game?> GetGameByIdAsync(int id)
         {
             return await _context.Games.FindAsync(id);
@@ -176,6 +210,45 @@ namespace MokSportsApp.Data.Repositories.Implementations
             }
         }
 
+        public async Task<List<WeeklyStats>> GetWeeklyStandings(int leagueId)
+        {
+            var result = new List<WeeklyStats>();
+
+            var currentResult = await GetWeeklyStats(DateTime.Now);
+
+            var preDateTime = DateTime.Now.Date.AddDays(-7);
+            var lastWeekResults = await GetWeeklyStats(preDateTime);
+
+            var items = currentResult.GroupBy(a => a.LeagueId);
+
+            foreach (var league in items)
+            {
+                var leagueCurrentWeekStats = league.OrderByDescending(a => a.Points).ToList();
+                var leagueLastWeekStats = lastWeekResults.Where(a => a.LeagueId == league.Key).OrderByDescending(a => a.Points).ToList();
+
+                foreach (var item in leagueCurrentWeekStats)
+                {
+                    var playerLastWeekResult = leagueLastWeekStats.FirstOrDefault(a => a.UserId == item.UserId);
+                    var currentWeekStanding = leagueCurrentWeekStats.FindIndex(a => a.UserId == item.UserId) + 1;
+                    if (playerLastWeekResult != null)
+                    {
+                        var lastWeekStanding = leagueLastWeekStats.FindIndex(a => a.UserId == item.UserId) + 1;
+
+                        if (currentWeekStanding < lastWeekStanding)
+                        {
+                            item.Rank = lastWeekStanding - currentWeekStanding;
+                        }
+                        else if (currentWeekStanding > lastWeekStanding)
+                        {
+                            item.Rank = currentWeekStanding - lastWeekStanding;
+                        }
+                    }
+                }
+                result.AddRange(leagueCurrentWeekStats);
+            }
+            return result.Where(a=>a.LeagueId == leagueId).ToList();
+        }
+
         public async Task SendWeeklyTopPerformingPlayerAlerts()
         {
             var result = await GetWeeklyStats(DateTime.Now);
@@ -266,6 +339,7 @@ namespace MokSportsApp.Data.Repositories.Implementations
 
         public async Task<List<GameFranchiseDTO>> GetGamesWithFranchiseByWeekAsync(int week)
         {
+            Random r = new Random();
             const string sql = @"
                 SELECT
                     g.Id,
@@ -303,9 +377,46 @@ namespace MokSportsApp.Data.Repositories.Implementations
                 ORDER BY g.GameDate ASC;
             ";
 
-            var results = await _context.Set<GameFranchiseDTO>()
+            var results = (await _context.Set<Game>()
                 .FromSqlRaw(sql, week)
-                .ToListAsync();
+                .ToListAsync())
+                .Select(a => new GameFranchiseDTO()
+                {
+                    AwayFranchise = a.AwayFranchise,
+                    AwayPoints = a.AwayPoints,
+                    AwayTeam = a.AwayTeam,
+                    ESPNLink = a.ESPNLink,
+                    GameDate = a.GameDate,
+                    GameId = a.GameId,
+                    GameStatus = a.GameStatus,
+                    GameTime = a.GameTime,
+                    HomeFranchise = a.HomeFranchise,
+                    HomePoints = a.HomePoints,
+                    HomeTeam = a.HomeTeam,
+                    Id = a.Id,
+                    Quarter1 = a.Quarter1,
+                    Quarter2 = a.Quarter2,
+                    Quarter3 = a.Quarter3,
+                    Quarter4 = a.Quarter4,
+                    Season = a.Season,
+                    SeasonType = a.SeasonType,
+                    SportsBookOdds = a.SportsBookOdds,
+                    TotalPoints = a.TotalPoints,
+                    Week = a.Week,
+                    HSPoints = r.Next(0, 3),
+                    LokPoints = r.Next(0, 3),
+                    WinPoint = r.Next(0, 3),
+                }).ToList();
+
+
+            // currently hard coded for MVP. But should be dynamic
+            if (results.Count > 0)
+            {
+                results[0].HSPoints = 4;
+                results[0].LokPoints = 4;
+                results[0].WinPoint = 4;
+                results[0].LokedTeamWon = true;
+            }
 
             return results;
         }

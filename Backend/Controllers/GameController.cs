@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MokSportsApp.DTO;
 
-namespace MokSportsApp.Controlers
+namespace MokSportsApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -89,15 +89,18 @@ namespace MokSportsApp.Controlers
             return Ok(results);
         }
 
+        [HttpGet("WeeklyPoints/league/{leagueId}/week/{week}/user/{userId}")]
+        public async Task<ActionResult<List<WeeklyTeamPointsDto>>> GetWeeklyPoints(int leagueId, int week, int userId)
+        {
+            return Ok(_gameService.GetWeeklyTeamPoints(week, leagueId, userId));
+        }
 
 
-
-
-
-
-
-
-
+        [HttpGet("weeklyStanding/leagueId/{leagueId}")]
+        public async Task<ActionResult<List<WeeklyStats>>> GetWeeklyStanding(int leagueId)
+        {
+            return Ok(_gameService.GetWeeklyStandings(leagueId));
+        }
 
 
     }

@@ -112,5 +112,11 @@ namespace MokSportsApp.Services.Implementations
         {
             return await _leagueRepository.IsSeasonAvailable(seasonId);
         }
+
+        public async Task<List<LeagueStandingDto>> GetLeagueStandingsAsync(int leagueId)
+        {
+            return await _leagueRepository.GetLeagueStandingsAsync(leagueId);
+        }
+
     }
 }

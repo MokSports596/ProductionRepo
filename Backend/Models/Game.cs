@@ -50,5 +50,7 @@ namespace MokSportsApp.Models
         public int? TotalPoints { get; set; }
         public string? SportsBookOdds { get; set; }
         public string? ESPNLink { get; set; }
+        public string HomeFranchise { get; set; }
+        public string AwayFranchise { get; set; }
     }
 }

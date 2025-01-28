@@ -9,8 +9,10 @@ namespace MokSportsApp.Models
         [Key]
         public int Id { get; set; }
 
+        [Column("user_id")]
         public int UserId { get; set; } // Foreign key referencing the User
 
+        [Column("league_id")]
         public int LeagueId { get; set; } // Foreign key referencing the League
 
         [ForeignKey("UserId")]

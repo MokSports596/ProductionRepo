@@ -28,5 +28,10 @@ namespace MokSportsApp.DTO
 
         public string? HomeFranchise { get; set; }
         public string? AwayFranchise { get; set; }
+
+        public int WinPoint { get; set; }
+        public int HSPoints { get; set; }
+        public int LokPoints { get; set; }
+        public bool LokedTeamWon { get; set; }
     }
 }

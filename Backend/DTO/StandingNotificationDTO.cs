@@ -16,5 +16,6 @@
         public int LeagueId { get; set; }
         public string Token { get; set; }
         public int Points { get; set; }
+        public int Rank { get; set; }
     }
 }
