@@ -3,3 +3,7 @@
 *.log
 .vscode/
 
+#ignore build folders
+bin/
+obj/
+
