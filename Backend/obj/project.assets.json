@@ -5291,19 +5291,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/jaishah16/.nuget/packages/": {}
+    "/Users/tjpatel/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/jaishah16/MokSports/ProductionRepo/Backend/MokSportsApp.csproj",
+      "projectUniqueName": "/Users/tjpatel/MokSportsRepo/Backend/MokSportsApp.csproj",
       "projectName": "MokSportsApp",
-      "projectPath": "/Users/jaishah16/MokSports/ProductionRepo/Backend/MokSportsApp.csproj",
-      "packagesPath": "/Users/jaishah16/.nuget/packages/",
-      "outputPath": "/Users/jaishah16/MokSports/ProductionRepo/Backend/obj/",
+      "projectPath": "/Users/tjpatel/MokSportsRepo/Backend/MokSportsApp.csproj",
+      "packagesPath": "/Users/tjpatel/.nuget/packages/",
+      "outputPath": "/Users/tjpatel/MokSportsRepo/Backend/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/jaishah16/.nuget/NuGet/NuGet.Config"
+        "/Users/tjpatel/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -5326,7 +5326,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -5390,7 +5391,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
