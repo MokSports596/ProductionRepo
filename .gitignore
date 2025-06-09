@@ -6,4 +6,4 @@
 #ignore build folders
 bin/
 obj/
-
+/Backend/obj
