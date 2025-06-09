@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {
+    "net9.0": {
       "Azure.Core/1.35.0": {
         "type": "package",
         "dependencies": {
@@ -5278,7 +5278,7 @@
     }
   },
   "projectFileDependencyGroups": {
-    "net8.0": [
+    "net9.0": [
       "FirebaseAdmin >= 3.0.1",
       "Hangfire >= 1.8.14",
       "Microsoft.AspNetCore.OpenApi >= 8.0.7",
@@ -5306,14 +5306,14 @@
         "/Users/tjpatel/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
-        "net8.0"
+        "net9.0"
       ],
       "sources": {
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "net9.0": {
+          "targetAlias": "net9.0",
           "projectReferences": {}
         }
       },
@@ -5330,8 +5330,8 @@
       "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
-      "net8.0": {
-        "targetAlias": "net8.0",
+      "net9.0": {
+        "targetAlias": "net9.0",
         "dependencies": {
           "FirebaseAdmin": {
             "target": "Package",
