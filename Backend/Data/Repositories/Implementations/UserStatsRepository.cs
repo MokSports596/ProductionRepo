@@ -22,9 +22,13 @@ namespace MokSportsApp.Data.Repositories.Implementations
                                  .ToListAsync();
         }
 
+        // public async Task<UserStats> GetUserStatsByIdAsync(int id)
+        // {
+        //     return await _context.UserStats.FindAsync(id);
+        // }
         public async Task<UserStats> GetUserStatsByIdAsync(int id)
         {
-            return await _context.UserStats.FindAsync(id);
+            return await _context.UserStats.FirstOrDefaultAsync(us => us.UserId == id);
         }
 
         public async Task<IEnumerable<UserStats>> GetUserStatsByUserAndLeagueAndWeekAsync(int userId, int leagueId, int weekId)
