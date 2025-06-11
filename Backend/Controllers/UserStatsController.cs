@@ -92,11 +92,28 @@ namespace MokSportsApp.Controllers
             // 5) Return an anonymous object matching the PDF schema
             return Ok(new
             {
-                Days    = diff.Days,
-                Hours   = diff.Hours,
+                Days = diff.Days,
+                Hours = diff.Hours,
                 Minutes = diff.Minutes,
                 Seconds = diff.Seconds
             });
+        }
+
+        // GET api/userstats/franchise/{franchiseId}/remaining-loks
+        [HttpGet("franchise/{franchiseId}/remaining-loks")]
+        public async Task<IActionResult> GetRemainingLoksByFranchise(int franchiseId)
+        {
+            try
+            {
+                var loksData = await _userStatsService.GetRemainingLoksByFranchiseAsync(franchiseId);
+                if (loksData == null)
+                    return NotFound();
+                return Ok(loksData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
