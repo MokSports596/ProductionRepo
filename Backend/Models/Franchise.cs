@@ -24,6 +24,7 @@ namespace MokSportsApp.Models
         public int? Team5LoksLeft { get; set; }
         public bool? HasLoad { get; set; }
         public int? SeasonPoints { get; set; }
+        public int? TotalSkinsWon { get; set; }
         // Navigation properties
         public User User { get; set; }
         public League League { get; set; }

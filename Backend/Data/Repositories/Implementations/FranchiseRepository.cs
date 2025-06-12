@@ -132,6 +132,15 @@ namespace MokSportsApp.Data.Repositories.Implementations
             }
             return playerIds;
         }
+        public async Task<int?> GetTotalSkinsWonAsync(int franchiseId)
+        {
+            var franchise = await _context.Franchises
+                .Where(f => f.FranchiseId == franchiseId)
+                .Select(f => (int?)f.TotalSkinsWon)
+                .FirstOrDefaultAsync();
+
+            return franchise;
+        }
 
     }
 }

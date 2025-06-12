@@ -209,6 +209,9 @@ namespace MokSportsApp.Migrations
                     b.Property<int?>("Team5LoksLeft")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TotalSkinsWon")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
