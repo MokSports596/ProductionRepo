@@ -13,5 +13,7 @@ namespace MokSportsApp.Services.Interfaces
         Task<Franchise> CreateFranchiseAsync(Franchise franchise);
         Task<Franchise> UpdateFranchiseAsync(int id, Franchise updatedFranchise);
         Task<bool> DeleteFranchiseAsync(int id);
+        Task<int?> GetTotalSkinsWonAsync(int franchiseId);
+        Task<bool> IsTeamLokedAsync(int franchiseId, int teamId);
     }
 }

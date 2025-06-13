@@ -130,5 +130,25 @@ namespace MokSportsApp.Controllers
             return Ok(updated);
         }
 
+        // GET api/franchise/{franchiseId}/total-skins
+        [HttpGet("{franchiseId}/total-skins")]
+        public async Task<IActionResult> GetTotalSkinsWon(int franchiseId)
+        {
+            var totalSkins = await _franchiseService.GetTotalSkinsWonAsync(franchiseId);
+            if (totalSkins == null)
+            {
+                return NotFound(new { message = "Franchise not found." });
+            }
+            return Ok(new { totalSkinsWon = totalSkins });
+        }
+
+        // GET: api/franchise/is-loked?franchiseId=1&teamId=10
+        [HttpGet("is-loked")]
+        public async Task<IActionResult> IsTeamLoked([FromQuery] int franchiseId, [FromQuery] int teamId)
+        {
+            var isLoked = await _franchiseService.IsTeamLokedAsync(franchiseId, teamId);
+            return Ok(new { isLoked });
+        }
+
     }
 }

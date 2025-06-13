@@ -1,4 +1,5 @@
 using MokSportsApp.Models;
+using MokSportsApp.DTO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,5 +13,6 @@ namespace MokSportsApp.Services.Interfaces
         Task AddOrUpdateUserStatsAsync(UserStats userStats);
         Task UpdateUserStatsAsync(UserStats userStats);
         Task DeleteUserStatsAsync(int id);
+        Task<RemainingLoksDTO> GetRemainingLoksByFranchiseAsync(int franchiseId);
     }
 }

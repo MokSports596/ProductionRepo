@@ -69,5 +69,52 @@ namespace MokSportsApp.Controllers
             await _userStatsService.DeleteUserStatsAsync(id);
             return NoContent();
         }
+
+        [HttpGet("TNF Timer")]
+        public IActionResult GetTimeToThursday()
+        {
+            var now = DateTime.Now;
+
+            // 1) Compute next Thursday date
+            int daysUntilThursday = ((int)DayOfWeek.Thursday - (int)now.DayOfWeek + 7) % 7;
+            var nextThursday = now.Date.AddDays(daysUntilThursday);
+
+            // 2) Set to 8:15 PM
+            var nextThursdayTime = nextThursday.AddHours(20).AddMinutes(15);
+
+            // 3) If that’s already passed today, roll forward a week
+            if (now > nextThursdayTime)
+                nextThursdayTime = nextThursdayTime.AddDays(7);
+
+            // 4) Compute the difference
+            var diff = nextThursdayTime - now;
+
+            // 5) Return an anonymous object matching the PDF schema
+            return Ok(new
+            {
+                Days = diff.Days,
+                Hours = diff.Hours,
+                Minutes = diff.Minutes,
+                Seconds = diff.Seconds
+            });
+        }
+
+        // GET api/userstats/franchise/{franchiseId}/remaining-loks
+        [HttpGet("franchise/{franchiseId}/remaining-loks")]
+        public async Task<IActionResult> GetRemainingLoksByFranchise(int franchiseId)
+        {
+            try
+            {
+                var loksData = await _userStatsService.GetRemainingLoksByFranchiseAsync(franchiseId);
+                if (loksData == null)
+                    return NotFound();
+                return Ok(loksData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
+    

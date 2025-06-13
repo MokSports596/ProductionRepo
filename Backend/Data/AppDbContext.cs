@@ -24,6 +24,7 @@ namespace MokSportsApp.Data
         public DbSet<TradeTeam> Trades { get; set; }
         public DbSet<UserDevice> UserDevices { get; set; }
         public DbSet<Week> Weeks { get; set; }
+        public DbSet<LeaguesByWeek> LeaguesByWeek { get; set; }
 
         // ---------------------------------------------------------------
         // NEW: A DbSet for your DTO if you want to query it directly 
@@ -224,12 +225,31 @@ namespace MokSportsApp.Data
                       .HasForeignKey(dp => dp.TeamId);
             });
 
-            
+
             modelBuilder.Entity<GameFranchiseDTO>(entity =>
             {
                 entity.HasNoKey();
 
                 entity.ToView(null);
+            });
+            
+            modelBuilder.Entity<LeaguesByWeek>(entity =>
+            {
+                entity.ToTable("LeaguesByWeek");
+
+                entity.HasKey(lbw => new { lbw.LeagueId, lbw.WeekId });
+
+                entity.HasOne(lbw => lbw.Franchise1).WithMany().HasForeignKey(lbw => lbw.Franchise1Id).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(lbw => lbw.Franchise2).WithMany().HasForeignKey(lbw => lbw.Franchise2Id).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(lbw => lbw.Franchise3).WithMany().HasForeignKey(lbw => lbw.Franchise3Id).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(lbw => lbw.Franchise4).WithMany().HasForeignKey(lbw => lbw.Franchise4Id).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(lbw => lbw.Franchise5).WithMany().HasForeignKey(lbw => lbw.Franchise5Id).OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(lbw => lbw.WeeklyRank1Franchise).WithMany().HasForeignKey(lbw => lbw.WeeklyRank1FranchiseId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(lbw => lbw.WeeklyRank2Franchise).WithMany().HasForeignKey(lbw => lbw.WeeklyRank2FranchiseId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(lbw => lbw.WeeklyRank3Franchise).WithMany().HasForeignKey(lbw => lbw.WeeklyRank3FranchiseId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(lbw => lbw.WeeklyRank4Franchise).WithMany().HasForeignKey(lbw => lbw.WeeklyRank4FranchiseId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(lbw => lbw.WeeklyRank5Franchise).WithMany().HasForeignKey(lbw => lbw.WeeklyRank5FranchiseId).OnDelete(DeleteBehavior.Restrict);
             });
         }
     }

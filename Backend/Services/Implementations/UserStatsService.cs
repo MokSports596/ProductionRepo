@@ -1,5 +1,6 @@
 using MokSportsApp.Data.Repositories.Interfaces;
 using MokSportsApp.Models;
+using MokSportsApp.DTO;
 using MokSportsApp.Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -43,6 +44,10 @@ namespace MokSportsApp.Services.Implementations
         public async Task DeleteUserStatsAsync(int id)
         {
             await _userStatsRepository.DeleteUserStatsAsync(id);
+        }
+        public async Task<RemainingLoksDTO> GetRemainingLoksByFranchiseAsync(int franchiseId)
+        {
+            return await _userStatsRepository.GetRemainingLoksByFranchiseAsync(franchiseId);
         }
     }
 }

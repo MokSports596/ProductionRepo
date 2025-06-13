@@ -74,6 +74,14 @@ namespace MokSportsApp.Services.Implementations
             await _franchiseRepository.SaveChangesAsync();
             return true;
         }
+        public async Task<int?> GetTotalSkinsWonAsync(int franchiseId)
+        {
+            return await _franchiseRepository.GetTotalSkinsWonAsync(franchiseId);
+        }
+        public async Task<bool> IsTeamLokedAsync(int franchiseId, int teamId)
+        {
+            return await _franchiseRepository.IsTeamLokedAsync(franchiseId, teamId);
+        }
 
 
     }

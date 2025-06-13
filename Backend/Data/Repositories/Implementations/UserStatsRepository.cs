@@ -1,5 +1,6 @@
 using MokSportsApp.Data.Repositories.Interfaces;
 using MokSportsApp.Models;
+using MokSportsApp.DTO;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,9 +23,13 @@ namespace MokSportsApp.Data.Repositories.Implementations
                                  .ToListAsync();
         }
 
+        // public async Task<UserStats> GetUserStatsByIdAsync(int id)
+        // {
+        //     return await _context.UserStats.FindAsync(id);
+        // }
         public async Task<UserStats> GetUserStatsByIdAsync(int id)
         {
-            return await _context.UserStats.FindAsync(id);
+            return await _context.UserStats.FirstOrDefaultAsync(us => us.UserId == id);
         }
 
         public async Task<IEnumerable<UserStats>> GetUserStatsByUserAndLeagueAndWeekAsync(int userId, int leagueId, int weekId)
@@ -70,6 +75,28 @@ namespace MokSportsApp.Data.Repositories.Implementations
                 _context.UserStats.Remove(userStats);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<RemainingLoksDTO> GetRemainingLoksByFranchiseAsync(int franchiseId)
+        {
+            var franchise = await _context.Franchises
+                .Where(f => f.FranchiseId == franchiseId)
+                .Select(f => new RemainingLoksDTO
+                {
+                    Team1Id = f.Team1Id,
+                    Team1LoksLeft = f.Team1LoksLeft,
+                    Team2Id = f.Team2Id,
+                    Team2LoksLeft = f.Team2LoksLeft,
+                    Team3Id = f.Team3Id,
+                    Team3LoksLeft = f.Team3LoksLeft,
+                    Team4Id = f.Team4Id,
+                    Team4LoksLeft = f.Team4LoksLeft,
+                    Team5Id = f.Team5Id,
+                    Team5LoksLeft = f.Team5LoksLeft
+                })
+                .FirstOrDefaultAsync();
+
+            return franchise;
         }
     }
 }

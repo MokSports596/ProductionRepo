@@ -34,12 +34,12 @@ namespace MokSportsApp.Controllers
                     .Where(g => g.Week == weekId && g.GameStatus == "Completed")
                     .Select(g => new CompletedGameDTO
                     {
-                        GameId    = g.Id,
-                        HomeTeam  = g.HomeTeam,
-                        AwayTeam  = g.AwayTeam,
+                        GameId = g.Id,
+                        HomeTeam = g.HomeTeam,
+                        AwayTeam = g.AwayTeam,
                         HomeScore = g.HomePoints.GetValueOrDefault(),
                         AwayScore = g.AwayPoints.GetValueOrDefault(),
-                        Status    = g.GameStatus
+                        Status = g.GameStatus
                     })
                     .ToList();
 
@@ -52,6 +52,36 @@ namespace MokSportsApp.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new { message = "An error occurred while retrieving completed games." });
+            }
+        }
+
+        [HttpGet("alluserstats/week/{weekId}")]
+        public IActionResult GetAllUserStats(int weekId)
+        {
+            if (weekId <= 0)
+                return BadRequest(new { message = "The weekId is invalid (must be > 0)." });
+
+            try
+            {
+                var userStats = _context.UserStats
+                    .Where(us => us.WeekId == weekId)
+                    .Select(us => new
+                    {
+                        us.FranchiseId,
+                        us.WeekId,
+                        us.SeasonPoints
+                    })
+                    .ToList();
+
+                if (!userStats.Any())
+                    return NotFound(new { message = "No user stats found for the given week." });
+
+                return Ok(userStats);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { message = "An error occurred while retrieving user stats." });
             }
         }
     }
