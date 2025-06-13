@@ -17,5 +17,6 @@ namespace MokSportsApp.Data.Repositories.Interfaces
         Task<IEnumerable<Franchise>> GetFranchisesByLeagueIdAsync(int leagueId);
         Task UpdateFranchiseAsync(Franchise franchise);
         Task<int?> GetTotalSkinsWonAsync(int franchiseId);
+        Task<bool> IsTeamLokedAsync(int franchiseId, int teamId);
     }
 }

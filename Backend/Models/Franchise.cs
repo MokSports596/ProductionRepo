@@ -15,6 +15,7 @@ namespace MokSportsApp.Models
         public int? Team3Id { get; set; }
         public int? Team4Id { get; set; }
         public int? Team5Id { get; set; }
+        public int? LOKTeamId { get; set; }
 
         // Current peformance statistics for the franchise
         public int? Team1LoksLeft { get; set; }

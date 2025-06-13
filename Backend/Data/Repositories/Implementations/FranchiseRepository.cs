@@ -141,6 +141,15 @@ namespace MokSportsApp.Data.Repositories.Implementations
 
             return franchise;
         }
+        public async Task<bool> IsTeamLokedAsync(int franchiseId, int teamId)
+        {
+            var franchise = await _context.Franchises
+                .FirstOrDefaultAsync(f => f.FranchiseId == franchiseId);
+
+            if (franchise == null) return false;
+
+            return franchise.LOKTeamId == teamId;
+        }
 
     }
 }

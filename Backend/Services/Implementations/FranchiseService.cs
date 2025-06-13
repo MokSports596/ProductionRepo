@@ -78,6 +78,10 @@ namespace MokSportsApp.Services.Implementations
         {
             return await _franchiseRepository.GetTotalSkinsWonAsync(franchiseId);
         }
+        public async Task<bool> IsTeamLokedAsync(int franchiseId, int teamId)
+        {
+            return await _franchiseRepository.IsTeamLokedAsync(franchiseId, teamId);
+        }
 
 
     }
