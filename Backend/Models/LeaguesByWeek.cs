@@ -40,6 +40,12 @@ namespace MokSportsApp.Models
         public int? WeeklyRank4FranchiseId { get; set; }
         public int? WeeklyRank5FranchiseId { get; set; }
 
+        public bool Franchise1UsedLoad { get; set; } = false;
+        public bool Franchise2UsedLoad { get; set; } = false;
+        public bool Franchise3UsedLoad { get; set; } = false;
+        public bool Franchise4UsedLoad { get; set; } = false;
+        public bool Franchise5UsedLoad { get; set; } = false;
+
         [ForeignKey("Franchise1Id")]
         public Franchise? Franchise1 { get; set; }
 
@@ -69,5 +75,20 @@ namespace MokSportsApp.Models
 
         [ForeignKey("WeeklyRank5FranchiseId")]
         public Franchise? WeeklyRank5Franchise { get; set; }
+
+        [ForeignKey("Franchise1LOKedTeamId")]
+        public Team? Franchise1LOKedTeam { get; set; }
+
+        [ForeignKey("Franchise2LOKedTeamId")]
+        public Team? Franchise2LOKedTeam { get; set; }
+
+        [ForeignKey("Franchise3LOKedTeamId")]
+        public Team? Franchise3LOKedTeam { get; set; }
+
+        [ForeignKey("Franchise4LOKedTeamId")]
+        public Team? Franchise4LOKedTeam { get; set; }
+
+        [ForeignKey("Franchise5LOKedTeamId")]
+        public Team? Franchise5LOKedTeam { get; set; }
     }
 }
