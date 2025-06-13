@@ -98,6 +98,26 @@ namespace MokSportsApp.Controllers
             return Ok(leagues);
         }
 
+        // POST: api/league/roll-over-skin
+        [HttpPost("roll-over-skin")]
+        public async Task<IActionResult> RollOverSkin([FromQuery] int nextWeekId, [FromQuery] int leagueId)
+        {
+            
+            try
+            {
+                await _leagueService.RollOverSkinAsync(leagueId, nextWeekId);
+                return Ok(new { message = "Skins rolled over successfully." });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { message = "An error occurred while rolling over skins." });
+            }
+        }
+
     }
 
     // DTO for joining a league

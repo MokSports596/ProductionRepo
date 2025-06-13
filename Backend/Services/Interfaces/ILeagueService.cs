@@ -12,5 +12,6 @@ namespace MokSportsApp.Services.Interfaces
         Task<List<League>> GetLeaguesByPinAsync(string pin);
         Task JoinLeagueAsync(int userId, string pin);
         Task<League?> GetLeagueByIdAsync(int id);
+        Task RollOverSkinAsync(int leagueId, int nextWeekId);
     }
 }

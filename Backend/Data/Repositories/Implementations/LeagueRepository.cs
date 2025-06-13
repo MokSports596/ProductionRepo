@@ -48,5 +48,10 @@ namespace MokSportsApp.Data.Repositories.Implementations
         {
             return await _context.Leagues.FindAsync(id);
         }
+        public async Task<LeaguesByWeek?> GetLeagueByWeekAsync(int leagueId, int weekId)
+        {
+            return await _context.LeaguesByWeek
+                .FirstOrDefaultAsync(lbw => lbw.LeagueId == leagueId && lbw.WeekId == weekId);
+        }
     }
 }

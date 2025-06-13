@@ -12,5 +12,6 @@ namespace MokSportsApp.Data.Repositories.Interfaces
         Task AddAsync(League league);
         Task SaveChangesAsync();
         Task<League?> GetByIdAsync(int id);
+        Task<LeaguesByWeek?> GetLeagueByWeekAsync(int leagueId, int weekId);
     }
 }

@@ -112,5 +112,16 @@ namespace MokSportsApp.Services.Implementations
         {
             return await _leagueRepository.IsSeasonAvailable(seasonId);
         }
+        public async Task RollOverSkinAsync(int leagueId, int nextWeekId)
+        {
+            var currentWeekId = nextWeekId - 1;
+            var prevEntry = await _leagueRepository.GetLeagueByWeekAsync(leagueId, currentWeekId);
+            var nextEntry = await _leagueRepository.GetLeagueByWeekAsync(leagueId, nextWeekId);
+            if (prevEntry == null || nextEntry == null)
+                throw new KeyNotFoundException("One or both week entries not found for the league.");
+
+            nextEntry.SkinsInPlay = prevEntry.SkinsInPlay + 1;
+            await _leagueRepository.SaveChangesAsync();
+        }
     }
 }
