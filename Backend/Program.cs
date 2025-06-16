@@ -51,6 +51,7 @@ builder.Services.AddScoped<IDraftService, DraftService>();
 builder.Services.AddScoped<ITradeService, TradeService>();
 builder.Services.AddScoped<ISeasonService, SeasonService>();
 
+builder.Services.AddScoped<ScoringService>();
 
 
 // Configure JSON serialization to handle circular references
